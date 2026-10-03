@@ -417,8 +417,12 @@ html.dev-on .bottom-bar{padding-left:calc(clamp(16px,3vw,40px) + 56px)}
 /* ---------- Carte un peu plus haute, bloc centré sur téléphone ---------- */
 .tcg{aspect-ratio:63/94}
 @media (max-width:900px){
-  .game{min-height:calc(100dvh - 52px);align-content:center}
+  .side.play{min-height:calc(100dvh - 52px)}
+  .play-head{position:sticky;top:env(safe-area-inset-top,0px);z-index:15;display:flex;flex-direction:column;gap:10px;background:var(--ink);padding:8px 0 6px;margin-top:-8px}
+  .play-body{flex:1;display:flex;flex-direction:column;justify-content:center}
 }
+.play-head{display:flex;flex-direction:column;gap:12px}
+.play-body{display:flex;flex-direction:column}
 </style>
 </head>
 <body>
@@ -1107,6 +1111,7 @@ function viewGame(){
   <div class="game">
     <div class="side">${viewScores()}</div>
     <div class="side play">
+      <div class="play-head">
       ${viewStrip()}
       <div class="turn">
         <span class="pawn-s" style="background:${t.color}"></span><span class="who">${S.phase==='recap'?'Résultat pour':'Au tour de'} <b>${esc(t.name)}</b></span>
@@ -1123,7 +1128,8 @@ function viewGame(){
         </div>
       </div>
       <div class="flash">${S.flash}</div>
-      ${S.phase==='recap'?viewRecap():viewCard()}
+      </div>
+      <div class="play-body">${S.phase==='recap'?viewRecap():viewCard()}</div>
     </div>
   </div>`;
 }
