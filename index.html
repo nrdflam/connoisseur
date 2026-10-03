@@ -548,7 +548,7 @@ function viewCard(){
     const btns=Array.from({length:10},(_,i)=>`<button class="lv" data-a="lv" data-l="${i+1}" ${th.qs[i]?'':'disabled'}>${i+1}</button>`).join('');
     return `<div class="card" style="${color}">
       <span class="cat">${catLabel}</span>
-      <span class="ask">T’es connoisseur à combien en…</span>
+      <span class="ask">T’es con ou connoisseur en…</span>
       <h2 class="theme">${esc(th.name)}</h2>
       <div class="levels">${btns}</div>
       <button class="link" data-a="skip">Changer de thème</button>
