@@ -423,6 +423,14 @@ html.dev-on .bottom-bar{padding-left:calc(clamp(16px,3vw,40px) + 56px)}
 }
 .play-head{display:flex;flex-direction:column;gap:12px}
 .play-body{display:flex;flex-direction:column}
+
+/* ---------- Burger en face des joueurs ---------- */
+.head-row{display:flex;align-items:center;gap:8px}
+.head-row .strip{flex:1;min-width:0}
+.head-row .burger-wrap{margin-left:auto;flex:none}
+.head-row .burger{width:40px;height:40px}
+/* ---------- Accueil : de l'air sous les boutons ---------- */
+@media (max-width:800px){.home{padding-bottom:96px}}
 </style>
 </head>
 <body>
@@ -1112,20 +1120,21 @@ function viewGame(){
     <div class="side">${viewScores()}</div>
     <div class="side play">
       <div class="play-head">
-      ${viewStrip()}
-      <div class="turn">
-        <span class="pawn-s" style="background:${t.color}"></span><span class="who">${S.phase==='recap'?'Résultat pour':'Au tour de'} <b>${esc(t.name)}</b></span>
+      <div class="head-row">
+        ${viewStrip()}
         <div class="burger-wrap">
           <button class="burger" data-a="burger" aria-expanded="${!!S.menuOpen}" aria-label="Options de la partie"><i></i><i></i><i></i></button>
           ${S.menuOpen?`<div class="menu-pop" role="menu">
             ${S.phase==='pick'?item('skip','Changer de carte'):''}
-            ${S.phase==='recap'?'':''}
             ${item('undo','Annuler le dernier coup',!S.history.length)}
             ${item('go','Changer de decks',false,'data-v="decks"')}
             ${item('menu','Retour à l’accueil')}
             <p class="menu-note">Clavier : 1 à 9, 0 pour 10 · Espace révèle · J juste · F faux</p>
           </div>`:''}
         </div>
+      </div>
+      <div class="turn">
+        <span class="pawn-s" style="background:${t.color}"></span><span class="who">${S.phase==='recap'?'Résultat pour':'Au tour de'} <b>${esc(t.name)}</b></span>
       </div>
       <div class="flash">${S.flash}</div>
       </div>
