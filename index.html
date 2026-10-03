@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
 <style>
-/* Layout : écran de salon. Plateau en serpentin à gauche, grande carte de jeu à droite ; une seule ambiance sombre assumée. */
+/* Layout : écran de salon. Scores à gauche, grande carte de jeu à droite, decks à finitions (irisé, métal, or…) ; une seule ambiance sombre assumée. */
 :root{
   color-scheme:dark;
   --ink:#0f1118; --panel:#181b25; --raise:#212533; --line:#2c3142;
@@ -53,7 +53,6 @@ h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.0
 .label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
 .team-row{display:flex;gap:8px;align-items:center}
 .team-row input[type=text]{flex:1;min-width:0;background:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
-.swatches{display:flex;gap:4px}
 .sw{width:22px;height:22px;border-radius:50%;border:2px solid transparent;padding:0}
 .sw.on{border-color:var(--text);box-shadow:0 0 0 2px var(--ink) inset}
 .icon-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--muted);flex:none}
@@ -65,15 +64,6 @@ h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.0
 .check{display:flex;gap:10px;align-items:flex-start;font-size:15px}
 .check input{margin-top:4px;accent-color:var(--pla);width:16px;height:16px;flex:none}
 .check small{display:block;color:var(--muted)}
-.counts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.count{border-radius:10px;padding:10px;color:var(--on-card)}
-.count b{font-family:var(--f-display);font-size:28px;display:block;line-height:1;font-variant-numeric:tabular-nums}
-.count span{font-size:12px;font-weight:700}
-.theme-list{max-height:220px;overflow:auto;display:flex;flex-direction:column;border-top:1px solid var(--line)}
-.theme-item{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
-.theme-item .dot{width:10px;height:10px;border-radius:50%;flex:none}
-.theme-item .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.theme-item .meta{color:var(--muted);font-variant-numeric:tabular-nums;font-size:13px}
 .report{border-radius:10px;padding:12px;background:var(--raise);font-size:14px}
 .report ul{margin:6px 0 0;padding-left:18px;color:var(--muted)}
 .format{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
@@ -90,10 +80,6 @@ h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.0
 .topbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
 .brand{font-family:var(--f-display);font-weight:800;font-size:22px}
 .scores{display:flex;flex-wrap:wrap;gap:8px}
-.chip{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:5px 12px 5px 6px;font-weight:600;font-size:14px}
-.chip.cur{background:var(--text);color:var(--on-card);border-color:var(--text)}
-.chip .pawn-s{width:18px;height:18px;border-radius:50%;border:2px solid var(--ink)}
-.chip .pos{font-variant-numeric:tabular-nums;opacity:.65}
 .game{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:24px;align-items:start}
 @media (max-width:900px){.game{grid-template-columns:1fr}}
 .scoreboard{display:flex;flex-direction:column;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px}
@@ -108,17 +94,6 @@ h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.0
 .round{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
 .ranking{display:flex;flex-direction:column;gap:6px;min-width:min(420px,100%)}
 .ranking div{display:flex;justify-content:space-between;gap:16px;font-size:18px;border-bottom:1px solid var(--line);padding:6px 0;font-variant-numeric:tabular-nums}
-.board{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px}
-.cell{aspect-ratio:1;max-width:100%;border-radius:8px;position:relative;color:var(--on-card);font-size:11px;font-weight:700;padding:3px 5px;min-width:0;overflow:hidden}
-.cell.start,.cell.final{background:var(--fin);font-family:var(--f-display);font-size:10px;text-transform:uppercase;letter-spacing:.02em}
-.cell.final{background:repeating-linear-gradient(45deg,var(--fin) 0 6px,#d9d5c8 6px 12px)}
-.cell .n{opacity:.6;font-variant-numeric:tabular-nums}
-.cell .pawns{position:absolute;inset:auto 3px 3px 3px;display:flex;flex-wrap:wrap;gap:2px;justify-content:flex-end}
-.pawn{width:42%;max-width:20px;aspect-ratio:1;border-radius:50%;border:2px solid var(--on-card);box-shadow:0 1px 0 rgba(0,0,0,.4)}
-.pawn.cur{animation:bob 1s ease-in-out infinite}
-@keyframes bob{50%{transform:translateY(-3px)}}
-.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--muted)}
-.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
 .side{display:flex;flex-direction:column;gap:14px;min-width:0}
 .turn{display:flex;align-items:center;gap:10px;font-size:15px;color:var(--muted)}
 .turn b{color:var(--text);font-size:20px;font-family:var(--f-display)}
@@ -162,6 +137,33 @@ h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.0
 .confetti span:nth-child(2){animation-delay:.08s}.confetti span:nth-child(3){animation-delay:.16s}.confetti span:nth-child(4){animation-delay:.24s}
 @keyframes pop{from{transform:scale(.3) rotate(-20deg)}to{transform:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- Decks ---------- */
+.decks-panel{grid-column:1/-1}
+.decks-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px}
+.decks-head .hint{margin-top:6px}
+.decks{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px;padding:4px 8px 8px 0}
+.deck{position:relative;overflow:hidden;border:0;border-radius:16px;padding:16px 16px 14px;min-height:168px;text-align:left;color:var(--on-card);display:flex;flex-direction:column;gap:8px;box-shadow:5px 5px 0 -1px var(--ink),6px 6px 0 0 rgba(244,241,232,.35),10px 10px 0 -1px var(--ink),11px 11px 0 0 rgba(244,241,232,.18);transition:transform .15s ease,filter .2s ease,opacity .2s ease}
+.deck:hover{transform:translateY(-3px) rotate(-.6deg)}
+.deck.off{filter:grayscale(1) brightness(.42);opacity:.75;box-shadow:none}
+.deck.off:hover{filter:grayscale(.4) brightness(.7)}
+.deck h3{font-size:22px;font-weight:800;letter-spacing:-.01em;margin-top:auto;padding-right:28px;overflow-wrap:anywhere}
+.deck p{margin:0;font-size:13px;font-weight:500;opacity:.8}
+.deck .meta{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;opacity:.75;position:relative}
+.deck .tick{position:absolute;top:12px;right:12px;width:26px;height:26px;border-radius:50%;background:var(--on-card);color:var(--text);display:grid;place-items:center;font-size:14px;font-weight:800;z-index:1}
+.deck.off .tick{background:transparent;border:2px solid var(--on-card);color:var(--on-card)}
+.deck > *{position:relative;z-index:1}
+.card > *:not(.bignum){position:relative;z-index:1}
+.shine{background-size:100% 100%}
+.shine::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.65) 50%,transparent 65%);background-size:260% 100%;background-position:130% 0;mix-blend-mode:soft-light;pointer-events:none;animation:sheen 5s ease-in-out infinite}
+.deck.shine:hover::after{animation-duration:1.6s}
+@keyframes sheen{0%{background-position:130% 0}55%,100%{background-position:-130% 0}}
+.glow{box-shadow:0 0 34px -4px #ff4fb0,0 0 0 1px rgba(255,255,255,.35) inset}
+.deck.glow{box-shadow:0 0 28px -6px #ff4fb0,5px 5px 0 -1px var(--ink),6px 6px 0 0 rgba(255,79,176,.5)}
+.stripe span{position:relative;overflow:hidden}
+.fmt summary{cursor:pointer;font-weight:600;color:var(--muted);font-size:14px}
+.fmt[open] summary{margin-bottom:10px}
+.fmt .hint{margin-top:10px}
 </style>
 </head>
 <body>
@@ -171,21 +173,42 @@ h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.0
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-/* ================= Données ================= */
-const CATS = {
-  scolaire:{label:'Savoirs', v:'var(--sco)'},
-  mature:{label:'Vie d’adulte', v:'var(--mat)'},
-  plaisir:{label:'Loisirs', v:'var(--pla)'},
-  improbable:{label:'Insolite', v:'var(--imp)'}
+/* ================= Finitions des decks ================= */
+const FINISHES = {
+  irise:{label:'Irisé', bg:'linear-gradient(115deg,#ffc8ee 0%,#c4ecff 22%,#dcffc9 44%,#fff0bd 66%,#e3ccff 88%,#ffc8ee 100%)', fx:'shine'},
+  metal:{label:'Métal', bg:'linear-gradient(160deg,#f1f3f6 0%,#b4bac4 38%,#e9ecf0 52%,#9aa2ae 78%,#d7dbe1 100%)', fx:'shine'},
+  or:{label:'Or', bg:'linear-gradient(135deg,#fff0b3 0%,#e2b54a 35%,#fff4c4 52%,#c9962f 78%,#f3d77a 100%)', fx:'shine'},
+  cuivre:{label:'Cuivre', bg:'linear-gradient(135deg,#ffd5b8 0%,#d0855a 38%,#ffc9a3 55%,#b5683f 80%,#e9a37b 100%)', fx:'shine'},
+  nacre:{label:'Nacre', bg:'linear-gradient(135deg,#fffaf2 0%,#efe2f7 30%,#ddf3f1 60%,#fbefe1 100%)', fx:'shine'},
+  neon:{label:'Néon', bg:'#ff4fb0', fx:'glow'},
+  retro:{label:'Rétro', bg:'linear-gradient(180deg,#ffb1e1 0%,#ffd3a8 50%,#a8e3ff 100%)', fx:''},
+  bleu:{label:'Bleu', bg:'#4d8dff', fx:''},
+  rouge:{label:'Rouge', bg:'#ff5d62', fx:''},
+  jaune:{label:'Jaune', bg:'#ffc83d', fx:''},
+  vert:{label:'Vert', bg:'#35d99a', fx:''},
+  violet:{label:'Violet', bg:'#b678ff', fx:''},
+  craie:{label:'Craie', bg:'#f4f1e8', fx:''}
 };
-const KEYS = ['scolaire','mature','plaisir','improbable'];
+const FINISH_CYCLE = ['irise','metal','or','neon','cuivre','retro','nacre','bleu','vert','violet','rouge','jaune'];
+const FINISH_ALIASES = {irise:'irise',holo:'irise',holographique:'irise',arcenciel:'irise',metal:'metal',metallique:'metal',argent:'metal',chrome:'metal',acier:'metal',or:'or',dore:'or',gold:'or',cuivre:'cuivre',bronze:'cuivre',nacre:'nacre',perle:'nacre',neon:'neon',fluo:'neon',retro:'retro',vaporwave:'retro',bleu:'bleu',rouge:'rouge',jaune:'jaune',vert:'vert',violet:'violet',craie:'craie',blanc:'craie'};
+function finishFrom(v){
+  const raw=String(v??'').trim();
+  if(/^#[0-9a-f]{3,8}$/i.test(raw)) return raw;
+  const n=norm(raw).replace(/[^a-z]/g,'');
+  return FINISH_ALIASES[n]||null;
+}
+function finishOf(f){ return FINISHES[f] || (f&&f[0]==='#'?{label:f,bg:f,fx:''}:FINISHES.craie); }
+
+/* ================= Joueurs ================= */
 const PAWNS = ['#ffffff','#ff7ab6','#ff9f43','#5ee7ff','#c6ff5e','#8b5cf6','#ffe066','#f87171','#94a3b8','#2dd4bf'];
 const MAX = {teams:6, solo:10};
 const W = () => S.play==='solo' ? {one:'joueur',a:'un joueur',Many:'Joueurs',def:'Joueur'} : {one:'équipe',a:'une équipe',Many:'Équipes',def:'Équipe'};
 const DEFAULTS = {teams:['Les Loutres','Les Cornichons'], solo:['Joueur 1','Joueur 2']};
 
+/* ================= Deck intégré ================= */
+const SAMPLE_DECK = {name:'Échauffement', finish:'nacre', desc:'Les cartes de démarrage, toujours disponibles.'};
 const RAW = [
- ['scolaire','Planètes du système solaire',[
+  ['Planètes du système solaire',[
   ['Sur quelle planète vivons-nous ?','La Terre'],
   ['Quelle planète est surnommée la planète rouge ?','Mars'],
   ['Quelle est la plus grande planète du système solaire ?','Jupiter'],
@@ -196,7 +219,7 @@ const RAW = [
   ['Comment s’appelle le plus grand satellite de Saturne ?','Titan'],
   ['Sur quelle planète une journée dure-t-elle plus longtemps qu’une année ?','Vénus'],
   ['Comment s’appelle le plus haut volcan connu du système solaire, sur Mars ?','Olympus Mons']]],
- ['scolaire','Géographie de la France',[
+  ['Géographie de la France',[
   ['Quelle est la capitale de la France ?','Paris'],
   ['Quel fleuve traverse Paris ?','La Seine'],
   ['Quel est le plus haut sommet de France ?','Le mont Blanc'],
@@ -207,7 +230,7 @@ const RAW = [
   ['Quelle est la préfecture de la Corrèze ?','Tulle'],
   ['Après la Corse, quelle est la plus grande île de France métropolitaine ?','L’île d’Oléron'],
   ['Quel est le point culminant du Massif central ?','Le puy de Sancy']]],
- ['mature','Vins et vignobles',[
+  ['Vins et vignobles',[
   ['De quelle région vient le champagne ?','La Champagne'],
   ['Quel ustensile sert à retirer un bouchon de liège ?','Un tire-bouchon'],
   ['Comment s’appelle la personne qui conseille les vins au restaurant ?','Le sommelier'],
@@ -218,7 +241,7 @@ const RAW = [
   ['Quel insecte a ravagé le vignoble français à la fin du XIXe siècle ?','Le phylloxéra'],
   ['Comment appelle-t-on la couche de levures sous laquelle vieillit le vin jaune ?','Le voile'],
   ['Comment s’appelle la bouteille de 62 cl réservée au vin jaune ?','Le clavelin']]],
- ['mature','Impôts et paperasse',[
+  ['Impôts et paperasse',[
   ['Combien de fois par an déclare-t-on ses revenus ?','Une fois'],
   ['Que signifie TVA ?','Taxe sur la valeur ajoutée'],
   ['Quel est le taux normal de TVA en France ?','20 %'],
@@ -229,7 +252,7 @@ const RAW = [
   ['Que signifie le sigle URSSAF ?','Union de recouvrement des cotisations de sécurité sociale et d’allocations familiales'],
   ['Qui est considéré comme l’inventeur de la TVA, en 1954 ?','Maurice Lauré'],
   ['Combien de parts fiscales a un couple marié avec trois enfants ?','4 parts']]],
- ['plaisir','Pâtisserie',[
+  ['Pâtisserie',[
   ['Quelle viennoiserie a la forme d’une lune ?','Le croissant'],
   ['Quelle pâtisserie allongée est garnie de crème et glacée au café ou au chocolat ?','L’éclair'],
   ['Quelle tarte aux pommes se cuit à l’envers ?','La tarte Tatin'],
@@ -240,7 +263,7 @@ const RAW = [
   ['Quel pâtissier a créé l’Ispahan, au parfum rose, litchi et framboise ?','Pierre Hermé'],
   ['Quel gâteau en couches associe biscuit Joconde, crème au beurre café et ganache ?','L’opéra'],
   ['Quel chef du début du XIXe siècle est considéré comme le père de la pâtisserie moderne ?','Antonin Carême']]],
- ['plaisir','Jeux vidéo',[
+  ['Jeux vidéo',[
   ['Quel jeu consiste à empiler des blocs qui tombent pour compléter des lignes ?','Tetris'],
   ['Quelle entreprise japonaise fabrique la Switch ?','Nintendo'],
   ['Dans quel pays Tetris a-t-il été créé ?','En URSS (Russie)'],
@@ -251,7 +274,7 @@ const RAW = [
   ['Qui a créé Tetris ?','Alexeï Pajitnov'],
   ['Quel jeu d’arcade Taito de 1978 met en scène des envahisseurs extraterrestres ?','Space Invaders'],
   ['Quel jeu de 1971 est considéré comme le premier jeu d’arcade commercial ?','Computer Space']]],
- ['improbable','Pigeons',[
+  ['Pigeons',[
   ['Quel oiseau picore les miettes sur toutes les places des villes ?','Le pigeon'],
   ['Comment appelle-t-on le pigeon qui transporte des messages ?','Le pigeon voyageur'],
   ['Comment s’appelle le petit du pigeon ?','Le pigeonneau'],
@@ -262,7 +285,7 @@ const RAW = [
   ['Quelle espèce de pigeon, autrefois comptée en milliards en Amérique du Nord, a disparu en 1914 ?','Le pigeon migrateur (ou tourte voyageuse)'],
   ['Quel pigeon voyageur a été décoré pour avoir sauvé près de 200 soldats américains en 1918 ?','Cher Ami'],
   ['Comment s’appelait le dernier pigeon migrateur, mort au zoo de Cincinnati ?','Martha']]],
- ['improbable','Escargots',[
+  ['Escargots',[
   ['Quel animal porte sa maison sur le dos et laisse une trace de bave ?','L’escargot'],
   ['L’escargot est-il un insecte, un mollusque ou un reptile ?','Un mollusque'],
   ['Avec quoi sert-on traditionnellement les escargots de Bourgogne ?','Du beurre à l’ail et au persil'],
@@ -274,84 +297,109 @@ const RAW = [
   ['Comment s’appelle le voile qui ferme la coquille pendant l’hibernation ?','L’épiphragme'],
   ['Quel est le nom latin de l’escargot de Bourgogne ?','Helix pomatia']]]
 ];
-const SAMPLES = RAW.map(([cat,name,qs],i)=>({id:'s'+i,cat,name,src:'sample',qs:qs.map(([q,a])=>({q,a}))}));
+const SAMPLES = RAW.map(([name,qs],i)=>({id:'s'+i,deck:SAMPLE_DECK.name,name,src:'sample',qs:qs.map(([q,a])=>({q,a}))}));
 
 /* ================= Stockage des imports ================= */
-const LS_KEY='ttmc.imports.v1';
-function loadImports(){try{const v=JSON.parse(localStorage.getItem(LS_KEY)||'[]');return Array.isArray(v)?v:[]}catch(e){return []}}
-function saveImports(){try{localStorage.setItem(LS_KEY,JSON.stringify(IMPORTS))}catch(e){}}
-let IMPORTS = loadImports();
-let BANK = [];
+const LS_KEY='connoisseur.imports.v2', LS_OLD='ttmc.imports.v1';
+const OLD_CATS={scolaire:'Savoirs',mature:'Vie d’adulte',plaisir:'Loisirs',improbable:'Insolite'};
+function loadImports(){
+  try{
+    const v=JSON.parse(localStorage.getItem(LS_KEY)||'null');
+    if(v&&Array.isArray(v.themes)) return {themes:v.themes,decks:v.decks||{}};
+    const old=JSON.parse(localStorage.getItem(LS_OLD)||'[]');
+    if(Array.isArray(old)&&old.length) return {themes:old.map(t=>({...t,deck:t.deck||OLD_CATS[t.cat]||'Import'})),decks:{}};
+  }catch(e){}
+  return {themes:[],decks:{}};
+}
+function saveImports(){try{localStorage.setItem(LS_KEY,JSON.stringify({themes:IMPORTS,decks:IMPORT_DECKS}))}catch(e){}}
+let {themes:IMPORTS, decks:IMPORT_DECKS} = loadImports();
+let BANK = [], BANK_DECKS = {};
 
 /* ================= État ================= */
 let S = {
   screen:'setup',
   teams:[{name:'Les Loutres',color:PAWNS[1],score:0},{name:'Les Cornichons',color:PAWNS[4],score:0}],
-  play:'teams', mode:'points', useBank:true, bankStatus:'loading', goal:30, rounds:8, timer:30, useSamples:true,
-  cur:0, turn:0, catTurn:0, phase:null, theme:null, level:null, cell:null, used:[], history:[], flash:'', report:null, error:'', winner:null
+  play:'teams', mode:'points', goal:30, rounds:8, timer:30, off:{}, bankStatus:'loading',
+  cur:0, turn:0, deckTurn:0, phase:null, theme:null, level:null, used:[], history:[], flash:'', report:null, error:'', winner:null
 };
 let tick=null, deadline=0;
 
 const $app=document.getElementById('app');
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const lib=()=>[...(S.useSamples?SAMPLES:[]),...(S.useBank?BANK:[]),...IMPORTS];
 const rnd=a=>a[Math.floor(Math.random()*a.length)];
 const team=()=>S.teams[S.cur];
+function norm(s){return String(s??'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim()}
+
+/* ================= Decks ================= */
+function allThemes(){ return [...SAMPLES,...BANK,...IMPORTS]; }
+function deckList(){
+  const meta={[SAMPLE_DECK.name]:{...SAMPLE_DECK,src:'sample'}};
+  Object.entries(BANK_DECKS).forEach(([k,v])=>meta[k]={...meta[k],...v,name:k,src:meta[k]?.src||'banque'});
+  Object.entries(IMPORT_DECKS).forEach(([k,v])=>meta[k]={...meta[k],...v,name:k,src:meta[k]?.src||'import'});
+  const order=[], seen={};
+  allThemes().forEach(t=>{ if(!seen[t.deck]){seen[t.deck]=1;order.push(t.deck)} });
+  return order.map((name,i)=>{
+    const m=meta[name]||{name,src:'import'};
+    const themes=allThemes().filter(t=>t.deck===name);
+    const finish=m.finish||FINISH_CYCLE[i%FINISH_CYCLE.length];
+    return {name, finish, desc:m.desc||'', src:m.src, themes};
+  });
+}
+const deckMeta=name=>deckList().find(d=>d.name===name)||{name,finish:'craie',themes:[]};
+const lib=()=>allThemes().filter(t=>!S.off[t.deck]);
+const activeDecks=()=>deckList().filter(d=>!S.off[d.name]&&d.themes.length).map(d=>d.name);
+function deckStyle(name){ const f=finishOf(deckMeta(name).finish); return {style:`background:${f.bg}`, cls:f.fx}; }
 
 /* ================= Import Excel ================= */
-const norm=s=>String(s??'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();
-function catFrom(v){
-  const n=norm(v);
-  if(!n) return null;
-  if(/^(sav|sco)/.test(n)) return 'scolaire';
-  if(/^(vie|adu|mat)/.test(n)) return 'mature';
-  if(/^(loi|pla)/.test(n)) return 'plaisir';
-  if(/^(ins|imp)/.test(n)) return 'improbable';
-  return undefined;
-}
-function parseSheet(rows, sheetName, out){
+function parseSheet(rows, sheetName, out, defDeck){
   let hi=-1;
   for(let r=0;r<Math.min(rows.length,10);r++){
     const h=(rows[r]||[]).map(norm);
     if(h.some(x=>x.startsWith('theme')) && h.some(x=>x.startsWith('question')||/^q\s*\d+$/.test(x))){hi=r;break}
+    if(h.some(x=>x.startsWith('deck')) && h.some(x=>x.startsWith('finition')||x.startsWith('couleur'))){
+      const di=h.findIndex(x=>x.startsWith('deck')), fi=h.findIndex(x=>x.startsWith('finition')||x.startsWith('couleur')), si=h.findIndex(x=>x.startsWith('desc'));
+      for(let k=r+1;k<rows.length;k++){
+        const row=rows[k]||[]; const name=String(row[di]??'').trim(); if(!name) continue;
+        const f=finishFrom(row[fi]);
+        if(String(row[fi]??'').trim()&&!f) out.warnings.push(`${sheetName}, ligne ${k+1} : finition « ${row[fi]} » inconnue, une finition sera choisie au hasard.`);
+        out.decks[name]={...(f?{finish:f}:{}),...(si>=0&&String(row[si]??'').trim()?{desc:String(row[si]).trim()}:{})};
+      }
+      return;
+    }
   }
   if(hi<0) return;
   const H=(rows[hi]).map(norm);
   const col=f=>H.findIndex(f);
-  const ci=col(x=>x.startsWith('cat')), ti=col(x=>x.startsWith('theme'));
-  const ni=col(x=>x.startsWith('niv')||x.startsWith('level'));
+  let di=col(x=>x.startsWith('deck')||x.startsWith('paquet'));
+  if(di<0) di=col(x=>x.startsWith('cat'));
+  const ti=col(x=>x.startsWith('theme')), ni=col(x=>x.startsWith('niv')||x.startsWith('level'));
   const map={};
-  const get=(cat,name)=>{const k=cat+'|'+norm(name);return map[k]||(map[k]={cat,name:String(name).trim(),qs:Array(10).fill(null)})};
-  let lastCat=null,lastTheme=null;
-  const resolveCat=(raw,row)=>{
-    let c=catFrom(raw);
-    if(c===undefined){out.warnings.push(`${sheetName}, ligne ${row} : catégorie « ${raw} » inconnue, rangée dans Insolite.`);c='improbable'}
-    return c;
-  };
+  const get=(deck,name)=>{const k=deck+'|'+norm(name);return map[k]||(map[k]={deck,name:String(name).trim(),qs:Array(10).fill(null)})};
+  let lastDeck=null,lastTheme=null;
   if(ni>=0){
     const qi=col(x=>x.startsWith('question')), ri=col(x=>x.startsWith('rep')||x.startsWith('answer'));
     for(let r=hi+1;r<rows.length;r++){
       const row=rows[r]||[]; const line=r+1;
       if(!row.some(v=>String(v??'').trim())) continue;
       const themeName=String(row[ti]??'').trim()||lastTheme;
-      let cat=ci>=0&&String(row[ci]??'').trim()?resolveCat(row[ci],line):(themeName===lastTheme?lastCat:null);
+      const cell=di>=0?String(row[di]??'').trim():'';
+      const deck=cell||(themeName===lastTheme&&lastDeck)||lastDeck||defDeck;
       const lv=parseInt(row[ni],10), q=String(row[qi]??'').trim(), a=String(row[ri]??'').trim();
       if(!q&&!a) continue;
       if(!themeName){out.warnings.push(`${sheetName}, ligne ${line} : thème manquant, ligne ignorée.`);continue}
-      if(!cat){out.warnings.push(`${sheetName}, ligne ${line} : catégorie manquante pour « ${themeName} », rangée dans Insolite.`);cat='improbable'}
-      lastTheme=themeName;lastCat=cat;
+      lastTheme=themeName;lastDeck=deck;
       if(!(lv>=1&&lv<=10)){out.warnings.push(`${sheetName}, ligne ${line} : niveau « ${row[ni]??''} » invalide (1 à 10).`);continue}
       if(!q||!a){out.warnings.push(`${sheetName}, ligne ${line} : question ou réponse vide.`);continue}
-      get(cat,themeName).qs[lv-1]={q,a};
+      get(deck,themeName).qs[lv-1]={q,a};
     }
   } else {
     const qc={},rc={};
     H.forEach((h,i)=>{let m=h.match(/^(?:q|question)\s*(\d+)$/);if(m)qc[+m[1]]=i;m=h.match(/^(?:r|rep|reponse|answer)\s*(\d+)$/);if(m)rc[+m[1]]=i});
     for(let r=hi+1;r<rows.length;r++){
-      const row=rows[r]||[]; const line=r+1;
+      const row=rows[r]||[];
       const themeName=String(row[ti]??'').trim(); if(!themeName) continue;
-      const cat=ci>=0?(resolveCat(row[ci],line)||'improbable'):'improbable';
-      const t=get(cat,themeName);
+      const deck=(di>=0&&String(row[di]??'').trim())||defDeck;
+      const t=get(deck,themeName);
       for(let l=1;l<=10;l++){const q=String(row[qc[l]]??'').trim(),a=String(row[rc[l]]??'').trim();if(q&&a)t.qs[l-1]={q,a}}
     }
   }
@@ -362,49 +410,56 @@ function parseSheet(rows, sheetName, out){
     out.themes.push(t);
   });
 }
+function parseWorkbook(buf, defDeck){
+  const out={themes:[],decks:{},warnings:[]};
+  const wb=XLSX.read(new Uint8Array(buf),{type:'array'});
+  wb.SheetNames.forEach(n=>parseSheet(XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:''}),n,out,defDeck));
+  return out;
+}
 function loadBank(){
   if(!window.XLSX){S.bankStatus='error';render();return}
   fetch('themes.xlsx',{cache:'no-cache'})
     .then(r=>{if(!r.ok)throw new Error(r.status);return r.arrayBuffer()})
     .then(buf=>{
-      const out={themes:[],warnings:[]};
-      const wb=XLSX.read(new Uint8Array(buf),{type:'array'});
-      wb.SheetNames.forEach(n=>parseSheet(XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:''}),n,out));
+      const out=parseWorkbook(buf,'Banque');
       BANK=out.themes.map((t,i)=>({id:'b'+i,src:'banque',...t}));
+      BANK_DECKS=out.decks;
       S.bankStatus=BANK.length?'ok':'error';
     })
     .catch(()=>{S.bankStatus='error'})
     .finally(()=>{if(S.screen==='setup')render()});
 }
 function importFile(file){
-  if(!window.XLSX){S.report={ok:0,warnings:['La lecture Excel n’a pas pu se charger. Vérifiez la connexion puis réessayez.']};render();return}
+  if(!window.XLSX){S.report={file:file.name,added:0,warnings:['La lecture Excel n’a pas pu se charger. Vérifiez la connexion puis réessayez.']};render();return}
   const fr=new FileReader();
   fr.onload=()=>{
-    const out={themes:[],warnings:[]};
-    try{
-      const wb=XLSX.read(new Uint8Array(fr.result),{type:'array'});
-      wb.SheetNames.forEach(n=>parseSheet(XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:''}),n,out));
-    }catch(e){out.warnings.push('Fichier illisible : enregistrez-le en .xlsx et réessayez.')}
+    let out={themes:[],decks:{},warnings:[]};
+    const base=file.name.replace(/\.[^.]+$/,'');
+    try{ out=parseWorkbook(fr.result,base); }
+    catch(e){out.warnings.push('Fichier illisible : enregistrez-le en .xlsx et réessayez.')}
     let added=0,replaced=0;
     out.themes.forEach(t=>{
-      const i=IMPORTS.findIndex(x=>x.cat===t.cat&&norm(x.name)===norm(t.name));
+      const i=IMPORTS.findIndex(x=>x.deck===t.deck&&norm(x.name)===norm(t.name));
       const obj={id:'i'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),src:file.name,...t};
       if(i>=0){IMPORTS[i]=obj;replaced++}else{IMPORTS.push(obj);added++}
     });
-    if(!out.themes.length&&!out.warnings.length) out.warnings.push('Aucun thème trouvé. La première ligne doit contenir les colonnes Catégorie, Thème, Niveau, Question, Réponse.');
+    Object.assign(IMPORT_DECKS,out.decks);
+    const decks=[...new Set(out.themes.map(t=>t.deck))];
+    decks.forEach(d=>delete S.off[d]);
+    if(!out.themes.length&&!out.warnings.length) out.warnings.push('Aucune carte trouvée. La première ligne doit contenir les colonnes Deck, Thème, Niveau, Question, Réponse.');
     saveImports();
-    S.report={file:file.name,added,replaced,warnings:out.warnings};
+    S.report={file:file.name,added,replaced,decks,warnings:out.warnings};
     render();
   };
   fr.readAsArrayBuffer(file);
 }
 
 /* ================= Logique de jeu ================= */
-function draw(cat, exclude){
+function draw(deck, exclude){
   const L=lib();
-  let pool=L.filter(t=>t.cat===cat&&!S.used.includes(t.id)&&t.id!==exclude);
-  if(!pool.length){S.used=S.used.filter(id=>L.find(t=>t.id===id)?.cat!==cat);pool=L.filter(t=>t.cat===cat&&t.id!==exclude)}
-  if(!pool.length) pool=L.filter(t=>t.cat===cat);
+  let pool=L.filter(t=>t.deck===deck&&!S.used.includes(t.id)&&t.id!==exclude);
+  if(!pool.length){S.used=S.used.filter(id=>L.find(t=>t.id===id)?.deck!==deck);pool=L.filter(t=>t.deck===deck&&t.id!==exclude)}
+  if(!pool.length) pool=L.filter(t=>t.deck===deck);
   if(!pool.length) pool=L.filter(t=>!S.used.includes(t.id)&&t.id!==exclude);
   if(!pool.length) pool=L;
   const t=rnd(pool); S.used.push(t.id); return t;
@@ -412,8 +467,8 @@ function draw(cat, exclude){
 function beginTurn(){
   stopTimer();
   S.level=null;
-  const cat=KEYS[S.catTurn%4];
-  S.theme=draw(cat);
+  const decks=activeDecks();
+  S.theme=draw(decks[S.deckTurn%decks.length]);
   S.phase='pick';
 }
 function choose(l){
@@ -426,28 +481,28 @@ function totalTurns(){ return S.rounds*S.teams.length }
 function finish(){ stopTimer(); S.screen='win'; render(); }
 function resolve(ok){
   if(S.phase!=='answer') return;
-  S.history.push({scores:S.teams.map(t=>t.score),cur:S.cur,turn:S.turn,catTurn:S.catTurn,used:[...S.used]});
+  S.history.push({scores:S.teams.map(t=>t.score),cur:S.cur,turn:S.turn,deckTurn:S.deckTurn,used:[...S.used]});
   const t=team();
   if(ok){ t.score+=S.level; S.flash=`<b>${esc(t.name)}</b> marque ${S.level} point${S.level>1?'s':''}.`; }
   else S.flash=S.level>=7?`<b>CON.</b> ${esc(t.name)} visait ${S.level} et repart avec zéro.`:`<b>${esc(t.name)}</b> ne marque rien.`;
   if(S.mode==='points'&&t.score>=S.goal) return finish();
-  S.turn++; S.catTurn++;
+  S.turn++; S.deckTurn++;
   if(S.mode==='rounds'&&S.turn>=totalTurns()) return finish();
   S.cur=(S.cur+1)%S.teams.length;
   beginTurn(); render();
 }
 function undo(){
   const h=S.history.pop(); if(!h) return;
-  S.teams.forEach((t,i)=>t.score=h.scores[i]); S.cur=h.cur; S.turn=h.turn; S.catTurn=h.catTurn; S.used=h.used;
+  S.teams.forEach((t,i)=>t.score=h.scores[i]); S.cur=h.cur; S.turn=h.turn; S.deckTurn=h.deckTurn; S.used=h.used;
   S.screen='game'; S.flash='Dernier coup annulé.'; beginTurn(); render();
 }
 function startGame(){
   S.error='';
   S.teams.forEach((t,i)=>{if(!t.name.trim())t.name=W().def+' '+(i+1)});
   if(S.teams.length<2){S.error=S.play==='solo'?'Il faut au moins deux joueurs.':'Il faut au moins deux équipes.';render();return}
-  if(!lib().length){S.error='Aucun thème disponible : activez les exemples ou importez un fichier.';render();return}
+  if(!activeDecks().length){S.error='Ajoutez au moins un deck à la partie.';render();return}
   S.teams.forEach(t=>t.score=0);
-  S.cur=0;S.turn=0;S.catTurn=Math.floor(Math.random()*4);S.used=[];S.history=[];S.flash='';
+  S.cur=0;S.turn=0;S.deckTurn=Math.floor(Math.random()*activeDecks().length);S.used=[];S.history=[];S.flash='';
   S.screen='game'; beginTurn(); render();
 }
 
@@ -470,8 +525,49 @@ function render(){
   else $app.innerHTML=viewWin();
   if(S.screen==='game'&&S.phase==='question') updTimer();
 }
+const plural=(n,w)=>`${n} ${w}${n>1?'s':''}`;
+function viewDecks(){
+  const D=deckList();
+  const on=D.filter(d=>!S.off[d.name]);
+  const cards=on.reduce((s,d)=>s+d.themes.length,0);
+  const tiles=D.map(d=>{
+    const f=finishOf(d.finish), isOn=!S.off[d.name];
+    const tag=d.src==='sample'?'Intégré':d.src==='banque'?'Banque':'Importé';
+    return `<button class="deck ${f.fx} ${isOn?'':'off'}" style="background:${f.bg}" data-a="deck" data-d="${esc(d.name)}" aria-pressed="${isOn}" title="${esc(d.themes.map(t=>t.name).join(' · '))}">
+      <span class="tick" aria-hidden="true">${isOn?'✓':'+'}</span>
+      <span class="meta">${tag} · ${f.label}</span>
+      <h3>${esc(d.name)}</h3>
+      ${d.desc?`<p>${esc(d.desc)}</p>`:''}
+      <span class="meta">${plural(d.themes.length,'carte')} · ${d.themes.length*10} questions</span>
+    </button>`;
+  }).join('');
+  const bank=S.bankStatus==='loading'?'<p class="hint">Chargement des decks de themes.xlsx…</p>':S.bankStatus==='error'?'<p class="hint">Fichier themes.xlsx introuvable à côté du jeu : seuls le deck intégré et vos imports sont disponibles.</p>':'';
+  const rep=S.report?`<div class="report"><b>${esc(S.report.file||'Import')}</b> : ${plural(S.report.added||0,'carte')} ajoutée${(S.report.added||0)>1?'s':''}${S.report.replaced?`, ${S.report.replaced} mise(s) à jour`:''}${S.report.decks?.length?` dans ${S.report.decks.map(esc).join(', ')}`:''}.${S.report.warnings.length?`<ul>${S.report.warnings.slice(0,8).map(w=>`<li>${esc(w)}</li>`).join('')}${S.report.warnings.length>8?`<li>… et ${S.report.warnings.length-8} autre(s)</li>`:''}</ul>`:''}</div>`:'';
+  return `<div class="panel decks-panel">
+    <div class="decks-head">
+      <div><h2>Decks</h2><p class="hint">Cliquez sur un deck pour l’ajouter ou le retirer de la partie. Une carte = un thème de 10 questions.</p></div>
+      <span class="label">${plural(on.length,'deck')} · ${plural(cards,'carte')} en jeu</span>
+    </div>
+    ${bank}
+    <div class="decks">${tiles}</div>
+    <div class="actions">
+      <button class="btn primary small" data-a="import">Importer un deck Excel</button>
+      ${location.hostname.endsWith('github.io')?`<a class="btn ghost small" href="Connoisseur_modele_themes.xlsx" download>Télécharger le modèle</a>`:''}
+        ${IMPORTS.length?`<button class="btn ghost small" data-a="clear-imports">Retirer les ${plural(IMPORTS.length,'carte')} importée${IMPORTS.length>1?'s':''}</button>`:''}
+    </div>
+    ${rep}
+    <details class="fmt">
+      <summary>Format du fichier Excel</summary>
+      <div class="format"><table>
+        <tr><th>Deck</th><th>Thème</th><th>Niveau</th><th>Question</th><th>Réponse</th></tr>
+        <tr><td>Années 90</td><td>Spice Girls</td><td>1</td><td>Combien étaient-elles ?</td><td>5</td></tr>
+        <tr><td></td><td></td><td>2</td><td>Quel est leur premier tube ?</td><td>Wannabe</td></tr>
+      </table></div>
+      <p class="hint">Une ligne par question, 10 niveaux par thème. Les cellules Deck et Thème vides reprennent la valeur du dessus. Pour choisir l’apparence d’un deck, ajoutez une feuille « Decks » avec les colonnes Deck, Finition et Description. Finitions : ${Object.values(FINISHES).map(f=>f.label.toLowerCase()).join(', ')}, ou un code couleur comme #ff6600. Les decks importés restent dans ce navigateur.</p>
+    </details>
+  </div>`;
+}
 function viewSetup(){
-  const L=lib(), counts=KEYS.map(k=>L.filter(t=>t.cat===k).length);
   const teams=S.teams.map((t,i)=>`
     <div class="team-row">
       <input type="text" id="team-${i}" data-team="${i}" value="${esc(t.name)}" maxlength="24" aria-label="Nom ${i+1}">
@@ -479,15 +575,13 @@ function viewSetup(){
       <button class="icon-btn" data-a="rm-team" data-i="${i}" aria-label="Retirer" ${S.teams.length<=2?'disabled':''}>✕</button>
     </div>`).join('');
   const seg=(key,opts)=>`<div class="seg">${opts.map(([v,l])=>`<button class="${S[key]===v?'on':''}" data-a="set" data-k="${key}" data-v="${v}">${l}</button>`).join('')}</div>`;
-  const list=L.map(t=>`<div class="theme-item"><span class="dot" style="background:${CATS[t.cat].v}"></span><span class="nm">${esc(t.name)}</span><span class="meta">${t.qs.filter(Boolean).length}/10 · ${t.src==='sample'?'exemple':t.src==='banque'?'banque':esc(t.src)}</span></div>`).join('')||'<p class="hint" style="padding-top:10px">Aucun thème pour l’instant.</p>';
-  const rep=S.report?`<div class="report"><b>${esc(S.report.file||'Import')}</b> : ${S.report.added||0} thème(s) ajouté(s)${S.report.replaced?`, ${S.report.replaced} mis à jour`:''}.${S.report.warnings.length?`<ul>${S.report.warnings.slice(0,8).map(w=>`<li>${esc(w)}</li>`).join('')}${S.report.warnings.length>8?`<li>… et ${S.report.warnings.length-8} autre(s)</li>`:''}</ul>`:''}</div>`:'';
   return `
   <header class="hero">
     <div>
       <h1><em>Con</em> ou<br>connoisseur ?</h1>
-      <p>Notez-vous de 1 à 10 sur le thème tiré : 1, vous êtes con, 10, vous êtes connoisseur. Bonne réponse : vous avancez d’autant de cases. Chaque bonne réponse rapporte autant de points que la note annoncée.</p>
+      <p>Notez-vous de 1 à 10 sur le thème tiré : 1, vous êtes con, 10, vous êtes connoisseur. Chaque bonne réponse rapporte autant de points que la note annoncée.</p>
     </div>
-    <div class="stripe">${KEYS.map(k=>`<span style="background:${CATS[k].v}" title="${CATS[k].label}"></span>`).join('')}</div>
+    <div class="stripe">${['irise','metal','or','neon','retro'].map(k=>`<span class="${FINISHES[k].fx}" style="background:${FINISHES[k].bg}" title="${FINISHES[k].label}"></span>`).join('')}</div>
   </header>
   <section class="setup">
     <div class="panel">
@@ -503,28 +597,9 @@ function viewSetup(){
         ?`<div class="field"><span class="label">Premier à</span>${seg('goal',[[20,'20 pts'],[30,'30 pts'],[50,'50 pts'],[80,'80 pts']])}</div>`
         :`<div class="field"><span class="label">Tours par ${W().one}</span>${seg('rounds',[[5,'5'],[8,'8'],[10,'10'],[15,'15']])}</div>`}
       <div class="field"><span class="label">Chrono par question</span>${seg('timer',[[0,'Sans'],[30,'30 s'],[45,'45 s'],[60,'60 s']])}</div>
-      <p class="hint">Bonne réponse : la note choisie devient le nombre de points. Les catégories tournent à chaque question.</p>
+      <p class="hint">Bonne réponse : la note choisie devient le nombre de points. Les decks choisis tournent à chaque question.</p>
     </div>
-    <div class="panel">
-      <h2>Thèmes</h2>
-      <div class="counts">${KEYS.map((k,i)=>`<div class="count" style="background:${CATS[k].v}"><b>${counts[i]}</b><span>${CATS[k].label}</span></div>`).join('')}</div>
-      <label class="check"><input type="checkbox" id="opt-bank" data-opt="useBank" ${S.useBank?'checked':''} ${S.bankStatus==='ok'?'':'disabled'}><span>Banque de thèmes${S.bankStatus==='ok'?` · ${BANK.length} thèmes`:''}<small>${S.bankStatus==='loading'?'Chargement de themes.xlsx…':S.bankStatus==='error'?'Fichier themes.xlsx introuvable à côté du jeu.':'Chargée depuis themes.xlsx, à côté du jeu.'}</small></span></label>
-      <label class="check"><input type="checkbox" id="opt-samples" data-opt="useSamples" ${S.useSamples?'checked':''}><span>Inclure les ${SAMPLES.length} thèmes d’exemple</span></label>
-      <div class="actions">
-        <button class="btn primary small" data-a="import">Importer un fichier Excel</button>
-        ${location.hostname.endsWith('github.io')?`<a class="btn ghost small" href="Connoisseur_modele_themes.xlsx" download>Télécharger le modèle</a>`:''}
-        ${IMPORTS.length?`<button class="btn ghost small" data-a="clear-imports">Retirer les ${IMPORTS.length} thème(s) importé(s)</button>`:''}
-      </div>
-      ${rep}
-      <div class="theme-list">${list}</div>
-      <span class="label">Format attendu · une ligne par question</span>
-      <div class="format"><table>
-        <tr><th>Catégorie</th><th>Thème</th><th>Niveau</th><th>Question</th><th>Réponse</th></tr>
-        <tr><td>Insolite</td><td>Pigeons</td><td>1</td><td>Quel oiseau picore…</td><td>Le pigeon</td></tr>
-        <tr><td></td><td></td><td>2</td><td>Comment appelle-t-on…</td><td>Le pigeon voyageur</td></tr>
-      </table></div>
-      <p class="hint">Catégories : Savoirs, Vie d’adulte, Loisirs ou Insolite. Les cellules Catégorie et Thème vides reprennent la valeur de la ligne du dessus. Les thèmes importés restent dans ce navigateur.</p>
-    </div>
+    ${viewDecks()}
   </section>
   <div class="start-bar">
     ${S.error?`<span class="err">${esc(S.error)}</span>`:''}
@@ -543,15 +618,15 @@ function viewScores(){
   return `<div class="scoreboard"><span class="round">${info}</span>${rows}</div>`;
 }
 function viewCard(){
-  const th=S.theme, color=`background:${CATS[th.cat].v}`, catLabel=CATS[th.cat].label;
+  const th=S.theme, ds=deckStyle(th.deck), label=esc(th.deck);
   if(S.phase==='pick'){
     const btns=Array.from({length:10},(_,i)=>`<button class="lv" data-a="lv" data-l="${i+1}" ${th.qs[i]?'':'disabled'}>${i+1}</button>`).join('');
-    return `<div class="card" style="${color}">
-      <span class="cat">${catLabel}</span>
+    return `<div class="card ${ds.cls}" style="${ds.style}">
+      <span class="cat">Deck · ${label}</span>
       <span class="ask">T’es con ou connoisseur en…</span>
       <h2 class="theme">${esc(th.name)}</h2>
       <div class="levels">${btns}</div>
-      <button class="link" data-a="skip">Changer de thème</button>
+      <button class="link" data-a="skip">Changer de carte</button>
     </div>`;
   }
   const qa=th.qs[S.level-1];
@@ -560,9 +635,9 @@ function viewCard(){
     ? `${timer}<div class="actions"><button class="btn dark" data-a="reveal">Voir la réponse <span class="kbd">Espace</span></button></div>`
     : `<div class="a"><small>Réponse</small>${esc(qa.a)}</div>
        <div class="actions"><button class="btn ok" data-a="ok">Juste · +${S.level} <span class="kbd">J</span></button><button class="btn ko" data-a="ko">Faux <span class="kbd">F</span></button></div>`;
-  return `<div class="card" style="${color}">
+  return `<div class="card ${ds.cls}" style="${ds.style}">
     <span class="bignum" aria-hidden="true">${S.level}</span>
-    <span class="cat">${catLabel} · niveau ${S.level}</span>
+    <span class="cat">${label} · niveau ${S.level}</span>
     <span class="ask">${esc(th.name)}</span>
     <p class="q">${esc(qa.q)}</p>
     ${body}
@@ -594,7 +669,7 @@ function viewWin(){
   const title=top.length>1?'Égalité':esc(top[0].name);
   const sub=top.length>1?`${top.map(t=>esc(t.name)).join(' et ')} terminent avec ${top[0].score} points.`:`${top[0].score} points.`;
   return `<section class="win">
-    <div class="confetti">${KEYS.map(k=>`<span style="background:${CATS[k].v}"></span>`).join('')}</div>
+    <div class="confetti">${['irise','or','neon','metal'].map(k=>`<span class="${FINISHES[k].fx}" style="background:${FINISHES[k].bg}"></span>`).join('')}</div>
     <span class="label">${top.length>1?'Fin de partie':'Victoire'}</span>
     <h1>${title}</h1>
     <p class="hint">${sub}</p>
@@ -602,28 +677,29 @@ function viewWin(){
     <div class="actions"><button class="btn primary" data-a="replay">Rejouer avec ${S.play==='solo'?'les mêmes joueurs':'les mêmes équipes'}</button><button class="btn" data-a="undo" ${S.history.length?'':'disabled'}>Annuler le dernier coup</button><button class="btn" data-a="menu">Retour au menu</button></div>
   </section>`;
 }
+
 /* ================= Événements ================= */
 $app.addEventListener('click',e=>{
   const b=e.target.closest('[data-a]'); if(!b||b.disabled) return;
   const a=b.dataset.a;
   if(a==='set'){const v=b.dataset.v;S[b.dataset.k]=isNaN(+v)?v:+v;render()}
+  else if(a==='deck'){const d=b.dataset.d;if(S.off[d])delete S.off[d];else S.off[d]=true;S.error='';render()}
   else if(a==='color'){const t=S.teams[+b.dataset.i];const used=S.teams.map(x=>x.color);let k=PAWNS.indexOf(t.color);for(let n=0;n<PAWNS.length;n++){k=(k+1)%PAWNS.length;if(!used.includes(PAWNS[k]))break}t.color=PAWNS[k];render()}
   else if(a==='play'){const to=b.dataset.v;if(to===S.play)return;S.teams.forEach((t,i)=>{if(t.name===DEFAULTS[S.play][i]||t.name===W().def+' '+(i+1))t.name=DEFAULTS[to][i]||((to==='solo'?'Joueur ':'Équipe ')+(i+1))});S.play=to;S.teams=S.teams.slice(0,MAX[to]);render()}
   else if(a==='add-team'){const used=S.teams.map(t=>t.color);S.teams.push({name:W().def+' '+(S.teams.length+1),color:PAWNS.find(c=>!used.includes(c))||PAWNS[0],score:0});render()}
   else if(a==='rm-team'){S.teams.splice(+b.dataset.i,1);render()}
   else if(a==='import'){document.getElementById('file').click()}
-  else if(a==='clear-imports'){IMPORTS=[];saveImports();S.report=null;render()}
+  else if(a==='clear-imports'){IMPORTS=[];IMPORT_DECKS={};saveImports();S.report=null;render()}
   else if(a==='start'||a==='replay'){startGame()}
   else if(a==='menu'){stopTimer();S.screen='setup';render()}
   else if(a==='lv'){choose(+b.dataset.l)}
-  else if(a==='skip'){S.theme=draw(S.theme.cat,S.theme.id);render()}
+  else if(a==='skip'){S.theme=draw(S.theme.deck,S.theme.id);render()}
   else if(a==='reveal'){reveal()}
   else if(a==='ok'){resolve(true)}
   else if(a==='ko'){resolve(false)}
   else if(a==='undo'){undo()}
 });
 $app.addEventListener('input',e=>{const i=e.target.dataset.team;if(i!==undefined)S.teams[+i].name=e.target.value});
-$app.addEventListener('change',e=>{const o=e.target.dataset.opt;if(o){S[o]=e.target.checked;render()}});
 document.getElementById('file').addEventListener('change',e=>{const f=e.target.files[0];if(f)importFile(f);e.target.value=''});
 document.addEventListener('keydown',e=>{
   if(S.screen!=='game'||e.target.closest('input')) return;
@@ -635,8 +711,14 @@ document.addEventListener('keydown',e=>{
 
 /* ================= Démarrage (garde la partie lors d'une mise à jour) ================= */
 function start(data){
-  if(data&&data.S&&data.S.teams&&data.S.teams[0]&&'score' in data.S.teams[0]){S=data.S; if(S.screen==='game'&&S.phase==='question'){S.phase='answer'}}
-  if(S.useBank===undefined) S.useBank=true;
+  const p=data&&data.S;
+  if(p&&p.teams&&p.teams[0]&&'score' in p.teams[0]){
+    S={...S,...p};
+    if(!S.off) S.off={};
+    if(S.deckTurn===undefined) S.deckTurn=0;
+    if(S.screen==='game'&&!(S.theme&&S.theme.deck)) S.screen='setup';
+    if(S.screen==='game'&&S.phase==='question') S.phase='answer';
+  }
   S.bankStatus='loading';
   render(); loadBank();
 }
