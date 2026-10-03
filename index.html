@@ -1250,6 +1250,11 @@ $app.addEventListener('input',e=>{
   const i=e.target.dataset.team; if(i!==undefined) S.teams[+i].name=e.target.value;
   if(e.target.id==='deck-q'){S.q=e.target.value;applySearch()}
 });
+document.addEventListener('click',e=>{
+  if(!(S.menuOpen||S.importOpen)) return;
+  if(!e.target.isConnected||e.target.closest('#app')||e.target.closest('.menu-pop')) return;
+  S.menuOpen=false; S.importOpen=false; render();
+});
 document.getElementById('file').addEventListener('change',e=>{const f=e.target.files[0];if(f)importFile(f);e.target.value=''});
 document.addEventListener('keydown',e=>{
   const box=document.getElementById('unbox');
