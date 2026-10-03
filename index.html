@@ -481,6 +481,15 @@ html.dev-on .bottom-bar{padding-left:calc(clamp(16px,3vw,40px) + 56px)}
   .choice b{font-size:24px}
   .choice span{font-size:14px}
 }
+
+/* ---------- Écran de score : fenêtre centrée sur le joueur ---------- */
+.rc-list{position:relative;display:flex;flex-direction:column;gap:8px;max-height:max(176px,calc(100dvh - 450px));overflow-y:auto;scrollbar-width:none;padding:2px;margin:-2px;overscroll-behavior:contain}
+.rc-list::-webkit-scrollbar{display:none}
+.rc-list.ft{-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 64px,#000 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 64px,#000 100%)}
+.rc-list.fb{-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 calc(100% - 64px),transparent 100%);mask-image:linear-gradient(to bottom,#000 0,#000 calc(100% - 64px),transparent 100%)}
+.rc-list.ft.fb{-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 64px,#000 calc(100% - 64px),transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 64px,#000 calc(100% - 64px),transparent 100%)}
+.rc-next{position:sticky;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:5;box-shadow:0 -10px 24px 6px var(--ink)}
+@media (min-width:901px){.rc-list{max-height:min(420px,calc(100vh - 380px))}}
 </style>
 </head>
 <body>
@@ -864,7 +873,7 @@ function render(){
   $app.innerHTML=v();
   if(S.screen==='game'&&S.theme) S.lastDealt=S.theme.id;
   if(S.screen==='game'&&S.phase==='question') updTimer();
-  if(S.screen==='game'&&S.phase==='recap'&&!S.recap.anim){ S.recap.anim=true; animateRecap(); }
+  if(S.screen==='game'&&S.phase==='recap'){ focusRecap(); if(!S.recap.anim){ S.recap.anim=true; animateRecap(); } }
   if(S.screen==='decks') applySearch();
 }
 const plural=(n,w)=>`${n} ${w}${n>1?'s':''}`;
@@ -1116,9 +1125,21 @@ function viewRecap(){
   const btn=R.final?'Voir le classement final →':`Au tour de ${esc(next.name)} →`;
   return `<section class="recap">
     <div class="rc-head ${done?'still':''}">${head}</div>
-    <div class="rc-board"><span class="round">${roundInfo()}</span>${rows}</div>
+    <div class="rc-board"><span class="round">${roundInfo()}</span><div class="rc-list" id="rc-list">${rows}</div></div>
     <button class="btn primary big rc-next" data-a="next">${btn}</button>
   </section>`;
+}
+function recapFade(){
+  const l=document.getElementById('rc-list'); if(!l) return;
+  const over=l.scrollHeight>l.clientHeight+2;
+  l.classList.toggle('ft',over&&l.scrollTop>4);
+  l.classList.toggle('fb',over&&l.scrollTop+l.clientHeight<l.scrollHeight-4);
+}
+function focusRecap(){
+  const l=document.getElementById('rc-list'), me=l&&l.querySelector('.rc-row.me'); if(!l) return;
+  if(me) l.scrollTop=Math.max(0,me.offsetTop-l.clientHeight/2+me.offsetHeight/2);
+  recapFade();
+  l.addEventListener('scroll',recapFade,{passive:true});
 }
 function animateRecap(){
   const rows=[...document.querySelectorAll('.rc-row')]; if(!rows.length) return;
