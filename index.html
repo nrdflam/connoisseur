@@ -70,7 +70,7 @@ h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.0
 
 /* ---------- Jeu ---------- */
 .topbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
-.brand{font-family:var(--f-display);font-weight:800;font-size:22px}
+.brand{font-size:20px}
 .scores{display:flex;flex-wrap:wrap;gap:8px}
 .game{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:24px;align-items:start}
 @media (max-width:900px){.game{grid-template-columns:1fr}}
@@ -143,7 +143,7 @@ h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.0
 /* ---------- Accueil ---------- */
 .home{min-height:calc(100vh - 80px);display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);align-items:center;gap:40px}
 .home h1{font-size:clamp(52px,8.5vw,120px);font-weight:800;letter-spacing:-.035em;line-height:.95}
-.home h1 em{font-style:normal;color:var(--pla)}
+.home h1 em{font-style:normal;background:var(--text);color:var(--ink);padding:0 .12em;border-radius:.08em;margin-right:.04em}
 .home p{color:var(--muted);max-width:40ch;font-size:18px;margin:20px 0 34px}
 .home-choice{display:flex;flex-wrap:wrap;gap:14px;max-width:560px}
 .choice{flex:1 1 200px;text-align:left;border:1px solid var(--line);background:var(--panel);border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;gap:4px;transition:transform .15s,background .15s,border-color .15s}
@@ -178,7 +178,6 @@ h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.0
 .crimp{position:absolute;left:0;right:0;top:0;height:12px;background:repeating-linear-gradient(90deg,rgba(0,0,0,.22) 0 2px,rgba(255,255,255,.28) 2px 4px);border-bottom:1px solid rgba(0,0,0,.18);z-index:2}
 .crimp.bottom{top:auto;bottom:0;border-bottom:0;border-top:1px solid rgba(0,0,0,.18)}
 .pk-brand{font-family:var(--f-display);font-weight:800;font-size:10px;letter-spacing:.14em;margin-top:6px}
-.pk-brand em{font-style:normal;background:var(--on-card);color:var(--text);padding:1px 3px;border-radius:2px;margin-right:1px}
 .pk-name{font-family:var(--f-display);font-weight:800;font-size:clamp(17px,1.8vw,21px);line-height:1;letter-spacing:-.01em;text-wrap:balance;overflow-wrap:anywhere}
 .pk-foot{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;margin-bottom:4px;opacity:.75}
 .pk-toggle{position:absolute;right:-9px;top:-9px;width:34px;height:34px;border-radius:50%;border:3px solid var(--ink);background:var(--raise);color:var(--text);font-weight:800;font-size:17px;line-height:1;z-index:3;display:grid;place-items:center;transition:transform .15s}
@@ -238,8 +237,6 @@ h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.0
 @keyframes flip{0%{transform:rotateY(180deg)}70%{transform:rotateY(-12deg) scale(1.08)}100%{transform:rotateY(0) scale(1)}}
 .ub-back,.ub-front{position:absolute;inset:0;border-radius:12px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;text-align:center;padding:14px;overflow:hidden}
 .ub-back{transform:rotateY(180deg);justify-content:center;background:repeating-linear-gradient(45deg,var(--panel) 0 10px,var(--raise) 10px 20px);border:2px solid var(--line)}
-.ub-back span{font-family:var(--f-display);font-weight:800;font-size:20px;line-height:.95;color:var(--muted)}
-.ub-back em{font-style:normal;color:var(--pla)}
 .ub-front{color:var(--on-card);justify-content:space-between;box-shadow:inset 0 0 0 2px rgba(18,19,26,.85),inset 0 0 0 6px rgba(255,255,255,.35),0 18px 34px -14px rgba(0,0,0,.95)}
 .ub-front > *{position:relative;z-index:1}
 .ub-front b{font-family:var(--f-display);font-size:clamp(19px,2vw,23px);line-height:1.05;text-wrap:balance;overflow-wrap:anywhere}
@@ -279,7 +276,6 @@ h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.0
 .gem:hover:not([disabled]){background:var(--on-card);color:var(--text);transform:translateY(-2px)}
 .gem[disabled]{opacity:.25;cursor:not-allowed}
 .tcg-foot{display:flex;justify-content:space-between;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.7;padding:0 4px}
-.tcg-foot em{font-style:normal;background:var(--on-card);color:var(--text);padding:0 3px;border-radius:2px}
 .tcg .timer-row{font-size:14px}
 .tcg-actions{justify-content:center}
 .tcg-actions .btn{font-size:17px;padding:12px 22px}
@@ -320,6 +316,24 @@ html.no-sheen .shine::after{display:none}
 html.no-deal .tcg.deal{animation:none}
 html.no-shake .tearing .ub-pack,html.no-shake .dragging .ub-pack{animation:none}
 html.no-glow .ub-glow{display:none}
+
+/* ---------- Logo (un seul style partout) ---------- */
+.logo{--lf:var(--text);--lb:var(--ink);display:inline-flex;align-items:center;font-family:var(--f-display);font-weight:800;font-style:normal;letter-spacing:.14em;line-height:1;text-transform:uppercase;color:var(--lf);white-space:nowrap}
+.logo em{font-style:normal;background:var(--lf);color:var(--lb);padding:.18em .28em .16em;border-radius:.18em;margin-right:.12em;letter-spacing:.14em}
+.pk-brand.logo,.tcg-foot .logo{--lf:var(--on-card);--lb:#fbf8ef}
+.ub-back .logo{--lf:var(--muted);--lb:var(--panel);font-size:11px}
+.home-logo{font-size:13px;margin-bottom:18px}
+/* ---------- Boutons de jeu toujours visibles ---------- */
+.tcg-actions{position:sticky;bottom:env(safe-area-inset-bottom,0px);z-index:6;padding:16px 0 12px;background:linear-gradient(180deg,transparent,var(--ink) 35%)}
+html.dev-on .tcg-actions{padding-left:56px;padding-right:56px}
+@media (max-width:900px){
+  .tcg{aspect-ratio:auto}
+  .tcg-art{flex:none;min-height:0;padding:12px 14px}
+  .tcg.deal .tcg-art{min-height:150px}
+  .art-num{font-size:64px}
+  .art-theme{font-size:clamp(30px,9vw,44px)}
+  .topbar{gap:8px}
+}
 </style>
 </head>
 <body>
@@ -690,7 +704,7 @@ function packHTML(d, opts={}){
   return `<div class="pack-wrap ${on?'on':''}" data-search="${esc(search)}">
     <button class="pack ${f.fx}" style="background:${f.bg}" data-a="open" data-d="${esc(d.name)}" aria-label="Ouvrir le booster ${esc(d.name)}">
       <span class="crimp"></span>
-      <span class="pk-brand"><em>CON</em>NOISSEUR</span>
+      <span class="pk-brand logo"><em>CON</em>NOISSEUR</span>
       <span class="pk-name">${esc(d.name)}</span>
       <span class="pk-foot">${plural(d.themes.length,'carte')}</span>
       <span class="crimp bottom"></span>
@@ -702,9 +716,10 @@ function packHTML(d, opts={}){
 function viewHome(){
   const D=deckList();
   const picks=(D.length>3?D.slice(1,4):D).slice(0,3);
-  const fan=picks.map((d,i)=>{const f=finishOf(d.finish);return `<div class="fan-pack ${f.fx}" style="background:${f.bg};--r:${(i-1)*9}deg;--x:${(i-1)*46}px"><span class="crimp"></span><span class="pk-brand"><em>CON</em>NOISSEUR</span><span class="pk-name">${esc(d?d.name:'Booster')}</span><span class="crimp bottom"></span></div>`}).join('');
+  const fan=picks.map((d,i)=>{const f=finishOf(d.finish);return `<div class="fan-pack ${f.fx}" style="background:${f.bg};--r:${(i-1)*9}deg;--x:${(i-1)*46}px"><span class="crimp"></span><span class="pk-brand logo"><em>CON</em>NOISSEUR</span><span class="pk-name">${esc(d?d.name:'Booster')}</span><span class="crimp bottom"></span></div>`}).join('');
   return `<section class="home">
     <div class="home-text">
+      <span class="logo home-logo"><em>CON</em>NOISSEUR</span>
       <h1><em>Con</em> ou<br>connoisseur ?</h1>
       <p>Note-toi de 1 à 10 sur une carte, réponds à la question de ce niveau, marque autant de points.</p>
       <div class="home-choice">
@@ -813,7 +828,7 @@ function openPack(name){
   const sparks=Array.from({length:22},(_,i)=>{const a=-160+Math.random()*140, dist=90+Math.random()*170, s=4+Math.random()*7;return `<i class="spark" style="--a:${a}deg;--d:${dist}px;--s:${s}px;--t:${(Math.random()*.25).toFixed(2)}s"></i>`}).join('');
   const cards=d.themes.map((t,i)=>`<div class="ub-card" style="--i:${i};--r:${(Math.random()*24-12).toFixed(1)}deg">
       <div class="ub-inner">
-        <div class="ub-back"><span><em>CON</em><br>NOIS<br>SEUR</span></div>
+        <div class="ub-back"><span class="logo"><em>CON</em>NOISSEUR</span></div>
         <div class="ub-front ${f.fx}" style="background:${f.bg}"><span class="meta">◆ ${i+1}/${d.themes.length}</span><b>${esc(t.name)}</b><span class="meta">${t.qs.filter(Boolean).length} questions</span><i class="holo"></i></div>
       </div></div>`).join('');
   box.innerHTML=`<div class="ub-dialog" role="dialog" aria-modal="true" aria-label="Booster ${esc(d.name)}">
@@ -823,7 +838,7 @@ function openPack(name){
       <div class="ub-burst" aria-hidden="true">${sparks}</div>
       <div class="ub-pack" data-u="tear" role="button" tabindex="0" aria-label="Déchirer le booster">
         <div class="ub-piece ub-body ${f.fx}" style="background:${f.bg};clip-path:${bodyClip}">
-          <span class="pk-brand"><em>CON</em>NOISSEUR</span>
+          <span class="pk-brand logo"><em>CON</em>NOISSEUR</span>
           <span class="pk-name">${esc(d.name)}</span>
           <span class="pk-foot">${plural(d.themes.length,'carte')}</span>
           <span class="crimp bottom"></span>
@@ -917,7 +932,7 @@ function viewCard(){
       <div class="tcg-art ${f.fx}" style="background:${f.bg}">${art}</div>
       <div class="tcg-type"><span>Carte · ${esc(th.deck)}</span><span>◆ ${idx}/${d.themes.length}</span></div>
       <div class="tcg-text">${text}</div>
-      <footer class="tcg-foot"><span><em>CON</em>NOISSEUR</span><span>${pick?'Choisis ta note':'Niv. '+S.level+' · '+(S.level*1)+' pt'+(S.level>1?'s':'')}</span></footer>
+      <footer class="tcg-foot"><span class="logo"><em>CON</em>NOISSEUR</span><span>${pick?'Choisis ta note':'Niv. '+S.level+' · '+(S.level*1)+' pt'+(S.level>1?'s':'')}</span></footer>
     </div>
   </article>
   <div class="actions tcg-actions">${actions}</div>`;
@@ -926,7 +941,7 @@ function viewGame(){
   const t=team();
   return `
   <div class="topbar">
-    <span class="brand"><em>CON</em>NOISSEUR</span>
+    <span class="brand logo"><em>CON</em>NOISSEUR</span>
     <div class="actions">
       <button class="btn small ghost" data-a="undo" ${S.history.length?'':'disabled'}>Annuler le coup</button>
       <button class="btn small ghost" data-a="go" data-v="decks">Decks</button>
