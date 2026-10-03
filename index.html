@@ -414,11 +414,10 @@ html.no-glow .ub-glow{display:none}
 html.dev-on .bottom-bar{padding-left:calc(clamp(16px,3vw,40px) + 56px)}
 .packs{padding-bottom:12px}
 
-/* ---------- Carte plus haute sur téléphone ---------- */
+/* ---------- Carte un peu plus haute, bloc centré sur téléphone ---------- */
+.tcg{aspect-ratio:63/94}
 @media (max-width:900px){
-  .tcg{aspect-ratio:auto;min-height:calc(100dvh - 165px);display:flex}
-  .tcg-in{flex:1;height:auto}
-  .tcg-art{flex:1 1 auto}
+  .game{min-height:calc(100dvh - 52px);align-content:center}
 }
 </style>
 </head>
