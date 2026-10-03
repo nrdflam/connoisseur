@@ -789,6 +789,7 @@ function updTimer(){
 function render(){
   const v={home:viewHome,setup:viewPlayers,decks:viewDeckPicker,game:viewGame,win:viewWin}[S.screen]||viewHome;
   $app.innerHTML=v();
+  if(S.screen==='game'&&S.theme) S.lastDealt=S.theme.id;
   if(S.screen==='game'&&S.phase==='question') updTimer();
   if(S.screen==='game'&&S.phase==='recap'&&!S.recap.anim){ S.recap.anim=true; animateRecap(); }
   if(S.screen==='decks') applySearch();
@@ -1075,7 +1076,8 @@ function viewCard(){
         <div class="tcg-verdict"><button class="btn ok" data-a="ok">Juste · +${S.level} <span class="kbd">J</span></button><button class="btn ko" data-a="ko">Faux <span class="kbd">F</span></button></div>`;
     }
   }
-  return `<article class="tcg ${f.fx} ${pick?'deal':''}" style="background:${f.bg}">
+  const fresh=pick&&S.lastDealt!==th.id;
+  return `<article class="tcg ${f.fx} ${fresh?'deal':''}" style="background:${f.bg}">
     <div class="tcg-in">
       <header class="tcg-title">${pick?`<h2 class="set">${esc(th.deck)}</h2>`:`<h2>${esc(th.name)}</h2>`}<span class="cost" style="background:${f.bg}">${pick?'?':S.level}</span></header>
       <div class="tcg-art ${f.fx} ${pick?'':'is-q'}" style="background:${f.bg}">${art}</div>
