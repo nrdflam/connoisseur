@@ -186,37 +186,75 @@ h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.0
 .pack-wrap.on .pk-toggle{background:var(--text);color:var(--on-card)}
 
 /* ---------- Unboxing ---------- */
-.unbox{position:fixed;inset:0;z-index:50;background:rgba(8,9,13,.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:grid;place-items:center;padding:calc(24px + env(safe-area-inset-top,0px)) 16px calc(24px + env(safe-area-inset-bottom,0px));overflow:auto;opacity:0;transition:opacity .2s}
+.unbox{position:fixed;inset:0;z-index:50;background:radial-gradient(circle at 50% 35%,rgba(40,44,62,.92),rgba(6,7,10,.96) 70%);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:grid;place-items:center;padding:calc(24px + env(safe-area-inset-top,0px)) 16px calc(24px + env(safe-area-inset-bottom,0px));overflow-x:hidden;overflow-y:auto;opacity:0;transition:opacity .25s}
 .unbox.in{opacity:1}
-.ub-dialog{position:relative;width:min(980px,100%);display:flex;flex-direction:column;gap:26px;align-items:center}
-.ub-close{position:absolute;top:0;right:0;z-index:4}
-.ub-stage{position:relative;width:100%;min-height:380px;display:grid;place-items:center}
-.ub-pack{width:230px;cursor:pointer}
-.ub-pack:hover{transform:scale(1.03) rotate(-1.5deg)}
-.ub-top{position:absolute;left:0;right:0;top:0;height:17%;background:inherit;background-size:100% 590%;z-index:3;border-bottom:2px dashed rgba(0,0,0,.3);transition:transform .5s cubic-bezier(.5,0,.75,0),opacity .5s}
-.ub-hint{position:absolute;bottom:0;margin:0;color:var(--muted);font-size:14px}
-.torn .ub-top{transform:translate(60px,-160px) rotate(24deg);opacity:0}
-.torn .ub-pack{animation:shake .45s}
-@keyframes shake{20%{transform:rotate(-4deg)}50%{transform:rotate(3deg) translateY(4px)}80%{transform:rotate(-2deg)}}
+.ub-dialog{position:relative;width:min(980px,100%);display:flex;flex-direction:column;gap:22px;align-items:center}
+.ub-close{position:absolute;top:0;right:0;z-index:6}
+.ub-stage{position:relative;width:100%;min-height:440px;display:grid;place-items:center}
+.ub-stage > *{grid-area:1/1}
+/* rayons et étincelles */
+.ub-rays{width:140vmin;height:140vmin;max-width:900px;max-height:900px;background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.17) 0 5deg,transparent 5deg 16deg);-webkit-mask:radial-gradient(circle,#000 0%,transparent 60%);mask:radial-gradient(circle,#000 0%,transparent 60%);opacity:0;transform:scale(.25);transition:opacity .6s,transform .9s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.burst .ub-rays{opacity:1;transform:scale(1);animation:spin 16s linear infinite}
+@keyframes spin{to{rotate:360deg}}
+.ub-burst{position:relative;width:0;height:0;align-self:center;margin-top:-180px;pointer-events:none;z-index:4}
+.spark{position:absolute;left:0;top:0;width:var(--s);height:var(--s);border-radius:50%;background:#fff;box-shadow:0 0 10px #fff,0 0 20px var(--pla);opacity:0}
+.spark:nth-child(3n){background:var(--pla)}
+.spark:nth-child(3n+1){background:#9fe6ff;box-shadow:0 0 10px #9fe6ff,0 0 20px #ff7ab6}
+.burst .spark{animation:spark 1s cubic-bezier(.1,.7,.3,1) var(--t) forwards}
+@keyframes spark{0%{opacity:1;transform:rotate(var(--a)) translateX(0) scale(1)}100%{opacity:0;transform:rotate(var(--a)) translateX(var(--d)) scale(.2)}}
+/* le paquet */
+.ub-pack{position:relative;z-index:3;width:min(250px,62vw);aspect-ratio:5/7.4;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;filter:drop-shadow(0 26px 28px rgba(0,0,0,.75));transition:transform .5s cubic-bezier(.3,.7,.3,1),opacity .4s}
+.ub-pack:hover{transform:rotate(-1.5deg) scale(1.02)}
+.ub-pack:focus-visible{outline:3px solid var(--pla);outline-offset:6px;border-radius:8px}
+.ub-piece{position:absolute;inset:0;border-radius:6px 6px 8px 8px;color:var(--on-card);overflow:hidden}
+.ub-body{display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;padding:30% 14px 22px}
+.ub-body > *:not(.crimp):not(.ub-glow){position:relative;z-index:1}
+.ub-body .pk-name{font-size:clamp(24px,3vw,30px)}
+.ub-top{z-index:2;transform-origin:100% 20%;transition:transform .8s cubic-bezier(.4,-.25,.6,1),opacity .8s}
+.ub-notch{position:absolute;left:10px;top:12.5%;font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.65;z-index:1}
+.ub-glow{position:absolute;left:-15%;right:-15%;top:8%;height:46%;background:radial-gradient(ellipse at 50% 10%,#fff 0%,rgba(255,255,255,.75) 22%,rgba(255,255,255,0) 70%);opacity:0;transition:opacity .35s;z-index:2}
+.ub-line{position:absolute;inset:0;width:100%;height:100%;z-index:4;overflow:visible;pointer-events:none}
+.ub-line .guide{fill:none;stroke:rgba(18,19,26,.5);stroke-width:1.4;stroke-dasharray:3 3;vector-effect:non-scaling-stroke}
+.ub-line .cut{fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:calc(1 - var(--p,0));filter:drop-shadow(0 0 3px #fff) drop-shadow(0 0 9px #ffc83d);transition:stroke-dashoffset var(--lineMs,500ms) linear}
+.dragging .ub-line .cut{transition:none}
+.dragging .ub-pack{animation:jitter .1s linear infinite;cursor:grabbing}
+@keyframes jitter{50%{transform:translate(.8px,-.6px) rotate(-.4deg)}}
+.tearing .ub-pack{animation:shake .5s}
+@keyframes shake{15%{transform:rotate(-3deg)}35%{transform:rotate(2.5deg) translateY(2px)}55%{transform:rotate(-2deg)}75%{transform:rotate(1deg)}}
+.torn .ub-top{transform:translate(90px,-230px) rotate(42deg);opacity:0}
+.torn .ub-line{opacity:0;transition:opacity .25s}
+.torn .ub-glow{opacity:1}
+.burst .ub-pack{transform:translateY(70px) scale(.9);opacity:.0;transition-delay:.25s}
+.ub-hint{align-self:end;margin:0;color:var(--muted);font-size:14px;transition:opacity .2s}
+.tearing .ub-hint{opacity:0}
 .opened .ub-pack,.opened .ub-hint{display:none}
-.ub-cards{display:none;width:100%;grid-template-columns:repeat(auto-fit,minmax(140px,180px));justify-content:center;gap:16px;perspective:1200px}
+/* les cartes */
+.ub-cards{display:none;position:relative;z-index:5;width:100%;grid-template-columns:repeat(auto-fit,minmax(140px,175px));justify-content:center;gap:16px;perspective:1300px}
 .opened .ub-cards{display:grid}
-.ub-card{aspect-ratio:5/7;opacity:0;animation:deal .5s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i) * 130ms)}
-@keyframes deal{from{opacity:0;transform:translateY(70px) scale(.8) rotate(-6deg)}to{opacity:1;transform:none}}
-.ub-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transform:rotateY(180deg);animation:flip .6s cubic-bezier(.3,.7,.3,1) forwards;animation-delay:calc(var(--i) * 130ms + 480ms)}
-@keyframes flip{to{transform:rotateY(0)}}
+.ub-card{aspect-ratio:63/88;opacity:0;animation:rise .7s cubic-bezier(.2,.9,.25,1.15) forwards;animation-delay:calc(var(--i) * 160ms)}
+@keyframes rise{0%{opacity:0;transform:translateY(200px) scale(.45) rotate(var(--r))}60%{opacity:1}100%{opacity:1;transform:none}}
+.ub-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transform:rotateY(180deg);animation:flip .7s cubic-bezier(.3,.7,.3,1) forwards;animation-delay:calc(var(--i) * 160ms + 650ms)}
+@keyframes flip{0%{transform:rotateY(180deg)}70%{transform:rotateY(-12deg) scale(1.08)}100%{transform:rotateY(0) scale(1)}}
 .ub-back,.ub-front{position:absolute;inset:0;border-radius:12px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;text-align:center;padding:14px;overflow:hidden}
 .ub-back{transform:rotateY(180deg);justify-content:center;background:repeating-linear-gradient(45deg,var(--panel) 0 10px,var(--raise) 10px 20px);border:2px solid var(--line)}
 .ub-back span{font-family:var(--f-display);font-weight:800;font-size:20px;line-height:.95;color:var(--muted)}
 .ub-back em{font-style:normal;color:var(--pla)}
-.ub-front{color:var(--on-card);justify-content:space-between;box-shadow:inset 0 0 0 1px rgba(255,255,255,.3),0 14px 30px -14px rgba(0,0,0,.9)}
+.ub-front{color:var(--on-card);justify-content:space-between;box-shadow:inset 0 0 0 2px rgba(18,19,26,.85),inset 0 0 0 6px rgba(255,255,255,.35),0 18px 34px -14px rgba(0,0,0,.95)}
 .ub-front > *{position:relative;z-index:1}
 .ub-front b{font-family:var(--f-display);font-size:clamp(19px,2vw,23px);line-height:1.05;text-wrap:balance;overflow-wrap:anywhere}
 .ub-front .meta{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
-.ub-info{text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center}
+.ub-front .holo{position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.9) 44%,rgba(160,230,255,.7) 50%,rgba(255,170,230,.7) 56%,transparent 70%);background-size:260% 100%;background-position:160% 0;mix-blend-mode:overlay;animation:holo 1.1s ease-out forwards;animation-delay:calc(var(--i) * 160ms + 1150ms)}
+@keyframes holo{to{background-position:-160% 0}}
+.quick .ub-card{animation-duration:.4s;animation-delay:calc(var(--i) * 70ms)}
+.quick .ub-inner{animation-duration:.45s;animation-delay:calc(var(--i) * 70ms + 200ms)}
+.quick .ub-front .holo{animation-delay:calc(var(--i) * 70ms + 450ms)}
+.quick .ub-rays{opacity:.6;transform:scale(1);animation:spin 16s linear infinite}
+/* infos */
+.ub-info{text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center;opacity:0;transform:translateY(12px);transition:opacity .45s,transform .45s;pointer-events:none}
+.done .ub-info{opacity:1;transform:none;pointer-events:auto}
 .ub-info h3{font-size:clamp(26px,3vw,34px);font-weight:800}
 .ub-info p{margin:0;color:var(--muted)}
-@media (prefers-reduced-motion:reduce){.ub-card{opacity:1}.ub-inner{transform:none}}
+@media (prefers-reduced-motion:reduce){.ub-card{opacity:1}.ub-inner{transform:none}.ub-rays{display:none}}
 
 /* ---------- Carte de jeu format TCG ---------- */
 .tcg{position:relative;overflow:hidden;width:min(100%,470px);aspect-ratio:63/88;margin:0 auto;border-radius:20px;padding:12px;box-shadow:0 26px 50px -24px rgba(0,0,0,.95),inset 0 0 0 1px rgba(255,255,255,.3);color:var(--on-card)}
@@ -728,26 +766,46 @@ function applySearch(){
 
 /* ================= Unboxing ================= */
 let SEEN=(()=>{try{return JSON.parse(localStorage.getItem('connoisseur.seen')||'{}')}catch(e){return {}}})();
+const UB={timers:[],tearing:false,drag:null};
+function ubLater(fn,ms){UB.timers.push(setTimeout(fn,ms))}
+function tearLine(){
+  // ligne de déchirure en dents de scie, en % de la hauteur du paquet
+  const pts=[]; const base=19;
+  for(let x=0;x<=100;x+=100/18){ pts.push([+x.toFixed(2), +(base+(Math.random()*4.4-2.2)).toFixed(2)]); }
+  return pts;
+}
 function openPack(name){
   const d=deckMeta(name); const f=finishOf(d.finish);
   const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   const box=document.getElementById('unbox');
-  const cards=d.themes.map((t,i)=>`<div class="ub-card" style="--i:${i}">
+  UB.timers.forEach(clearTimeout); UB.timers=[]; UB.tearing=false; UB.drag=null;
+  const L=tearLine();
+  const topClip='polygon(0 0,100% 0,'+[...L].reverse().map(([x,y])=>`${x}% ${y}%`).join(',')+')';
+  const bodyClip='polygon('+L.map(([x,y])=>`${x}% ${y}%`).join(',')+',100% 100%,0 100%)';
+  const poly=L.map(([x,y])=>`${x},${y}`).join(' ');
+  const sparks=Array.from({length:22},(_,i)=>{const a=-160+Math.random()*140, dist=90+Math.random()*170, s=4+Math.random()*7;return `<i class="spark" style="--a:${a}deg;--d:${dist}px;--s:${s}px;--t:${(Math.random()*.25).toFixed(2)}s"></i>`}).join('');
+  const cards=d.themes.map((t,i)=>`<div class="ub-card" style="--i:${i};--r:${(Math.random()*24-12).toFixed(1)}deg">
       <div class="ub-inner">
         <div class="ub-back"><span><em>CON</em><br>NOIS<br>SEUR</span></div>
-        <div class="ub-front ${f.fx}" style="background:${f.bg}"><span class="meta">Carte ${i+1}/${d.themes.length}</span><b>${esc(t.name)}</b><span class="meta">${t.qs.filter(Boolean).length} questions</span></div>
+        <div class="ub-front ${f.fx}" style="background:${f.bg}"><span class="meta">◆ ${i+1}/${d.themes.length}</span><b>${esc(t.name)}</b><span class="meta">${t.qs.filter(Boolean).length} questions</span><i class="holo"></i></div>
       </div></div>`).join('');
   box.innerHTML=`<div class="ub-dialog" role="dialog" aria-modal="true" aria-label="Booster ${esc(d.name)}">
     <button class="icon-btn ub-close" data-u="close" aria-label="Fermer">✕</button>
     <div class="ub-stage">
-      <button class="ub-pack pack ${f.fx}" style="background:${f.bg}" data-u="tear" aria-label="Ouvrir le booster">
-        <span class="ub-top"><span class="crimp"></span></span>
-        <span class="pk-brand"><em>CON</em>NOISSEUR</span>
-        <span class="pk-name">${esc(d.name)}</span>
-        <span class="pk-foot">${plural(d.themes.length,'carte')}</span>
-        <span class="crimp bottom"></span>
-      </button>
-      <p class="ub-hint">Clique pour ouvrir</p>
+      <div class="ub-rays" aria-hidden="true"></div>
+      <div class="ub-burst" aria-hidden="true">${sparks}</div>
+      <div class="ub-pack" data-u="tear" role="button" tabindex="0" aria-label="Déchirer le booster">
+        <div class="ub-piece ub-body ${f.fx}" style="background:${f.bg};clip-path:${bodyClip}">
+          <span class="pk-brand"><em>CON</em>NOISSEUR</span>
+          <span class="pk-name">${esc(d.name)}</span>
+          <span class="pk-foot">${plural(d.themes.length,'carte')}</span>
+          <span class="crimp bottom"></span>
+          <span class="ub-glow"></span>
+        </div>
+        <div class="ub-piece ub-top ${f.fx}" style="background:${f.bg};clip-path:${topClip}"><span class="crimp"></span><span class="ub-notch">◀ déchirer ici</span></div>
+        <svg class="ub-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polyline class="guide" points="${poly}"/><polyline class="cut" points="${poly}" pathLength="1"/></svg>
+      </div>
+      <p class="ub-hint">Glisse le long du haut pour déchirer, ou clique</p>
       <div class="ub-cards">${cards}</div>
     </div>
     <div class="ub-info">
@@ -756,26 +814,42 @@ function openPack(name){
       <div class="actions"><button class="btn ${S.on[name]?'':'primary'}" data-u="toggle">${S.on[name]?'Retirer de la partie':'Ajouter à la partie'}</button><button class="btn ghost" data-u="close">Fermer</button></div>
     </div>
   </div>`;
-  box.hidden=false; box.dataset.deck=name;
-  box.className='unbox'+(reduce||SEEN[name]?' opened':'');
+  box.hidden=false; box.dataset.deck=name; box.style.setProperty('--n',d.themes.length);
+  box.className='unbox'+(reduce||SEEN[name]?' opened done quick':'');
   requestAnimationFrame(()=>box.classList.add('in'));
-  box.querySelector('[data-u="tear"]').focus();
+  const pack=box.querySelector('.ub-pack');
+  pack.focus();
+  // déchirure au doigt ou à la souris
+  pack.addEventListener('pointerdown',e=>{ if(UB.tearing) return; const r=pack.getBoundingClientRect(); UB.drag={x0:e.clientX,r,moved:false}; pack.setPointerCapture(e.pointerId); });
+  pack.addEventListener('pointermove',e=>{
+    if(!UB.drag||UB.tearing) return;
+    const p=Math.max(0,Math.min(1,(e.clientX-UB.drag.r.left)/UB.drag.r.width));
+    if(Math.abs(e.clientX-UB.drag.x0)>8) UB.drag.moved=true;
+    if(UB.drag.moved){ box.style.setProperty('--p',p.toFixed(3)); box.classList.add('dragging'); if(p>.85) tearPack(true); }
+  });
+  pack.addEventListener('pointerup',()=>{ if(!UB.drag) return; const moved=UB.drag.moved; UB.drag=null; box.classList.remove('dragging'); if(!moved) tearPack(false); else if(!UB.tearing) box.style.setProperty('--p',0); });
+  pack.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();tearPack(false)} });
 }
-function tearPack(){
+function tearPack(fromDrag){
   const box=document.getElementById('unbox');
-  if(box.classList.contains('torn')||box.classList.contains('opened')) return;
-  box.classList.add('torn');
-  setTimeout(()=>box.classList.add('opened'),520);
+  if(UB.tearing||box.classList.contains('opened')) return;
+  UB.tearing=true; UB.drag=null; box.classList.remove('dragging');
+  const lineMs=fromDrag?120:520;
+  box.classList.add('tearing'); box.style.setProperty('--lineMs',lineMs+'ms'); box.style.setProperty('--p',1);
+  ubLater(()=>box.classList.add('torn'),lineMs);
+  ubLater(()=>box.classList.add('burst'),lineMs+260);
+  ubLater(()=>box.classList.add('opened'),lineMs+900);
+  const n=+box.style.getPropertyValue('--n')||1;
+  ubLater(()=>box.classList.add('done'),lineMs+900+n*160+900);
   SEEN[box.dataset.deck]=1; try{localStorage.setItem('connoisseur.seen',JSON.stringify(SEEN))}catch(e){}
 }
-function closePack(){ const box=document.getElementById('unbox'); box.hidden=true; box.innerHTML=''; box.className='unbox'; }
+function closePack(){ UB.timers.forEach(clearTimeout); UB.timers=[]; const box=document.getElementById('unbox'); box.hidden=true; box.innerHTML=''; box.className='unbox'; box.removeAttribute('style'); }
 document.getElementById('unbox').addEventListener('click',e=>{
   const box=e.currentTarget;
   if(e.target===box) return closePack();
-  const b=e.target.closest('[data-u]'); if(!b) return;
+  const b=e.target.closest('[data-u]'); if(!b||b.dataset.u==='tear') return;
   const u=b.dataset.u, name=box.dataset.deck;
   if(u==='close') closePack();
-  else if(u==='tear') tearPack();
   else if(u==='toggle'){ if(S.on[name])delete S.on[name]; else S.on[name]=true; S.error=''; closePack(); render(); }
 });
 
