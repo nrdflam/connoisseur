@@ -401,6 +401,18 @@ html.no-glow .ub-glow{display:none}
 .rc-next{margin:0 auto;width:100%;justify-content:center}
 .game .flash:empty{display:none}
 .rc-head.still .rc-delta{animation:none}
+
+/* ---------- Équilibre de la carte ---------- */
+.tcg-art{justify-content:center;align-items:center;text-align:center;gap:8px}
+.tcg-art.is-q{align-items:stretch;text-align:left}
+.art-sub{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.65;margin-top:4px}
+.tcg-title h2.set{font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-family:var(--f-body)}
+.tcg-levels{gap:6px}
+.gem{aspect-ratio:1.3;border-radius:999px}
+/* ---------- Barre du bas opaque ---------- */
+.bottom-bar{background:var(--ink);border-top:1px solid var(--line);margin-inline:calc(-1 * clamp(16px,3vw,40px));padding:12px clamp(16px,3vw,40px) calc(12px + env(safe-area-inset-bottom,0px));bottom:0;margin-top:8px;box-shadow:0 -14px 24px -12px rgba(0,0,0,.8)}
+html.dev-on .bottom-bar{padding-left:calc(clamp(16px,3vw,40px) + 56px)}
+.packs{padding-bottom:12px}
 </style>
 </head>
 <body>
@@ -1044,7 +1056,7 @@ function viewCard(){
   const pick=S.phase==='pick', qa=pick?null:th.qs[S.level-1];
   let art, text;
   if(pick){
-    art=`<span class="art-kicker">T’es con ou connoisseur en…</span><b class="art-theme">${esc(th.name)}</b>`;
+    art=`<span class="art-kicker">T’es con ou connoisseur en…</span><b class="art-theme">${esc(th.name)}</b><span class="art-sub">Note-toi de 1 à 10</span>`;
     text=`<div class="tcg-levels">${Array.from({length:10},(_,i)=>`<button class="gem" data-a="lv" data-l="${i+1}" ${th.qs[i]?'':'disabled'}>${i+1}</button>`).join('')}</div>`;
   } else {
     const len=qa.q.length;
@@ -1059,9 +1071,9 @@ function viewCard(){
   }
   return `<article class="tcg ${f.fx} ${pick?'deal':''}" style="background:${f.bg}">
     <div class="tcg-in">
-      <header class="tcg-title"><h2>${esc(th.name)}</h2><span class="cost" style="background:${f.bg}">${pick?'?':S.level}</span></header>
+      <header class="tcg-title">${pick?`<h2 class="set">${esc(th.deck)}</h2>`:`<h2>${esc(th.name)}</h2>`}<span class="cost" style="background:${f.bg}">${pick?'?':S.level}</span></header>
       <div class="tcg-art ${f.fx} ${pick?'':'is-q'}" style="background:${f.bg}">${art}</div>
-      <div class="tcg-type"><span>Carte · ${esc(th.deck)}</span><span>◆ ${idx}/${d.themes.length}</span></div>
+      <div class="tcg-type"><span>${pick?'Carte · 10 questions':'Carte · '+esc(th.deck)}</span><span>◆ ${idx}/${d.themes.length}</span></div>
       <div class="tcg-text">${text}</div>
       <footer class="tcg-foot"><span class="logo"><em>CON</em>NOISSEUR</span><span>${pick?'Choisis ta note':'Niv. '+S.level+' · '+S.level+' pt'+(S.level>1?'s':'')}</span></footer>
     </div>
