@@ -431,6 +431,8 @@ html.dev-on .bottom-bar{padding-left:calc(clamp(16px,3vw,40px) + 56px)}
 .head-row .burger{width:40px;height:40px}
 /* ---------- Accueil : de l'air sous les boutons ---------- */
 @media (max-width:800px){.home{padding-bottom:96px}}
+.pk-mid{display:flex;flex-direction:column;align-items:center;gap:7px}
+.pk-desc{font-size:11px;font-weight:600;line-height:1.25;opacity:.75;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;text-wrap:balance}
 </style>
 </head>
 <body>
@@ -474,7 +476,7 @@ const W = () => S.play==='solo' ? {one:'joueur',a:'un joueur',Many:'Joueurs',def
 const DEFAULTS = {teams:['Les Loutres','Les Cornichons'], solo:['Joueur 1','Joueur 2']};
 
 /* ================= Deck intégré ================= */
-const SAMPLE_DECK = {name:'Échauffement', finish:'nacre', desc:'Les cartes de démarrage, toujours disponibles.'};
+const SAMPLE_DECK = {name:'Échauffement', finish:'nacre', desc:'Un peu de tout pour démarrer'};
 const RAW = [
   ['Planètes du système solaire',[
   ['Sur quelle planète vivons-nous ?','La Terre'],
@@ -826,7 +828,7 @@ function packHTML(d, opts={}){
     <button class="pack ${f.fx}" style="background:${f.bg}" data-a="open" data-d="${esc(d.name)}" aria-label="Ouvrir le booster ${esc(d.name)}">
       <span class="crimp"></span>
       <span class="pk-brand logo"><em>CON</em>NOISSEUR</span>
-      <span class="pk-name">${esc(d.name)}</span>
+      <span class="pk-mid"><span class="pk-name">${esc(d.name)}</span><span class="pk-desc">${esc(d.desc||d.themes.slice(0,3).map(t=>t.name).join(', ')+(d.themes.length>3?'…':''))}</span></span>
       <span class="pk-foot">${plural(d.themes.length,'carte')}</span>
       <span class="crimp bottom"></span>
     </button>
