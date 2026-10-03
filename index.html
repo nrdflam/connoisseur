@@ -281,19 +281,20 @@ const LS_KEY='ttmc.imports.v1';
 function loadImports(){try{const v=JSON.parse(localStorage.getItem(LS_KEY)||'[]');return Array.isArray(v)?v:[]}catch(e){return []}}
 function saveImports(){try{localStorage.setItem(LS_KEY,JSON.stringify(IMPORTS))}catch(e){}}
 let IMPORTS = loadImports();
+let BANK = [];
 
 /* ================= État ================= */
 let S = {
   screen:'setup',
   teams:[{name:'Les Loutres',color:PAWNS[1],score:0},{name:'Les Cornichons',color:PAWNS[4],score:0}],
-  play:'teams', mode:'points', goal:30, rounds:8, timer:30, useSamples:true,
+  play:'teams', mode:'points', useBank:true, bankStatus:'loading', goal:30, rounds:8, timer:30, useSamples:true,
   cur:0, turn:0, catTurn:0, phase:null, theme:null, level:null, cell:null, used:[], history:[], flash:'', report:null, error:'', winner:null
 };
 let tick=null, deadline=0;
 
 const $app=document.getElementById('app');
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const lib=()=>[...(S.useSamples?SAMPLES:[]),...IMPORTS];
+const lib=()=>[...(S.useSamples?SAMPLES:[]),...(S.useBank?BANK:[]),...IMPORTS];
 const rnd=a=>a[Math.floor(Math.random()*a.length)];
 const team=()=>S.teams[S.cur];
 
@@ -360,6 +361,20 @@ function parseSheet(rows, sheetName, out){
     if(n<10) out.warnings.push(`« ${t.name} » : ${n}/10 niveaux remplis, les autres seront grisés.`);
     out.themes.push(t);
   });
+}
+function loadBank(){
+  if(!window.XLSX){S.bankStatus='error';render();return}
+  fetch('themes.xlsx',{cache:'no-cache'})
+    .then(r=>{if(!r.ok)throw new Error(r.status);return r.arrayBuffer()})
+    .then(buf=>{
+      const out={themes:[],warnings:[]};
+      const wb=XLSX.read(new Uint8Array(buf),{type:'array'});
+      wb.SheetNames.forEach(n=>parseSheet(XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:''}),n,out));
+      BANK=out.themes.map((t,i)=>({id:'b'+i,src:'banque',...t}));
+      S.bankStatus=BANK.length?'ok':'error';
+    })
+    .catch(()=>{S.bankStatus='error'})
+    .finally(()=>{if(S.screen==='setup')render()});
 }
 function importFile(file){
   if(!window.XLSX){S.report={ok:0,warnings:['La lecture Excel n’a pas pu se charger. Vérifiez la connexion puis réessayez.']};render();return}
@@ -464,7 +479,7 @@ function viewSetup(){
       <button class="icon-btn" data-a="rm-team" data-i="${i}" aria-label="Retirer" ${S.teams.length<=2?'disabled':''}>✕</button>
     </div>`).join('');
   const seg=(key,opts)=>`<div class="seg">${opts.map(([v,l])=>`<button class="${S[key]===v?'on':''}" data-a="set" data-k="${key}" data-v="${v}">${l}</button>`).join('')}</div>`;
-  const list=L.map(t=>`<div class="theme-item"><span class="dot" style="background:${CATS[t.cat].v}"></span><span class="nm">${esc(t.name)}</span><span class="meta">${t.qs.filter(Boolean).length}/10 · ${t.src==='sample'?'exemple':esc(t.src)}</span></div>`).join('')||'<p class="hint" style="padding-top:10px">Aucun thème pour l’instant.</p>';
+  const list=L.map(t=>`<div class="theme-item"><span class="dot" style="background:${CATS[t.cat].v}"></span><span class="nm">${esc(t.name)}</span><span class="meta">${t.qs.filter(Boolean).length}/10 · ${t.src==='sample'?'exemple':t.src==='banque'?'banque':esc(t.src)}</span></div>`).join('')||'<p class="hint" style="padding-top:10px">Aucun thème pour l’instant.</p>';
   const rep=S.report?`<div class="report"><b>${esc(S.report.file||'Import')}</b> : ${S.report.added||0} thème(s) ajouté(s)${S.report.replaced?`, ${S.report.replaced} mis à jour`:''}.${S.report.warnings.length?`<ul>${S.report.warnings.slice(0,8).map(w=>`<li>${esc(w)}</li>`).join('')}${S.report.warnings.length>8?`<li>… et ${S.report.warnings.length-8} autre(s)</li>`:''}</ul>`:''}</div>`:'';
   return `
   <header class="hero">
@@ -493,6 +508,7 @@ function viewSetup(){
     <div class="panel">
       <h2>Thèmes</h2>
       <div class="counts">${KEYS.map((k,i)=>`<div class="count" style="background:${CATS[k].v}"><b>${counts[i]}</b><span>${CATS[k].label}</span></div>`).join('')}</div>
+      <label class="check"><input type="checkbox" id="opt-bank" data-opt="useBank" ${S.useBank?'checked':''} ${S.bankStatus==='ok'?'':'disabled'}><span>Banque de thèmes${S.bankStatus==='ok'?` · ${BANK.length} thèmes`:''}<small>${S.bankStatus==='loading'?'Chargement de themes.xlsx…':S.bankStatus==='error'?'Fichier themes.xlsx introuvable à côté du jeu.':'Chargée depuis themes.xlsx, à côté du jeu.'}</small></span></label>
       <label class="check"><input type="checkbox" id="opt-samples" data-opt="useSamples" ${S.useSamples?'checked':''}><span>Inclure les ${SAMPLES.length} thèmes d’exemple</span></label>
       <div class="actions">
         <button class="btn primary small" data-a="import">Importer un fichier Excel</button>
@@ -620,7 +636,9 @@ document.addEventListener('keydown',e=>{
 /* ================= Démarrage (garde la partie lors d'une mise à jour) ================= */
 function start(data){
   if(data&&data.S&&data.S.teams&&data.S.teams[0]&&'score' in data.S.teams[0]){S=data.S; if(S.screen==='game'&&S.phase==='question'){S.phase='answer'}}
-  render();
+  if(S.useBank===undefined) S.useBank=true;
+  S.bankStatus='loading';
+  render(); loadBank();
 }
 window.claude?.hot?.snapshot?.(()=>({S}));
 window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
