@@ -462,6 +462,14 @@ html.dev-on .bottom-bar{padding-left:calc(clamp(16px,3vw,40px) + 56px)}
   .bottom-bar{padding-top:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))}
   .btn.big{padding:12px 22px;font-size:17px}
 }
+@media (max-width:800px){
+  .screen-fill{min-height:calc(100dvh - 30px);display:flex;flex-direction:column;gap:16px}
+  .screen-fill .setup{flex:1;display:flex;flex-direction:column}
+  .screen-fill .panel{flex:1}
+  .panel-players .add-team{margin-top:auto}
+  .panel-game{justify-content:space-evenly}
+  .screen-fill .bottom-bar{margin-top:0}
+}
 </style>
 </head>
 <body>
@@ -901,14 +909,14 @@ function viewPlayers(){
       <button class="icon-btn" data-a="rm-team" data-i="${i}" aria-label="Retirer" ${S.teams.length<=2?'disabled':''}>✕</button>
     </div>`).join('');
   const seg=(key,opts)=>`<div class="seg">${opts.map(([v,l])=>`<button class="${S[key]===v?'on':''}" data-a="set" data-k="${key}" data-v="${v}">${l}</button>`).join('')}</div>`;
-  return `${stepHead('home',1,S.play==='solo'?'Les joueurs':'Les équipes')}
+  return `<div class="screen-fill">${stepHead('home',1,S.play==='solo'?'Les joueurs':'Les équipes')}
   <section class="setup">
-    <div class="panel">
+    <div class="panel panel-players">
       <h2>${W().Many}</h2>
       ${teams}
-      <button class="btn ghost small" data-a="add-team" ${S.teams.length>=MAX[S.play]?'disabled':''} style="align-self:flex-start">+ Ajouter ${W().a}</button>
+      <button class="btn ghost small add-team" data-a="add-team" ${S.teams.length>=MAX[S.play]?'disabled':''} style="align-self:flex-start">+ Ajouter ${W().a}</button>
     </div>
-    <div class="panel">
+    <div class="panel panel-game">
       <h2>Partie</h2>
       <div class="field"><span class="label">Fin de partie</span>${seg('mode',[['points','Objectif de points'],['rounds','Nombre de tours']])}</div>
       ${S.mode==='points'
@@ -917,7 +925,7 @@ function viewPlayers(){
       <div class="field"><span class="label">Chrono par question</span>${seg('timer',[[0,'Sans'],[30,'30 s'],[45,'45 s'],[60,'60 s']])}</div>
     </div>
   </section>
-  <div class="bottom-bar"><span></span><button class="btn primary big" data-a="go" data-v="decks">Choisir les decks →</button></div>`;
+  <div class="bottom-bar"><span></span><button class="btn primary big" data-a="go" data-v="decks">Choisir les decks →</button></div></div>`;
 }
 
 function viewDeckPicker(){
