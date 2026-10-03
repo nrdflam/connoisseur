@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Connoisseur</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout : écran de salon. Plateau en serpentin à gauche, grande carte de jeu à droite ; une seule ambiance sombre assumée. */
+:root{
+  color-scheme:dark;
+  --ink:#0f1118; --panel:#181b25; --raise:#212533; --line:#2c3142;
+  --text:#f4f1e8; --muted:#9aa0b4; --dim:#5d6377;
+  --sco:#4d8dff; --mat:#ff5d62; --pla:#ffc83d; --imp:#35d99a; --int:#b678ff; --fin:#f4f1e8;
+  --on-card:#12131a;
+  --ok:#35d99a; --ko:#ff5d62;
+  --f-display:"Bricolage Grotesque", "Arial Black", system-ui, sans-serif;
+  --f-body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+html,body{height:100%}
+body{margin:0}
+[hidden]{display:none!important}
+body{background:var(--ink);color:var(--text);font-family:var(--f-body);font-size:16px;line-height:1.45;padding-inline:clamp(16px,3vw,40px);padding-block:20px 32px}
+*{box-sizing:border-box}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--pla);outline-offset:2px}
+h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.05}
+.app{max-width:1400px;margin:0 auto;display:flex;flex-direction:column;gap:24px}
+
+/* ---------- Boutons ---------- */
+.btn{border:1px solid var(--line);background:var(--raise);border-radius:10px;padding:10px 16px;font-weight:600;display:inline-flex;align-items:center;gap:8px;transition:transform .12s,background .12s}
+.btn:hover{background:var(--line)}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--text);color:var(--on-card);border-color:var(--text)}
+.btn.primary:hover{background:#fff}
+.btn.ghost{background:transparent}
+.btn.small{padding:6px 11px;font-size:14px}
+.btn[disabled]{opacity:.35;cursor:not-allowed}
+.kbd{font-size:11px;border:1px solid currentColor;border-radius:4px;padding:0 4px;opacity:.55;font-weight:600}
+
+/* ---------- Accueil ---------- */
+.hero{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px}
+.hero h1{font-size:clamp(40px,7vw,92px);font-weight:800;letter-spacing:-.02em}
+.hero h1 em,.brand em{font-style:normal;color:var(--pla)}
+.hero p{margin:10px 0 0;color:var(--muted);max-width:56ch}
+.stripe{display:flex;gap:6px}
+.stripe span{width:34px;height:34px;border-radius:8px}
+.setup{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.panel h2{font-size:22px;font-weight:700}
+.label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.team-row{display:flex;gap:8px;align-items:center}
+.team-row input[type=text]{flex:1;min-width:0;background:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.swatches{display:flex;gap:4px}
+.sw{width:22px;height:22px;border-radius:50%;border:2px solid transparent;padding:0}
+.sw.on{border-color:var(--text);box-shadow:0 0 0 2px var(--ink) inset}
+.icon-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--muted);flex:none}
+.icon-btn:hover{color:var(--text);background:var(--raise)}
+.field{display:flex;flex-direction:column;gap:8px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{border:1px solid var(--line);background:transparent;border-radius:999px;padding:7px 14px;font-weight:600;font-size:14px}
+.seg button.on{background:var(--text);color:var(--on-card);border-color:var(--text)}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:15px}
+.check input{margin-top:4px;accent-color:var(--pla);width:16px;height:16px;flex:none}
+.check small{display:block;color:var(--muted)}
+.counts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.count{border-radius:10px;padding:10px;color:var(--on-card)}
+.count b{font-family:var(--f-display);font-size:28px;display:block;line-height:1;font-variant-numeric:tabular-nums}
+.count span{font-size:12px;font-weight:700}
+.theme-list{max-height:220px;overflow:auto;display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.theme-item{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.theme-item .dot{width:10px;height:10px;border-radius:50%;flex:none}
+.theme-item .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.theme-item .meta{color:var(--muted);font-variant-numeric:tabular-nums;font-size:13px}
+.report{border-radius:10px;padding:12px;background:var(--raise);font-size:14px}
+.report ul{margin:6px 0 0;padding-left:18px;color:var(--muted)}
+.format{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+.format table{border-collapse:collapse;font-size:13px;width:100%;min-width:420px}
+.format th,.format td{text-align:left;padding:6px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+.format th{background:var(--raise);font-weight:700}
+.format tr:last-child td{border-bottom:0}
+.hint{font-size:13px;color:var(--muted);margin:0}
+.start-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:flex-end}
+.start-bar .btn.primary{font-size:20px;padding:14px 28px;font-family:var(--f-display)}
+.err{color:var(--ko);font-weight:600}
+
+/* ---------- Jeu ---------- */
+.topbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.brand{font-family:var(--f-display);font-weight:800;font-size:22px}
+.scores{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:5px 12px 5px 6px;font-weight:600;font-size:14px}
+.chip.cur{background:var(--text);color:var(--on-card);border-color:var(--text)}
+.chip .pawn-s{width:18px;height:18px;border-radius:50%;border:2px solid var(--ink)}
+.chip .pos{font-variant-numeric:tabular-nums;opacity:.65}
+.game{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:900px){.game{grid-template-columns:1fr}}
+.scoreboard{display:flex;flex-direction:column;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px}
+.srow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:14px;padding:12px 14px;border-radius:12px;border:1px solid transparent}
+.srow.cur{border-color:var(--text);background:var(--raise)}
+.srow .pawn-s{width:26px;height:26px;border-radius:50%;border:3px solid var(--panel)}
+.srow .nm{font-family:var(--f-display);font-weight:700;font-size:clamp(18px,2vw,24px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.srow .pts{font-family:var(--f-display);font-weight:800;font-size:clamp(32px,4vw,52px);line-height:1;font-variant-numeric:tabular-nums}
+.srow .pts small{font-size:14px;color:var(--muted);font-weight:600;margin-left:4px}
+.srow .bar{grid-column:2/4;height:6px;background:var(--line);border-radius:999px;overflow:hidden}
+.srow .bar i{display:block;height:100%;border-radius:999px;transition:width .4s}
+.round{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.ranking{display:flex;flex-direction:column;gap:6px;min-width:min(420px,100%)}
+.ranking div{display:flex;justify-content:space-between;gap:16px;font-size:18px;border-bottom:1px solid var(--line);padding:6px 0;font-variant-numeric:tabular-nums}
+.board{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px}
+.cell{aspect-ratio:1;max-width:100%;border-radius:8px;position:relative;color:var(--on-card);font-size:11px;font-weight:700;padding:3px 5px;min-width:0;overflow:hidden}
+.cell.start,.cell.final{background:var(--fin);font-family:var(--f-display);font-size:10px;text-transform:uppercase;letter-spacing:.02em}
+.cell.final{background:repeating-linear-gradient(45deg,var(--fin) 0 6px,#d9d5c8 6px 12px)}
+.cell .n{opacity:.6;font-variant-numeric:tabular-nums}
+.cell .pawns{position:absolute;inset:auto 3px 3px 3px;display:flex;flex-wrap:wrap;gap:2px;justify-content:flex-end}
+.pawn{width:42%;max-width:20px;aspect-ratio:1;border-radius:50%;border:2px solid var(--on-card);box-shadow:0 1px 0 rgba(0,0,0,.4)}
+.pawn.cur{animation:bob 1s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-3px)}}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.side{display:flex;flex-direction:column;gap:14px;min-width:0}
+.turn{display:flex;align-items:center;gap:10px;font-size:15px;color:var(--muted)}
+.turn b{color:var(--text);font-size:20px;font-family:var(--f-display)}
+.turn .pawn-s{width:22px;height:22px;border-radius:50%;border:3px solid var(--panel);flex:none}
+.flash{font-size:14px;color:var(--muted);min-height:20px}
+.flash b{color:var(--text)}
+.card{border-radius:22px;padding:clamp(20px,3vw,32px);color:var(--on-card);display:flex;flex-direction:column;gap:14px;box-shadow:0 18px 40px -20px rgba(0,0,0,.7);position:relative;overflow:hidden}
+.card .cat{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:800}
+.card .ask{font-size:clamp(18px,2vw,22px);font-weight:600}
+.card .theme{font-size:clamp(34px,5vw,64px);font-weight:800;letter-spacing:-.02em;overflow-wrap:anywhere}
+.card .bignum{font-family:var(--f-display);font-weight:800;font-size:clamp(72px,10vw,128px);line-height:.85;position:absolute;right:20px;top:14px;opacity:.18;font-variant-numeric:tabular-nums}
+.card .q{font-size:clamp(22px,2.6vw,32px);font-weight:700;line-height:1.25;max-width:30ch;position:relative}
+.card .a{background:var(--on-card);color:var(--text);border-radius:14px;padding:14px 18px;font-size:clamp(20px,2.4vw,28px);font-weight:700}
+.card .a small{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.card .note{font-size:14px;font-weight:600;opacity:.75}
+.levels{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.lv{border:2px solid var(--on-card);background:transparent;color:var(--on-card);border-radius:12px;aspect-ratio:1.35;font-family:var(--f-display);font-weight:800;font-size:clamp(22px,3vw,34px);transition:background .1s,color .1s}
+.lv:hover:not([disabled]){background:var(--on-card);color:var(--text)}
+.lv[disabled]{opacity:.25;cursor:not-allowed;text-decoration:line-through}
+.timer{height:10px;background:rgba(18,19,26,.18);border-radius:999px;overflow:hidden}
+.timer i{display:block;height:100%;background:var(--on-card);border-radius:999px;transition:width .2s linear}
+.timer-row{display:flex;align-items:center;gap:12px;font-weight:700;font-variant-numeric:tabular-nums}
+.timer-row .timer{flex:1}
+.timer-row.out{color:#7a0b10}
+.actions{display:flex;flex-wrap:wrap;gap:10px}
+.actions .btn{font-size:17px;padding:12px 20px}
+.btn.ok{background:var(--ok);border-color:var(--ok);color:var(--on-card)}
+.btn.ko{background:var(--ko);border-color:var(--ko);color:var(--on-card)}
+.card .btn.dark{background:var(--on-card);color:var(--text);border-color:var(--on-card)}
+.card .link{background:none;border:0;color:var(--on-card);text-decoration:underline;font-weight:600;padding:0;align-self:flex-start;font-size:14px;opacity:.75}
+.final-card{background:var(--fin)}
+.final-card::before{content:"";position:absolute;inset:0 0 auto 0;height:10px;background:repeating-linear-gradient(90deg,var(--sco) 0 25%,var(--mat) 25% 50%,var(--pla) 50% 75%,var(--imp) 75% 100%)}
+.shortcuts{font-size:13px;color:var(--dim)}
+
+/* ---------- Victoire ---------- */
+.win{min-height:70vh;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:20px}
+.win .label{color:var(--pla)}
+.win h1{font-size:clamp(48px,10vw,140px);font-weight:800;letter-spacing:-.03em}
+.confetti{display:flex;gap:8px}
+.confetti span{width:clamp(30px,5vw,60px);aspect-ratio:1;border-radius:12px;animation:pop .6s ease-out both}
+.confetti span:nth-child(2){animation-delay:.08s}.confetti span:nth-child(3){animation-delay:.16s}.confetti span:nth-child(4){animation-delay:.24s}
+@keyframes pop{from{transform:scale(.3) rotate(-20deg)}to{transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div id="app" class="app"></div>
+<input type="file" id="file" accept=".xlsx,.xls,.csv,.ods" hidden>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+/* ================= Données ================= */
+const CATS = {
+  scolaire:{label:'Savoirs', v:'var(--sco)'},
+  mature:{label:'Vie d’adulte', v:'var(--mat)'},
+  plaisir:{label:'Loisirs', v:'var(--pla)'},
+  improbable:{label:'Insolite', v:'var(--imp)'}
+};
+const KEYS = ['scolaire','mature','plaisir','improbable'];
+const PAWNS = ['#ffffff','#ff7ab6','#ff9f43','#5ee7ff','#c6ff5e','#8b5cf6','#ffe066','#f87171','#94a3b8','#2dd4bf'];
+const MAX = {teams:6, solo:10};
+const W = () => S.play==='solo' ? {one:'joueur',a:'un joueur',Many:'Joueurs',def:'Joueur'} : {one:'équipe',a:'une équipe',Many:'Équipes',def:'Équipe'};
+const DEFAULTS = {teams:['Les Loutres','Les Cornichons'], solo:['Joueur 1','Joueur 2']};
+
+const RAW = [
+ ['scolaire','Planètes du système solaire',[
+  ['Sur quelle planète vivons-nous ?','La Terre'],
+  ['Quelle planète est surnommée la planète rouge ?','Mars'],
+  ['Quelle est la plus grande planète du système solaire ?','Jupiter'],
+  ['Quelle planète est la plus proche du Soleil ?','Mercure'],
+  ['Quelle planète est célèbre pour ses grands anneaux bien visibles ?','Saturne'],
+  ['Combien de planètes compte le système solaire depuis 2006 ?','8'],
+  ['Quelle planète tourne « couchée », avec un axe incliné d’environ 98° ?','Uranus'],
+  ['Comment s’appelle le plus grand satellite de Saturne ?','Titan'],
+  ['Sur quelle planète une journée dure-t-elle plus longtemps qu’une année ?','Vénus'],
+  ['Comment s’appelle le plus haut volcan connu du système solaire, sur Mars ?','Olympus Mons']]],
+ ['scolaire','Géographie de la France',[
+  ['Quelle est la capitale de la France ?','Paris'],
+  ['Quel fleuve traverse Paris ?','La Seine'],
+  ['Quel est le plus haut sommet de France ?','Le mont Blanc'],
+  ['Quel est le plus long fleuve entièrement français ?','La Loire'],
+  ['Dans quelle ville se trouve la Cité de l’espace ?','Toulouse'],
+  ['Combien de régions compte la France métropolitaine depuis 2016 ?','13'],
+  ['Quel département porte le numéro 01 ?','L’Ain'],
+  ['Quelle est la préfecture de la Corrèze ?','Tulle'],
+  ['Après la Corse, quelle est la plus grande île de France métropolitaine ?','L’île d’Oléron'],
+  ['Quel est le point culminant du Massif central ?','Le puy de Sancy']]],
+ ['mature','Vins et vignobles',[
+  ['De quelle région vient le champagne ?','La Champagne'],
+  ['Quel ustensile sert à retirer un bouchon de liège ?','Un tire-bouchon'],
+  ['Comment s’appelle la personne qui conseille les vins au restaurant ?','Le sommelier'],
+  ['Le Beaujolais nouveau sort quel jeudi de novembre ?','Le troisième'],
+  ['Quel cépage blanc domine en Bourgogne, notamment à Chablis ?','Le chardonnay'],
+  ['Quelle est la contenance d’un magnum ?','1,5 litre'],
+  ['Quel cépage rouge domine dans les vins du Beaujolais ?','Le gamay'],
+  ['Quel insecte a ravagé le vignoble français à la fin du XIXe siècle ?','Le phylloxéra'],
+  ['Comment appelle-t-on la couche de levures sous laquelle vieillit le vin jaune ?','Le voile'],
+  ['Comment s’appelle la bouteille de 62 cl réservée au vin jaune ?','Le clavelin']]],
+ ['mature','Impôts et paperasse',[
+  ['Combien de fois par an déclare-t-on ses revenus ?','Une fois'],
+  ['Que signifie TVA ?','Taxe sur la valeur ajoutée'],
+  ['Quel est le taux normal de TVA en France ?','20 %'],
+  ['Comment s’appelle le prélèvement de l’impôt sur le salaire, en place depuis 2019 ?','Le prélèvement à la source'],
+  ['Quel taux réduit de TVA s’applique à la plupart des produits alimentaires ?','5,5 %'],
+  ['Quel impôt local a été supprimé pour les résidences principales ?','La taxe d’habitation'],
+  ['Comment s’appelle le mécanisme qui divise le revenu imposable selon le nombre de parts ?','Le quotient familial'],
+  ['Que signifie le sigle URSSAF ?','Union de recouvrement des cotisations de sécurité sociale et d’allocations familiales'],
+  ['Qui est considéré comme l’inventeur de la TVA, en 1954 ?','Maurice Lauré'],
+  ['Combien de parts fiscales a un couple marié avec trois enfants ?','4 parts']]],
+ ['plaisir','Pâtisserie',[
+  ['Quelle viennoiserie a la forme d’une lune ?','Le croissant'],
+  ['Quelle pâtisserie allongée est garnie de crème et glacée au café ou au chocolat ?','L’éclair'],
+  ['Quelle tarte aux pommes se cuit à l’envers ?','La tarte Tatin'],
+  ['Avec quelle pâte fait-on les éclairs et les chouquettes ?','La pâte à choux'],
+  ['Quel gâteau rend hommage à une course cycliste créée en 1891 ?','Le Paris-Brest'],
+  ['Quelle crème mélange crème pâtissière et beurre ?','La crème mousseline'],
+  ['Quel gâteau breton signifie « gâteau au beurre » ?','Le kouign-amann'],
+  ['Quel pâtissier a créé l’Ispahan, au parfum rose, litchi et framboise ?','Pierre Hermé'],
+  ['Quel gâteau en couches associe biscuit Joconde, crème au beurre café et ganache ?','L’opéra'],
+  ['Quel chef du début du XIXe siècle est considéré comme le père de la pâtisserie moderne ?','Antonin Carême']]],
+ ['plaisir','Jeux vidéo',[
+  ['Quel jeu consiste à empiler des blocs qui tombent pour compléter des lignes ?','Tetris'],
+  ['Quelle entreprise japonaise fabrique la Switch ?','Nintendo'],
+  ['Dans quel pays Tetris a-t-il été créé ?','En URSS (Russie)'],
+  ['Quelle console Sony est sortie au Japon en 1994 ?','La PlayStation'],
+  ['Quel jeu de construction en cubes Microsoft a-t-il racheté en 2014 ?','Minecraft'],
+  ['Quel éditeur français a publié le premier Rayman ?','Ubisoft'],
+  ['En quelle année la Game Boy est-elle sortie au Japon ?','1989'],
+  ['Qui a créé Tetris ?','Alexeï Pajitnov'],
+  ['Quel jeu d’arcade Taito de 1978 met en scène des envahisseurs extraterrestres ?','Space Invaders'],
+  ['Quel jeu de 1971 est considéré comme le premier jeu d’arcade commercial ?','Computer Space']]],
+ ['improbable','Pigeons',[
+  ['Quel oiseau picore les miettes sur toutes les places des villes ?','Le pigeon'],
+  ['Comment appelle-t-on le pigeon qui transporte des messages ?','Le pigeon voyageur'],
+  ['Comment s’appelle le petit du pigeon ?','Le pigeonneau'],
+  ['Quel bâtiment sert à abriter des pigeons ?','Le pigeonnier (ou colombier)'],
+  ['À quelle famille d’oiseaux appartient le pigeon ?','Les columbidés'],
+  ['Quelle substance mâle et femelle produisent-ils pour nourrir leurs petits ?','Le lait de jabot'],
+  ['Quel oiseau disparu de l’île Maurice était un proche parent des pigeons ?','Le dodo'],
+  ['Quelle espèce de pigeon, autrefois comptée en milliards en Amérique du Nord, a disparu en 1914 ?','Le pigeon migrateur (ou tourte voyageuse)'],
+  ['Quel pigeon voyageur a été décoré pour avoir sauvé près de 200 soldats américains en 1918 ?','Cher Ami'],
+  ['Comment s’appelait le dernier pigeon migrateur, mort au zoo de Cincinnati ?','Martha']]],
+ ['improbable','Escargots',[
+  ['Quel animal porte sa maison sur le dos et laisse une trace de bave ?','L’escargot'],
+  ['L’escargot est-il un insecte, un mollusque ou un reptile ?','Un mollusque'],
+  ['Avec quoi sert-on traditionnellement les escargots de Bourgogne ?','Du beurre à l’ail et au persil'],
+  ['Comment s’appelle l’élevage d’escargots ?','L’héliciculture'],
+  ['Combien de tentacules a un escargot de Bourgogne ?','4'],
+  ['Où se trouvent les yeux de l’escargot ?','Au bout des grands tentacules'],
+  ['L’escargot est-il mâle, femelle ou les deux ?','Les deux (hermaphrodite)'],
+  ['Comment s’appelle la langue râpeuse couverte de milliers de dents de l’escargot ?','La radula'],
+  ['Comment s’appelle le voile qui ferme la coquille pendant l’hibernation ?','L’épiphragme'],
+  ['Quel est le nom latin de l’escargot de Bourgogne ?','Helix pomatia']]]
+];
+const SAMPLES = RAW.map(([cat,name,qs],i)=>({id:'s'+i,cat,name,src:'sample',qs:qs.map(([q,a])=>({q,a}))}));
+
+/* ================= Stockage des imports ================= */
+const LS_KEY='ttmc.imports.v1';
+function loadImports(){try{const v=JSON.parse(localStorage.getItem(LS_KEY)||'[]');return Array.isArray(v)?v:[]}catch(e){return []}}
+function saveImports(){try{localStorage.setItem(LS_KEY,JSON.stringify(IMPORTS))}catch(e){}}
+let IMPORTS = loadImports();
+
+/* ================= État ================= */
+let S = {
+  screen:'setup',
+  teams:[{name:'Les Loutres',color:PAWNS[1],score:0},{name:'Les Cornichons',color:PAWNS[4],score:0}],
+  play:'teams', mode:'points', goal:30, rounds:8, timer:30, useSamples:true,
+  cur:0, turn:0, catTurn:0, phase:null, theme:null, level:null, cell:null, used:[], history:[], flash:'', report:null, error:'', winner:null
+};
+let tick=null, deadline=0;
+
+const $app=document.getElementById('app');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const lib=()=>[...(S.useSamples?SAMPLES:[]),...IMPORTS];
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const team=()=>S.teams[S.cur];
+
+/* ================= Import Excel ================= */
+const norm=s=>String(s??'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();
+function catFrom(v){
+  const n=norm(v);
+  if(!n) return null;
+  if(/^(sav|sco)/.test(n)) return 'scolaire';
+  if(/^(vie|adu|mat)/.test(n)) return 'mature';
+  if(/^(loi|pla)/.test(n)) return 'plaisir';
+  if(/^(ins|imp)/.test(n)) return 'improbable';
+  return undefined;
+}
+function parseSheet(rows, sheetName, out){
+  let hi=-1;
+  for(let r=0;r<Math.min(rows.length,10);r++){
+    const h=(rows[r]||[]).map(norm);
+    if(h.some(x=>x.startsWith('theme')) && h.some(x=>x.startsWith('question')||/^q\s*\d+$/.test(x))){hi=r;break}
+  }
+  if(hi<0) return;
+  const H=(rows[hi]).map(norm);
+  const col=f=>H.findIndex(f);
+  const ci=col(x=>x.startsWith('cat')), ti=col(x=>x.startsWith('theme'));
+  const ni=col(x=>x.startsWith('niv')||x.startsWith('level'));
+  const map={};
+  const get=(cat,name)=>{const k=cat+'|'+norm(name);return map[k]||(map[k]={cat,name:String(name).trim(),qs:Array(10).fill(null)})};
+  let lastCat=null,lastTheme=null;
+  const resolveCat=(raw,row)=>{
+    let c=catFrom(raw);
+    if(c===undefined){out.warnings.push(`${sheetName}, ligne ${row} : catégorie « ${raw} » inconnue, rangée dans Insolite.`);c='improbable'}
+    return c;
+  };
+  if(ni>=0){
+    const qi=col(x=>x.startsWith('question')), ri=col(x=>x.startsWith('rep')||x.startsWith('answer'));
+    for(let r=hi+1;r<rows.length;r++){
+      const row=rows[r]||[]; const line=r+1;
+      if(!row.some(v=>String(v??'').trim())) continue;
+      const themeName=String(row[ti]??'').trim()||lastTheme;
+      let cat=ci>=0&&String(row[ci]??'').trim()?resolveCat(row[ci],line):(themeName===lastTheme?lastCat:null);
+      const lv=parseInt(row[ni],10), q=String(row[qi]??'').trim(), a=String(row[ri]??'').trim();
+      if(!q&&!a) continue;
+      if(!themeName){out.warnings.push(`${sheetName}, ligne ${line} : thème manquant, ligne ignorée.`);continue}
+      if(!cat){out.warnings.push(`${sheetName}, ligne ${line} : catégorie manquante pour « ${themeName} », rangée dans Insolite.`);cat='improbable'}
+      lastTheme=themeName;lastCat=cat;
+      if(!(lv>=1&&lv<=10)){out.warnings.push(`${sheetName}, ligne ${line} : niveau « ${row[ni]??''} » invalide (1 à 10).`);continue}
+      if(!q||!a){out.warnings.push(`${sheetName}, ligne ${line} : question ou réponse vide.`);continue}
+      get(cat,themeName).qs[lv-1]={q,a};
+    }
+  } else {
+    const qc={},rc={};
+    H.forEach((h,i)=>{let m=h.match(/^(?:q|question)\s*(\d+)$/);if(m)qc[+m[1]]=i;m=h.match(/^(?:r|rep|reponse|answer)\s*(\d+)$/);if(m)rc[+m[1]]=i});
+    for(let r=hi+1;r<rows.length;r++){
+      const row=rows[r]||[]; const line=r+1;
+      const themeName=String(row[ti]??'').trim(); if(!themeName) continue;
+      const cat=ci>=0?(resolveCat(row[ci],line)||'improbable'):'improbable';
+      const t=get(cat,themeName);
+      for(let l=1;l<=10;l++){const q=String(row[qc[l]]??'').trim(),a=String(row[rc[l]]??'').trim();if(q&&a)t.qs[l-1]={q,a}}
+    }
+  }
+  Object.values(map).forEach(t=>{
+    const n=t.qs.filter(Boolean).length;
+    if(!n) return;
+    if(n<10) out.warnings.push(`« ${t.name} » : ${n}/10 niveaux remplis, les autres seront grisés.`);
+    out.themes.push(t);
+  });
+}
+function importFile(file){
+  if(!window.XLSX){S.report={ok:0,warnings:['La lecture Excel n’a pas pu se charger. Vérifiez la connexion puis réessayez.']};render();return}
+  const fr=new FileReader();
+  fr.onload=()=>{
+    const out={themes:[],warnings:[]};
+    try{
+      const wb=XLSX.read(new Uint8Array(fr.result),{type:'array'});
+      wb.SheetNames.forEach(n=>parseSheet(XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:''}),n,out));
+    }catch(e){out.warnings.push('Fichier illisible : enregistrez-le en .xlsx et réessayez.')}
+    let added=0,replaced=0;
+    out.themes.forEach(t=>{
+      const i=IMPORTS.findIndex(x=>x.cat===t.cat&&norm(x.name)===norm(t.name));
+      const obj={id:'i'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),src:file.name,...t};
+      if(i>=0){IMPORTS[i]=obj;replaced++}else{IMPORTS.push(obj);added++}
+    });
+    if(!out.themes.length&&!out.warnings.length) out.warnings.push('Aucun thème trouvé. La première ligne doit contenir les colonnes Catégorie, Thème, Niveau, Question, Réponse.');
+    saveImports();
+    S.report={file:file.name,added,replaced,warnings:out.warnings};
+    render();
+  };
+  fr.readAsArrayBuffer(file);
+}
+
+/* ================= Logique de jeu ================= */
+function draw(cat, exclude){
+  const L=lib();
+  let pool=L.filter(t=>t.cat===cat&&!S.used.includes(t.id)&&t.id!==exclude);
+  if(!pool.length){S.used=S.used.filter(id=>L.find(t=>t.id===id)?.cat!==cat);pool=L.filter(t=>t.cat===cat&&t.id!==exclude)}
+  if(!pool.length) pool=L.filter(t=>t.cat===cat);
+  if(!pool.length) pool=L.filter(t=>!S.used.includes(t.id)&&t.id!==exclude);
+  if(!pool.length) pool=L;
+  const t=rnd(pool); S.used.push(t.id); return t;
+}
+function beginTurn(){
+  stopTimer();
+  S.level=null;
+  const cat=KEYS[S.catTurn%4];
+  S.theme=draw(cat);
+  S.phase='pick';
+}
+function choose(l){
+  if(S.phase!=='pick') return;
+  if(!S.theme.qs[l-1]) return;
+  S.level=l; S.phase='question'; startTimer(); render();
+}
+function reveal(){ if(S.phase!=='question') return; S.phase='answer'; stopTimer(); render(); }
+function totalTurns(){ return S.rounds*S.teams.length }
+function finish(){ stopTimer(); S.screen='win'; render(); }
+function resolve(ok){
+  if(S.phase!=='answer') return;
+  S.history.push({scores:S.teams.map(t=>t.score),cur:S.cur,turn:S.turn,catTurn:S.catTurn,used:[...S.used]});
+  const t=team();
+  if(ok){ t.score+=S.level; S.flash=`<b>${esc(t.name)}</b> marque ${S.level} point${S.level>1?'s':''}.`; }
+  else S.flash=S.level>=7?`<b>CON.</b> ${esc(t.name)} visait ${S.level} et repart avec zéro.`:`<b>${esc(t.name)}</b> ne marque rien.`;
+  if(S.mode==='points'&&t.score>=S.goal) return finish();
+  S.turn++; S.catTurn++;
+  if(S.mode==='rounds'&&S.turn>=totalTurns()) return finish();
+  S.cur=(S.cur+1)%S.teams.length;
+  beginTurn(); render();
+}
+function undo(){
+  const h=S.history.pop(); if(!h) return;
+  S.teams.forEach((t,i)=>t.score=h.scores[i]); S.cur=h.cur; S.turn=h.turn; S.catTurn=h.catTurn; S.used=h.used;
+  S.screen='game'; S.flash='Dernier coup annulé.'; beginTurn(); render();
+}
+function startGame(){
+  S.error='';
+  S.teams.forEach((t,i)=>{if(!t.name.trim())t.name=W().def+' '+(i+1)});
+  if(S.teams.length<2){S.error=S.play==='solo'?'Il faut au moins deux joueurs.':'Il faut au moins deux équipes.';render();return}
+  if(!lib().length){S.error='Aucun thème disponible : activez les exemples ou importez un fichier.';render();return}
+  S.teams.forEach(t=>t.score=0);
+  S.cur=0;S.turn=0;S.catTurn=Math.floor(Math.random()*4);S.used=[];S.history=[];S.flash='';
+  S.screen='game'; beginTurn(); render();
+}
+
+/* ================= Chrono ================= */
+function startTimer(){ stopTimer(); if(!S.timer) return; deadline=Date.now()+S.timer*1000; tick=setInterval(updTimer,200); }
+function stopTimer(){ if(tick){clearInterval(tick);tick=null} }
+function updTimer(){
+  const left=Math.max(0,deadline-Date.now()), bar=document.getElementById('tbar'), num=document.getElementById('tnum'), row=document.getElementById('trow');
+  if(!bar) return;
+  bar.style.width=(left/(S.timer*1000)*100)+'%';
+  num.textContent=left>0?Math.ceil(left/1000)+' s':'Temps écoulé';
+  row.classList.toggle('out',left===0);
+  if(left===0) stopTimer();
+}
+
+/* ================= Rendu ================= */
+function render(){
+  if(S.screen==='setup') $app.innerHTML=viewSetup();
+  else if(S.screen==='game') $app.innerHTML=viewGame();
+  else $app.innerHTML=viewWin();
+  if(S.screen==='game'&&S.phase==='question') updTimer();
+}
+function viewSetup(){
+  const L=lib(), counts=KEYS.map(k=>L.filter(t=>t.cat===k).length);
+  const teams=S.teams.map((t,i)=>`
+    <div class="team-row">
+      <input type="text" id="team-${i}" data-team="${i}" value="${esc(t.name)}" maxlength="24" aria-label="Nom ${i+1}">
+      <button class="sw on" style="background:${t.color};width:30px;height:30px;flex:none" data-a="color" data-i="${i}" aria-label="Changer la couleur"></button>
+      <button class="icon-btn" data-a="rm-team" data-i="${i}" aria-label="Retirer" ${S.teams.length<=2?'disabled':''}>✕</button>
+    </div>`).join('');
+  const seg=(key,opts)=>`<div class="seg">${opts.map(([v,l])=>`<button class="${S[key]===v?'on':''}" data-a="set" data-k="${key}" data-v="${v}">${l}</button>`).join('')}</div>`;
+  const list=L.map(t=>`<div class="theme-item"><span class="dot" style="background:${CATS[t.cat].v}"></span><span class="nm">${esc(t.name)}</span><span class="meta">${t.qs.filter(Boolean).length}/10 · ${t.src==='sample'?'exemple':esc(t.src)}</span></div>`).join('')||'<p class="hint" style="padding-top:10px">Aucun thème pour l’instant.</p>';
+  const rep=S.report?`<div class="report"><b>${esc(S.report.file||'Import')}</b> : ${S.report.added||0} thème(s) ajouté(s)${S.report.replaced?`, ${S.report.replaced} mis à jour`:''}.${S.report.warnings.length?`<ul>${S.report.warnings.slice(0,8).map(w=>`<li>${esc(w)}</li>`).join('')}${S.report.warnings.length>8?`<li>… et ${S.report.warnings.length-8} autre(s)</li>`:''}</ul>`:''}</div>`:'';
+  return `
+  <header class="hero">
+    <div>
+      <h1><em>Con</em> ou<br>connoisseur ?</h1>
+      <p>Notez-vous de 1 à 10 sur le thème tiré : 1, vous êtes con, 10, vous êtes connoisseur. Bonne réponse : vous avancez d’autant de cases. Chaque bonne réponse rapporte autant de points que la note annoncée.</p>
+    </div>
+    <div class="stripe">${KEYS.map(k=>`<span style="background:${CATS[k].v}" title="${CATS[k].label}"></span>`).join('')}</div>
+  </header>
+  <section class="setup">
+    <div class="panel">
+      <h2>${W().Many}</h2>
+      <div class="seg">${[['teams','En équipes'],['solo','En solo']].map(([v,l])=>`<button class="${S.play===v?'on':''}" data-a="play" data-v="${v}">${l}</button>`).join('')}</div>
+      ${teams}
+      <button class="btn ghost small" data-a="add-team" ${S.teams.length>=MAX[S.play]?'disabled':''} style="align-self:flex-start">+ Ajouter ${W().a}</button>
+    </div>
+    <div class="panel">
+      <h2>Partie</h2>
+      <div class="field"><span class="label">Fin de partie</span>${seg('mode',[['points','Objectif de points'],['rounds','Nombre de tours']])}</div>
+      ${S.mode==='points'
+        ?`<div class="field"><span class="label">Premier à</span>${seg('goal',[[20,'20 pts'],[30,'30 pts'],[50,'50 pts'],[80,'80 pts']])}</div>`
+        :`<div class="field"><span class="label">Tours par ${W().one}</span>${seg('rounds',[[5,'5'],[8,'8'],[10,'10'],[15,'15']])}</div>`}
+      <div class="field"><span class="label">Chrono par question</span>${seg('timer',[[0,'Sans'],[30,'30 s'],[45,'45 s'],[60,'60 s']])}</div>
+      <p class="hint">Bonne réponse : la note choisie devient le nombre de points. Les catégories tournent à chaque question.</p>
+    </div>
+    <div class="panel">
+      <h2>Thèmes</h2>
+      <div class="counts">${KEYS.map((k,i)=>`<div class="count" style="background:${CATS[k].v}"><b>${counts[i]}</b><span>${CATS[k].label}</span></div>`).join('')}</div>
+      <label class="check"><input type="checkbox" id="opt-samples" data-opt="useSamples" ${S.useSamples?'checked':''}><span>Inclure les ${SAMPLES.length} thèmes d’exemple</span></label>
+      <div class="actions">
+        <button class="btn primary small" data-a="import">Importer un fichier Excel</button>
+        ${location.hostname.endsWith('github.io')?`<a class="btn ghost small" href="Connoisseur_modele_themes.xlsx" download>Télécharger le modèle</a>`:''}
+        ${IMPORTS.length?`<button class="btn ghost small" data-a="clear-imports">Retirer les ${IMPORTS.length} thème(s) importé(s)</button>`:''}
+      </div>
+      ${rep}
+      <div class="theme-list">${list}</div>
+      <span class="label">Format attendu · une ligne par question</span>
+      <div class="format"><table>
+        <tr><th>Catégorie</th><th>Thème</th><th>Niveau</th><th>Question</th><th>Réponse</th></tr>
+        <tr><td>Insolite</td><td>Pigeons</td><td>1</td><td>Quel oiseau picore…</td><td>Le pigeon</td></tr>
+        <tr><td></td><td></td><td>2</td><td>Comment appelle-t-on…</td><td>Le pigeon voyageur</td></tr>
+      </table></div>
+      <p class="hint">Catégories : Savoirs, Vie d’adulte, Loisirs ou Insolite. Les cellules Catégorie et Thème vides reprennent la valeur de la ligne du dessus. Les thèmes importés restent dans ce navigateur.</p>
+    </div>
+  </section>
+  <div class="start-bar">
+    ${S.error?`<span class="err">${esc(S.error)}</span>`:''}
+    <button class="btn primary" data-a="start">Lancer la partie →</button>
+  </div>`;
+}
+function viewScores(){
+  const max=S.mode==='points'?S.goal:Math.max(1,...S.teams.map(t=>t.score));
+  const rows=S.teams.map((t,i)=>`<div class="srow ${i===S.cur?'cur':''}">
+    <span class="pawn-s" style="background:${t.color}"></span>
+    <span class="nm">${esc(t.name)}</span>
+    <span class="pts">${t.score}${S.mode==='points'?`<small>/ ${S.goal}</small>`:''}</span>
+    <span class="bar"><i style="width:${Math.min(100,t.score/max*100)}%;background:${t.color}"></i></span>
+  </div>`).join('');
+  const info=S.mode==='points'?`Premier à ${S.goal} points`:`Tour ${Math.min(S.rounds,Math.floor(S.turn/S.teams.length)+1)} / ${S.rounds}`;
+  return `<div class="scoreboard"><span class="round">${info}</span>${rows}</div>`;
+}
+function viewCard(){
+  const th=S.theme, color=`background:${CATS[th.cat].v}`, catLabel=CATS[th.cat].label;
+  if(S.phase==='pick'){
+    const btns=Array.from({length:10},(_,i)=>`<button class="lv" data-a="lv" data-l="${i+1}" ${th.qs[i]?'':'disabled'}>${i+1}</button>`).join('');
+    return `<div class="card" style="${color}">
+      <span class="cat">${catLabel}</span>
+      <span class="ask">T’es connoisseur à combien en…</span>
+      <h2 class="theme">${esc(th.name)}</h2>
+      <div class="levels">${btns}</div>
+      <button class="link" data-a="skip">Changer de thème</button>
+    </div>`;
+  }
+  const qa=th.qs[S.level-1];
+  const timer=S.timer&&S.phase==='question'?`<div class="timer-row" id="trow"><div class="timer"><i id="tbar" style="width:100%"></i></div><span id="tnum">${S.timer} s</span></div>`:'';
+  const body=S.phase==='question'
+    ? `${timer}<div class="actions"><button class="btn dark" data-a="reveal">Voir la réponse <span class="kbd">Espace</span></button></div>`
+    : `<div class="a"><small>Réponse</small>${esc(qa.a)}</div>
+       <div class="actions"><button class="btn ok" data-a="ok">Juste · +${S.level} <span class="kbd">J</span></button><button class="btn ko" data-a="ko">Faux <span class="kbd">F</span></button></div>`;
+  return `<div class="card" style="${color}">
+    <span class="bignum" aria-hidden="true">${S.level}</span>
+    <span class="cat">${catLabel} · niveau ${S.level}</span>
+    <span class="ask">${esc(th.name)}</span>
+    <p class="q">${esc(qa.q)}</p>
+    ${body}
+  </div>`;
+}
+function viewGame(){
+  const t=team();
+  return `
+  <div class="topbar">
+    <span class="brand"><em>CON</em>NOISSEUR</span>
+    <div class="actions">
+      <button class="btn small ghost" data-a="undo" ${S.history.length?'':'disabled'}>Annuler le coup</button>
+      <button class="btn small ghost" data-a="menu">Menu</button>
+    </div>
+  </div>
+  <div class="game">
+    <div class="side">${viewScores()}</div>
+    <div class="side">
+      <div class="turn"><span class="pawn-s" style="background:${t.color}"></span><span>Au tour de <b>${esc(t.name)}</b></span></div>
+      <div class="flash">${S.flash}</div>
+      ${viewCard()}
+      <span class="shortcuts">Clavier : 1 à 9 et 0 pour 10 · Espace révèle · J juste · F faux</span>
+    </div>
+  </div>`;
+}
+function viewWin(){
+  const ranked=[...S.teams].sort((a,b)=>b.score-a.score);
+  const top=ranked.filter(t=>t.score===ranked[0].score);
+  const title=top.length>1?'Égalité':esc(top[0].name);
+  const sub=top.length>1?`${top.map(t=>esc(t.name)).join(' et ')} terminent avec ${top[0].score} points.`:`${top[0].score} points.`;
+  return `<section class="win">
+    <div class="confetti">${KEYS.map(k=>`<span style="background:${CATS[k].v}"></span>`).join('')}</div>
+    <span class="label">${top.length>1?'Fin de partie':'Victoire'}</span>
+    <h1>${title}</h1>
+    <p class="hint">${sub}</p>
+    <div class="ranking">${ranked.map((t,i)=>`<div><span>${i+1}. ${esc(t.name)}</span><b>${t.score} pts</b></div>`).join('')}</div>
+    <div class="actions"><button class="btn primary" data-a="replay">Rejouer avec ${S.play==='solo'?'les mêmes joueurs':'les mêmes équipes'}</button><button class="btn" data-a="undo" ${S.history.length?'':'disabled'}>Annuler le dernier coup</button><button class="btn" data-a="menu">Retour au menu</button></div>
+  </section>`;
+}
+/* ================= Événements ================= */
+$app.addEventListener('click',e=>{
+  const b=e.target.closest('[data-a]'); if(!b||b.disabled) return;
+  const a=b.dataset.a;
+  if(a==='set'){const v=b.dataset.v;S[b.dataset.k]=isNaN(+v)?v:+v;render()}
+  else if(a==='color'){const t=S.teams[+b.dataset.i];const used=S.teams.map(x=>x.color);let k=PAWNS.indexOf(t.color);for(let n=0;n<PAWNS.length;n++){k=(k+1)%PAWNS.length;if(!used.includes(PAWNS[k]))break}t.color=PAWNS[k];render()}
+  else if(a==='play'){const to=b.dataset.v;if(to===S.play)return;S.teams.forEach((t,i)=>{if(t.name===DEFAULTS[S.play][i]||t.name===W().def+' '+(i+1))t.name=DEFAULTS[to][i]||((to==='solo'?'Joueur ':'Équipe ')+(i+1))});S.play=to;S.teams=S.teams.slice(0,MAX[to]);render()}
+  else if(a==='add-team'){const used=S.teams.map(t=>t.color);S.teams.push({name:W().def+' '+(S.teams.length+1),color:PAWNS.find(c=>!used.includes(c))||PAWNS[0],score:0});render()}
+  else if(a==='rm-team'){S.teams.splice(+b.dataset.i,1);render()}
+  else if(a==='import'){document.getElementById('file').click()}
+  else if(a==='clear-imports'){IMPORTS=[];saveImports();S.report=null;render()}
+  else if(a==='start'||a==='replay'){startGame()}
+  else if(a==='menu'){stopTimer();S.screen='setup';render()}
+  else if(a==='lv'){choose(+b.dataset.l)}
+  else if(a==='skip'){S.theme=draw(S.theme.cat,S.theme.id);render()}
+  else if(a==='reveal'){reveal()}
+  else if(a==='ok'){resolve(true)}
+  else if(a==='ko'){resolve(false)}
+  else if(a==='undo'){undo()}
+});
+$app.addEventListener('input',e=>{const i=e.target.dataset.team;if(i!==undefined)S.teams[+i].name=e.target.value});
+$app.addEventListener('change',e=>{const o=e.target.dataset.opt;if(o){S[o]=e.target.checked;render()}});
+document.getElementById('file').addEventListener('change',e=>{const f=e.target.files[0];if(f)importFile(f);e.target.value=''});
+document.addEventListener('keydown',e=>{
+  if(S.screen!=='game'||e.target.closest('input')) return;
+  if(S.phase==='pick'&&/^[0-9]$/.test(e.key)){choose(e.key==='0'?10:+e.key)}
+  else if(S.phase==='question'&&(e.key===' '||e.key==='Enter')){e.preventDefault();reveal()}
+  else if(S.phase==='answer'&&(e.key==='j'||e.key==='J')){resolve(true)}
+  else if(S.phase==='answer'&&(e.key==='f'||e.key==='F')){resolve(false)}
+});
+
+/* ================= Démarrage (garde la partie lors d'une mise à jour) ================= */
+function start(data){
+  if(data&&data.S&&data.S.teams&&data.S.teams[0]&&'score' in data.S.teams[0]){S=data.S; if(S.screen==='game'&&S.phase==='question'){S.phase='answer'}}
+  render();
+}
+window.claude?.hot?.snapshot?.(()=>({S}));
+window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
+</script>
+</body>
+</html>
