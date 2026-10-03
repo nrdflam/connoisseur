@@ -217,6 +217,45 @@ h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.0
 .ub-info h3{font-size:clamp(26px,3vw,34px);font-weight:800}
 .ub-info p{margin:0;color:var(--muted)}
 @media (prefers-reduced-motion:reduce){.ub-card{opacity:1}.ub-inner{transform:none}}
+
+/* ---------- Carte de jeu format TCG ---------- */
+.tcg{position:relative;overflow:hidden;width:min(100%,470px);aspect-ratio:63/88;margin:0 auto;border-radius:20px;padding:12px;box-shadow:0 26px 50px -24px rgba(0,0,0,.95),inset 0 0 0 1px rgba(255,255,255,.3);color:var(--on-card)}
+.tcg-in{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;gap:7px;background:#f3eee0;border-radius:12px;padding:9px;box-shadow:inset 0 0 0 2px rgba(18,19,26,.85)}
+.tcg-title{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#fbf8ef;border:2px solid var(--on-card);border-radius:10px;padding:6px 6px 6px 12px}
+.tcg-title h2{font-size:clamp(19px,2.2vw,24px);font-weight:800;letter-spacing:-.01em;line-height:1.05;overflow-wrap:anywhere}
+.cost{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:20px;border:2px solid var(--on-card);box-shadow:inset 0 -3px 0 rgba(0,0,0,.18)}
+.tcg-art{position:relative;overflow:hidden;flex:1 1 auto;min-height:150px;border:2px solid var(--on-card);border-radius:8px;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;padding:14px 16px;box-shadow:inset 0 0 40px rgba(0,0,0,.18)}
+.tcg-art > *{position:relative;z-index:1}
+.art-kicker{font-size:14px;font-weight:700}
+.art-theme{font-family:var(--f-display);font-weight:800;font-size:clamp(34px,4.6vw,54px);line-height:.95;letter-spacing:-.025em;overflow-wrap:anywhere;text-wrap:balance}
+.art-num{font-family:var(--f-display);font-weight:800;font-size:clamp(88px,12vw,140px);line-height:.8;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.tcg-type{display:flex;justify-content:space-between;gap:10px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;background:#fbf8ef;border:2px solid var(--on-card);border-radius:7px;padding:5px 10px}
+.tcg-type span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.tcg-text{background:#fbf8ef;border:2px solid var(--on-card);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.tcg-q{margin:0;font-size:clamp(18px,2.1vw,23px);font-weight:700;line-height:1.25}
+.tcg-a{background:var(--on-card);color:var(--text);border-radius:8px;padding:10px 14px;font-size:clamp(18px,2.1vw,23px);font-weight:700}
+.tcg-a small{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.tcg-levels{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.gem{aspect-ratio:1;border-radius:50%;border:2px solid var(--on-card);background:#fff;color:var(--on-card);font-family:var(--f-display);font-weight:800;font-size:clamp(17px,2.2vw,22px);box-shadow:inset 0 -3px 0 rgba(0,0,0,.12);transition:transform .1s,background .1s,color .1s}
+.gem:hover:not([disabled]){background:var(--on-card);color:var(--text);transform:translateY(-2px)}
+.gem[disabled]{opacity:.25;cursor:not-allowed}
+.tcg-foot{display:flex;justify-content:space-between;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.7;padding:0 4px}
+.tcg-foot em{font-style:normal;background:var(--on-card);color:var(--text);padding:0 3px;border-radius:2px}
+.tcg .timer-row{font-size:14px}
+.tcg-actions{justify-content:center}
+.tcg-actions .btn{font-size:17px;padding:12px 22px}
+.tcg.deal{animation:dealcard .55s cubic-bezier(.2,.8,.2,1)}
+@keyframes dealcard{from{opacity:0;transform:perspective(900px) rotateY(-80deg) translateX(60px)}to{opacity:1;transform:none}}
+@media (max-width:900px){
+  .side.play{order:-1}
+  .scoreboard{padding:10px;gap:4px}
+  .srow{padding:8px 10px;gap:10px}
+  .srow .nm{font-size:16px}
+  .srow .pts{font-size:26px}
+  .srow .bar{height:4px}
+  .tcg{padding:9px;border-radius:16px}
+  .tcg-art{min-height:120px}
+}
 </style>
 </head>
 <body>
@@ -752,30 +791,34 @@ function viewScores(){
   return `<div class="scoreboard"><span class="round">${info}</span>${rows}</div>`;
 }
 function viewCard(){
-  const th=S.theme, ds=deckStyle(th.deck), label=esc(th.deck);
-  if(S.phase==='pick'){
-    const btns=Array.from({length:10},(_,i)=>`<button class="lv" data-a="lv" data-l="${i+1}" ${th.qs[i]?'':'disabled'}>${i+1}</button>`).join('');
-    return `<div class="card ${ds.cls}" style="${ds.style}">
-      <span class="cat">Deck · ${label}</span>
-      <span class="ask">T’es con ou connoisseur en…</span>
-      <h2 class="theme">${esc(th.name)}</h2>
-      <div class="levels">${btns}</div>
-      <button class="link" data-a="skip">Changer de carte</button>
-    </div>`;
+  const th=S.theme, d=deckMeta(th.deck), f=finishOf(d.finish);
+  const idx=Math.max(1,d.themes.findIndex(t=>t.id===th.id)+1);
+  const pick=S.phase==='pick', qa=pick?null:th.qs[S.level-1];
+  let text, actions;
+  if(pick){
+    text=`<div class="tcg-levels">${Array.from({length:10},(_,i)=>`<button class="gem" data-a="lv" data-l="${i+1}" ${th.qs[i]?'':'disabled'}>${i+1}</button>`).join('')}</div>`;
+    actions=`<button class="btn ghost" data-a="skip">Changer de carte</button>`;
+  } else if(S.phase==='question'){
+    const timer=S.timer?`<div class="timer-row" id="trow"><div class="timer"><i id="tbar" style="width:100%"></i></div><span id="tnum">${S.timer} s</span></div>`:'';
+    text=`<p class="tcg-q">${esc(qa.q)}</p>${timer}`;
+    actions=`<button class="btn primary" data-a="reveal">Voir la réponse <span class="kbd">Espace</span></button>`;
+  } else {
+    text=`<p class="tcg-q">${esc(qa.q)}</p><div class="tcg-a"><small>Réponse</small>${esc(qa.a)}</div>`;
+    actions=`<button class="btn ok" data-a="ok">Juste · +${S.level} <span class="kbd">J</span></button><button class="btn ko" data-a="ko">Faux <span class="kbd">F</span></button>`;
   }
-  const qa=th.qs[S.level-1];
-  const timer=S.timer&&S.phase==='question'?`<div class="timer-row" id="trow"><div class="timer"><i id="tbar" style="width:100%"></i></div><span id="tnum">${S.timer} s</span></div>`:'';
-  const body=S.phase==='question'
-    ? `${timer}<div class="actions"><button class="btn dark" data-a="reveal">Voir la réponse <span class="kbd">Espace</span></button></div>`
-    : `<div class="a"><small>Réponse</small>${esc(qa.a)}</div>
-       <div class="actions"><button class="btn ok" data-a="ok">Juste · +${S.level} <span class="kbd">J</span></button><button class="btn ko" data-a="ko">Faux <span class="kbd">F</span></button></div>`;
-  return `<div class="card ${ds.cls}" style="${ds.style}">
-    <span class="bignum" aria-hidden="true">${S.level}</span>
-    <span class="cat">${label} · niveau ${S.level}</span>
-    <span class="ask">${esc(th.name)}</span>
-    <p class="q">${esc(qa.q)}</p>
-    ${body}
-  </div>`;
+  const art=pick
+    ? `<span class="art-kicker">T’es con ou connoisseur en…</span><b class="art-theme">${esc(th.name)}</b>`
+    : `<span class="art-kicker">Niveau</span><b class="art-num">${S.level}</b>`;
+  return `<article class="tcg ${f.fx} ${pick?'deal':''}" style="background:${f.bg}">
+    <div class="tcg-in">
+      <header class="tcg-title"><h2>${esc(th.name)}</h2><span class="cost" style="background:${f.bg}">${pick?'?':S.level}</span></header>
+      <div class="tcg-art ${f.fx}" style="background:${f.bg}">${art}</div>
+      <div class="tcg-type"><span>Carte · ${esc(th.deck)}</span><span>◆ ${idx}/${d.themes.length}</span></div>
+      <div class="tcg-text">${text}</div>
+      <footer class="tcg-foot"><span><em>CON</em>NOISSEUR</span><span>${pick?'Choisis ta note':'Niv. '+S.level+' · '+(S.level*1)+' pt'+(S.level>1?'s':'')}</span></footer>
+    </div>
+  </article>
+  <div class="actions tcg-actions">${actions}</div>`;
 }
 function viewGame(){
   const t=team();
@@ -790,7 +833,7 @@ function viewGame(){
   </div>
   <div class="game">
     <div class="side">${viewScores()}</div>
-    <div class="side">
+    <div class="side play">
       <div class="turn"><span class="pawn-s" style="background:${t.color}"></span><span>Au tour de <b>${esc(t.name)}</b></span></div>
       <div class="flash">${S.flash}</div>
       ${viewCard()}
