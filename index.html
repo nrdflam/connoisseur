@@ -430,9 +430,38 @@ html.dev-on .bottom-bar{padding-left:calc(clamp(16px,3vw,40px) + 56px)}
 .head-row .burger-wrap{margin-left:auto;flex:none}
 .head-row .burger{width:40px;height:40px}
 /* ---------- Accueil : de l'air sous les boutons ---------- */
-@media (max-width:800px){.home{padding-bottom:96px}}
 .pk-mid{display:flex;flex-direction:column;align-items:center;gap:7px}
 .pk-desc{font-size:11px;font-weight:600;line-height:1.25;opacity:.75;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;text-wrap:balance}
+
+/* ---------- Téléphone : tout tient sans scroller ---------- */
+@media (max-width:800px){
+  body{padding-block:14px 16px}
+  .home{gap:14px;padding-top:0}
+  .fan{height:165px}
+  .fan-pack{width:98px;padding:12px 8px;gap:8px}
+  .fan-pack .pk-name{font-size:14px}
+  .fan-pack .pk-brand{font-size:8px}
+  .home-logo{margin-bottom:10px;font-size:12px}
+  .home h1{font-size:clamp(42px,12.5vw,58px)}
+  .home p{font-size:15px;margin:12px 0 18px}
+  .home-choice{flex-wrap:nowrap;gap:10px;margin-bottom:44px}
+  .choice{flex:1 1 0;min-width:0;padding:15px 14px}
+  .choice b{font-size:21px}
+  .choice span{font-size:13px}
+  .step-head{flex-direction:row;flex-wrap:wrap;align-items:center;column-gap:12px;row-gap:6px}
+  .step-head .btn{margin-bottom:0}
+  .step-title{flex-basis:100%;font-size:30px}
+  .step-head .hint{flex-basis:100%;font-size:14px;margin:0}
+  .app{gap:16px}
+  .setup{gap:12px}
+  .panel{padding:14px;gap:11px;border-radius:14px}
+  .panel h2{font-size:18px}
+  .field{gap:6px}
+  .team-row input[type=text]{padding:8px 11px}
+  .seg button{padding:6px 12px}
+  .bottom-bar{padding-top:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))}
+  .btn.big{padding:12px 22px;font-size:17px}
+}
 </style>
 </head>
 <body>
