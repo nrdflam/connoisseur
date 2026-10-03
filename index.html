@@ -734,7 +734,7 @@ function choose(l){
 }
 function reveal(){ if(S.phase!=='question') return; S.phase='answer'; stopTimer(); render(); }
 function totalTurns(){ return S.rounds*S.teams.length }
-function finish(){ stopTimer(); S.screen='win'; render(); }
+function finish(){ stopTimer(); S.live=false; S.screen='win'; render(); }
 function ranking(scores){ return scores.map((sc,i)=>({i,sc})).sort((x,y)=>y.sc-x.sc||x.i-y.i).map(r=>r.i); }
 function resolve(ok){
   if(S.phase!=='answer') return;
@@ -761,7 +761,7 @@ function undo(){
   const h=S.history.pop(); if(!h) return;
   S.recap=null;
   S.teams.forEach((t,i)=>t.score=h.scores[i]); S.cur=h.cur; S.turn=h.turn; S.deckTurn=h.deckTurn; S.used=h.used;
-  S.screen='game'; S.flash='Dernier coup annulé.'; beginTurn(); render();
+  S.screen='game'; S.live=true; S.menuOpen=false; S.flash='Dernier coup annulé.'; beginTurn(); render();
 }
 function startGame(){
   S.error='';
@@ -770,7 +770,18 @@ function startGame(){
   if(!activeDecks().length){S.error='Ajoute au moins un deck à la partie.';S.screen='decks';render();return}
   S.teams.forEach(t=>t.score=0);
   S.cur=0;S.turn=0;S.deckTurn=Math.floor(Math.random()*activeDecks().length);S.used=[];S.history=[];S.flash='';
+  S.live=true; S.recap=null; S.lastDealt=null;
   S.screen='game'; beginTurn(); render();
+}
+function resumeGame(){
+  S.error='';
+  if(!activeDecks().length){S.error='Ajoute au moins un deck à la partie.';render();return}
+  S.cur=S.cur%S.teams.length;
+  S.teams.forEach(t=>{if(typeof t.score!=='number')t.score=0});
+  S.screen='game'; S.menuOpen=false;
+  if(S.phase!=='recap'&&!(S.theme&&S.on[S.theme.deck])) beginTurn();
+  else if(S.phase==='question') startTimer();
+  render();
 }
 
 /* ================= Chrono ================= */
@@ -814,7 +825,8 @@ function packHTML(d, opts={}){
 function viewHome(){
   const D=deckList();
   const picks=(D.length>3?D.slice(1,4):D).slice(0,3);
-  const fan=picks.map((d,i)=>{const f=finishOf(d.finish);return `<div class="fan-pack ${f.fx}" style="background:${f.bg};--r:${(i-1)*9}deg;--x:${(i-1)*46}px"><span class="crimp"></span><span class="pk-brand logo"><em>CON</em>NOISSEUR</span><span class="pk-name">${esc(d?d.name:'Booster')}</span><span class="crimp bottom"></span></div>`}).join('');
+  const mid=(picks.length-1)/2;
+  const fan=picks.map((d,i)=>{const f=finishOf(d.finish);return `<div class="fan-pack ${f.fx}" style="background:${f.bg};--r:${(i-mid)*9}deg;--x:${(i-mid)*46}px"><span class="crimp"></span><span class="pk-brand logo"><em>CON</em>NOISSEUR</span><span class="pk-name">${esc(d?d.name:'Booster')}</span><span class="crimp bottom"></span></div>`}).join('');
   return `<section class="home">
     <div class="home-text">
       <span class="logo home-logo"><em>CON</em>NOISSEUR</span>
@@ -894,7 +906,7 @@ function viewDeckPicker(){
   <div class="bottom-bar">
     <span class="sel">${on.length?`<b>${plural(on.length,'deck')}</b> · ${plural(cards,'carte')}`:'Aucun deck choisi'}</span>
     ${S.error?`<span class="err">${esc(S.error)}</span>`:''}
-    <button class="btn primary big" data-a="start" ${on.length?'':'disabled'}>Lancer la partie →</button>
+    ${S.live?`<button class="btn ghost" data-a="start" ${on.length?'':'disabled'}>Nouvelle partie</button><button class="btn primary big" data-a="resume" ${on.length?'':'disabled'}>Reprendre la partie →</button>`:`<button class="btn primary big" data-a="start" ${on.length?'':'disabled'}>Lancer la partie →</button>`}
   </div>`;
 }
 function applySearch(){
@@ -1159,6 +1171,7 @@ $app.addEventListener('click',e=>{
   else if(a==='ko'){resolve(false)}
   else if(a==='undo'){undo()}
   else if(a==='next'){nextTurn()}
+  else if(a==='resume'){resumeGame()}
 });
 $app.addEventListener('input',e=>{
   const i=e.target.dataset.team; if(i!==undefined) S.teams[+i].name=e.target.value;
@@ -1168,6 +1181,7 @@ document.getElementById('file').addEventListener('change',e=>{const f=e.target.f
 document.addEventListener('keydown',e=>{
   const box=document.getElementById('unbox');
   if(!box.hidden){ if(e.key==='Escape') closePack(); return; }
+  if(S.menuOpen&&e.key==='Escape'){S.menuOpen=false;render();return}
   if(S.screen!=='game'||e.target.closest('input')) return;
   if(S.phase==='pick'&&/^[0-9]$/.test(e.key)){choose(e.key==='0'?10:+e.key)}
   else if(S.phase==='question'&&(e.key===' '||e.key==='Enter')){e.preventDefault();reveal()}
@@ -1236,12 +1250,13 @@ function start(data){
     delete S.off;
     if(S.q===undefined) S.q='';
     if(S.deckTurn===undefined) S.deckTurn=0;
-    if(S.screen==='game'&&!(S.theme&&S.theme.deck)) S.screen='setup';
+    if(S.screen==='game'&&!(S.theme&&S.theme.deck)){ S.screen='decks'; S.live=false; }
     if(S.screen==='game'&&S.phase==='question') S.phase='answer';
     if(S.screen==='game'&&S.phase==='recap'&&!S.recap) S.phase='answer';
     if(S.recap) S.recap.anim=true;
     S.menuOpen=false;
   }
+  if(S.live===undefined) S.live=S.screen==='game';
   S.bankStatus='loading';
   render(); loadBank();
 }
