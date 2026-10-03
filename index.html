@@ -410,9 +410,16 @@ html.no-glow .ub-glow{display:none}
 .tcg-levels{gap:6px}
 .gem{aspect-ratio:1.3;border-radius:999px}
 /* ---------- Barre du bas opaque ---------- */
-.bottom-bar{background:var(--ink);border-top:1px solid var(--line);margin-inline:calc(-1 * clamp(16px,3vw,40px));padding:12px clamp(16px,3vw,40px) calc(12px + env(safe-area-inset-bottom,0px));bottom:0;margin-top:8px;box-shadow:0 -14px 24px -12px rgba(0,0,0,.8)}
+.bottom-bar{background:var(--ink);border-top:1px solid var(--line);margin-inline:calc(-1 * clamp(16px,3vw,40px));padding:12px clamp(16px,3vw,40px) calc(13px + env(safe-area-inset-bottom,0px));bottom:-2px;margin-top:8px;box-shadow:0 -14px 24px -12px rgba(0,0,0,.8),0 40px 0 0 var(--ink)}
 html.dev-on .bottom-bar{padding-left:calc(clamp(16px,3vw,40px) + 56px)}
 .packs{padding-bottom:12px}
+
+/* ---------- Carte plus haute sur téléphone ---------- */
+@media (max-width:900px){
+  .tcg{aspect-ratio:auto;min-height:calc(100dvh - 165px);display:flex}
+  .tcg-in{flex:1;height:auto}
+  .tcg-art{flex:1 1 auto}
+}
 </style>
 </head>
 <body>
