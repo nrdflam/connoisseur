@@ -4,7 +4,7 @@
 
 - En équipes (2 à 6) ou en solo (2 à 10)
 - Objectif de points ou nombre de tours
-- Decks à ajouter à la partie d'un clic, chacun avec sa finition (irisé, métal, or, néon, rétro…)
+- Decks présentés comme des boosters : on les ouvre pour découvrir leurs cartes, on les ajoute à la partie d'un clic
 - Decks chargés automatiquement depuis `themes.xlsx` : feuille « Cartes » (Deck, Thème, Niveau, Question, Réponse) et feuille « Decks » (Deck, Finition, Description)
 - Import ponctuel d'un deck Excel depuis le jeu (modèle : `Connoisseur_modele_themes.xlsx`)
 

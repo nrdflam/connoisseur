@@ -41,12 +41,6 @@ h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.0
 .kbd{font-size:11px;border:1px solid currentColor;border-radius:4px;padding:0 4px;opacity:.55;font-weight:600}
 
 /* ---------- Accueil ---------- */
-.hero{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px}
-.hero h1{font-size:clamp(40px,7vw,92px);font-weight:800;letter-spacing:-.02em}
-.hero h1 em,.brand em{font-style:normal;color:var(--pla)}
-.hero p{margin:10px 0 0;color:var(--muted);max-width:56ch}
-.stripe{display:flex;gap:6px}
-.stripe span{width:34px;height:34px;border-radius:8px}
 .setup{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;align-items:start}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:16px;min-width:0}
 .panel h2{font-size:22px;font-weight:700}
@@ -72,8 +66,6 @@ h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.0
 .format th{background:var(--raise);font-weight:700}
 .format tr:last-child td{border-bottom:0}
 .hint{font-size:13px;color:var(--muted);margin:0}
-.start-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:flex-end}
-.start-bar .btn.primary{font-size:20px;padding:14px 28px;font-family:var(--f-display)}
 .err{color:var(--ko);font-weight:600}
 
 /* ---------- Jeu ---------- */
@@ -138,37 +130,99 @@ h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.0
 @keyframes pop{from{transform:scale(.3) rotate(-20deg)}to{transform:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
-/* ---------- Decks ---------- */
-.decks-panel{grid-column:1/-1}
-.decks-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px}
-.decks-head .hint{margin-top:6px}
-.decks{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px;padding:4px 8px 8px 0}
-.deck{position:relative;overflow:hidden;border:0;border-radius:16px;padding:16px 16px 14px;min-height:168px;text-align:left;color:var(--on-card);display:flex;flex-direction:column;gap:8px;box-shadow:5px 5px 0 -1px var(--ink),6px 6px 0 0 rgba(244,241,232,.35),10px 10px 0 -1px var(--ink),11px 11px 0 0 rgba(244,241,232,.18);transition:transform .15s ease,filter .2s ease,opacity .2s ease}
-.deck:hover{transform:translateY(-3px) rotate(-.6deg)}
-.deck.off{filter:grayscale(1) brightness(.42);opacity:.75;box-shadow:none}
-.deck.off:hover{filter:grayscale(.4) brightness(.7)}
-.deck h3{font-size:22px;font-weight:800;letter-spacing:-.01em;margin-top:auto;padding-right:28px;overflow-wrap:anywhere}
-.deck p{margin:0;font-size:13px;font-weight:500;opacity:.8}
-.deck .meta{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;opacity:.75;position:relative}
-.deck .tick{position:absolute;top:12px;right:12px;width:26px;height:26px;border-radius:50%;background:var(--on-card);color:var(--text);display:grid;place-items:center;font-size:14px;font-weight:800;z-index:1}
-.deck.off .tick{background:transparent;border:2px solid var(--on-card);color:var(--on-card)}
-.deck > *{position:relative;z-index:1}
-.card > *:not(.bignum){position:relative;z-index:1}
-.shine{background-size:100% 100%}
+
+/* ---------- Finitions ---------- */
 .shine::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.65) 50%,transparent 65%);background-size:260% 100%;background-position:130% 0;mix-blend-mode:soft-light;pointer-events:none;animation:sheen 5s ease-in-out infinite}
-.deck.shine:hover::after{animation-duration:1.6s}
 @keyframes sheen{0%{background-position:130% 0}55%,100%{background-position:-130% 0}}
 .glow{box-shadow:0 0 34px -4px #ff4fb0,0 0 0 1px rgba(255,255,255,.35) inset}
-.deck.glow{box-shadow:0 0 28px -6px #ff4fb0,5px 5px 0 -1px var(--ink),6px 6px 0 0 rgba(255,79,176,.5)}
-.stripe span{position:relative;overflow:hidden}
 .fmt summary{cursor:pointer;font-weight:600;color:var(--muted);font-size:14px}
 .fmt[open] summary{margin-bottom:10px}
 .fmt .hint{margin-top:10px}
+.link-btn{background:none;border:0;color:var(--text);text-decoration:underline;padding:0;font-size:inherit}
+
+/* ---------- Accueil ---------- */
+.home{min-height:calc(100vh - 80px);display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);align-items:center;gap:40px}
+.home h1{font-size:clamp(52px,8.5vw,120px);font-weight:800;letter-spacing:-.035em;line-height:.95}
+.home h1 em{font-style:normal;color:var(--pla)}
+.home p{color:var(--muted);max-width:40ch;font-size:18px;margin:20px 0 34px}
+.home-choice{display:flex;flex-wrap:wrap;gap:14px;max-width:560px}
+.choice{flex:1 1 200px;text-align:left;border:1px solid var(--line);background:var(--panel);border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;gap:4px;transition:transform .15s,background .15s,border-color .15s}
+.choice b{font-family:var(--f-display);font-size:28px;font-weight:800}
+.choice span{color:var(--muted);font-size:14px}
+.choice:hover{transform:translateY(-3px);border-color:var(--text);background:var(--raise)}
+.fan{position:relative;height:360px;display:grid;place-items:center}
+.fan-pack{position:absolute;width:180px;aspect-ratio:5/7.4;border-radius:6px 6px 8px 8px;color:var(--on-card);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:18px 14px;transform:translateX(var(--x)) rotate(var(--r));box-shadow:0 24px 44px -18px rgba(0,0,0,.95),inset 0 0 0 1px rgba(255,255,255,.25);overflow:hidden}
+.fan-pack:nth-child(2){z-index:2;transform:translateX(var(--x)) rotate(var(--r)) translateY(-16px)}
+.fan-pack > *:not(.crimp){position:relative;z-index:1}
+.fan-pack .pk-name{font-size:24px}
+@media (max-width:800px){.home{grid-template-columns:1fr;min-height:auto;padding-top:10px}.fan{order:-1;height:220px}.fan-pack{width:120px}.fan-pack .pk-name{font-size:17px}}
+
+/* ---------- Étapes ---------- */
+.step-head{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.step-head .btn{margin-bottom:6px}
+.step-title{font-size:clamp(34px,5vw,58px);font-weight:800;letter-spacing:-.025em}
+.step-head .hint{font-size:15px}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.search{flex:1 1 240px;min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+.bottom-bar{position:sticky;bottom:env(safe-area-inset-bottom,0px);display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:22px 0 14px;background:linear-gradient(180deg,transparent,var(--ink) 34%);z-index:5}
+.btn.big{font-size:18px;padding:14px 26px;font-family:var(--f-display);margin-left:auto}
+.sel{color:var(--muted)} .sel b{color:var(--text)}
+
+/* ---------- Boosters ---------- */
+.packs{display:grid;grid-template-columns:repeat(auto-fill,minmax(136px,1fr));gap:24px 18px;padding:8px 8px 0 0}
+.pack-wrap{position:relative;min-width:0}
+.pack{position:relative;overflow:hidden;width:100%;aspect-ratio:5/7.4;border:0;border-radius:6px 6px 8px 8px;padding:22px 12px 20px;color:var(--on-card);display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;box-shadow:0 12px 26px -14px rgba(0,0,0,.9),inset 0 0 0 1px rgba(255,255,255,.25);transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s}
+.pack > *:not(.crimp){position:relative;z-index:1}
+.pack:hover{transform:translateY(-6px) rotate(-2deg) scale(1.03)}
+.pack-wrap.on .pack{box-shadow:0 0 0 3px var(--ink),0 0 0 6px var(--text),0 16px 30px -14px rgba(0,0,0,.95)}
+.crimp{position:absolute;left:0;right:0;top:0;height:12px;background:repeating-linear-gradient(90deg,rgba(0,0,0,.22) 0 2px,rgba(255,255,255,.28) 2px 4px);border-bottom:1px solid rgba(0,0,0,.18);z-index:2}
+.crimp.bottom{top:auto;bottom:0;border-bottom:0;border-top:1px solid rgba(0,0,0,.18)}
+.pk-brand{font-family:var(--f-display);font-weight:800;font-size:10px;letter-spacing:.14em;margin-top:6px}
+.pk-brand em{font-style:normal;background:var(--on-card);color:var(--text);padding:1px 3px;border-radius:2px;margin-right:1px}
+.pk-name{font-family:var(--f-display);font-weight:800;font-size:clamp(17px,1.8vw,21px);line-height:1;letter-spacing:-.01em;text-wrap:balance;overflow-wrap:anywhere}
+.pk-foot{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;margin-bottom:4px;opacity:.75}
+.pk-toggle{position:absolute;right:-9px;top:-9px;width:34px;height:34px;border-radius:50%;border:3px solid var(--ink);background:var(--raise);color:var(--text);font-weight:800;font-size:17px;line-height:1;z-index:3;display:grid;place-items:center;transition:transform .15s}
+.pk-toggle:hover{transform:scale(1.12)}
+.pack-wrap.on .pk-toggle{background:var(--text);color:var(--on-card)}
+
+/* ---------- Unboxing ---------- */
+.unbox{position:fixed;inset:0;z-index:50;background:rgba(8,9,13,.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:grid;place-items:center;padding:calc(24px + env(safe-area-inset-top,0px)) 16px calc(24px + env(safe-area-inset-bottom,0px));overflow:auto;opacity:0;transition:opacity .2s}
+.unbox.in{opacity:1}
+.ub-dialog{position:relative;width:min(980px,100%);display:flex;flex-direction:column;gap:26px;align-items:center}
+.ub-close{position:absolute;top:0;right:0;z-index:4}
+.ub-stage{position:relative;width:100%;min-height:380px;display:grid;place-items:center}
+.ub-pack{width:230px;cursor:pointer}
+.ub-pack:hover{transform:scale(1.03) rotate(-1.5deg)}
+.ub-top{position:absolute;left:0;right:0;top:0;height:17%;background:inherit;background-size:100% 590%;z-index:3;border-bottom:2px dashed rgba(0,0,0,.3);transition:transform .5s cubic-bezier(.5,0,.75,0),opacity .5s}
+.ub-hint{position:absolute;bottom:0;margin:0;color:var(--muted);font-size:14px}
+.torn .ub-top{transform:translate(60px,-160px) rotate(24deg);opacity:0}
+.torn .ub-pack{animation:shake .45s}
+@keyframes shake{20%{transform:rotate(-4deg)}50%{transform:rotate(3deg) translateY(4px)}80%{transform:rotate(-2deg)}}
+.opened .ub-pack,.opened .ub-hint{display:none}
+.ub-cards{display:none;width:100%;grid-template-columns:repeat(auto-fit,minmax(140px,180px));justify-content:center;gap:16px;perspective:1200px}
+.opened .ub-cards{display:grid}
+.ub-card{aspect-ratio:5/7;opacity:0;animation:deal .5s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i) * 130ms)}
+@keyframes deal{from{opacity:0;transform:translateY(70px) scale(.8) rotate(-6deg)}to{opacity:1;transform:none}}
+.ub-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transform:rotateY(180deg);animation:flip .6s cubic-bezier(.3,.7,.3,1) forwards;animation-delay:calc(var(--i) * 130ms + 480ms)}
+@keyframes flip{to{transform:rotateY(0)}}
+.ub-back,.ub-front{position:absolute;inset:0;border-radius:12px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;text-align:center;padding:14px;overflow:hidden}
+.ub-back{transform:rotateY(180deg);justify-content:center;background:repeating-linear-gradient(45deg,var(--panel) 0 10px,var(--raise) 10px 20px);border:2px solid var(--line)}
+.ub-back span{font-family:var(--f-display);font-weight:800;font-size:20px;line-height:.95;color:var(--muted)}
+.ub-back em{font-style:normal;color:var(--pla)}
+.ub-front{color:var(--on-card);justify-content:space-between;box-shadow:inset 0 0 0 1px rgba(255,255,255,.3),0 14px 30px -14px rgba(0,0,0,.9)}
+.ub-front > *{position:relative;z-index:1}
+.ub-front b{font-family:var(--f-display);font-size:clamp(19px,2vw,23px);line-height:1.05;text-wrap:balance;overflow-wrap:anywhere}
+.ub-front .meta{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.ub-info{text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center}
+.ub-info h3{font-size:clamp(26px,3vw,34px);font-weight:800}
+.ub-info p{margin:0;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.ub-card{opacity:1}.ub-inner{transform:none}}
 </style>
 </head>
 <body>
 
 <div id="app" class="app"></div>
+<div id="unbox" class="unbox" hidden></div>
 <input type="file" id="file" accept=".xlsx,.xls,.csv,.ods" hidden>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -317,9 +371,9 @@ let BANK = [], BANK_DECKS = {};
 
 /* ================= État ================= */
 let S = {
-  screen:'setup',
+  screen:'home', q:'',
   teams:[{name:'Les Loutres',color:PAWNS[1],score:0},{name:'Les Cornichons',color:PAWNS[4],score:0}],
-  play:'teams', mode:'points', goal:30, rounds:8, timer:30, off:{}, bankStatus:'loading',
+  play:'teams', mode:'points', goal:30, rounds:8, timer:30, on:{}, bankStatus:'loading',
   cur:0, turn:0, deckTurn:0, phase:null, theme:null, level:null, used:[], history:[], flash:'', report:null, error:'', winner:null
 };
 let tick=null, deadline=0;
@@ -346,8 +400,8 @@ function deckList(){
   });
 }
 const deckMeta=name=>deckList().find(d=>d.name===name)||{name,finish:'craie',themes:[]};
-const lib=()=>allThemes().filter(t=>!S.off[t.deck]);
-const activeDecks=()=>deckList().filter(d=>!S.off[d.name]&&d.themes.length).map(d=>d.name);
+const lib=()=>allThemes().filter(t=>S.on[t.deck]);
+const activeDecks=()=>deckList().filter(d=>S.on[d.name]&&d.themes.length).map(d=>d.name);
 function deckStyle(name){ const f=finishOf(deckMeta(name).finish); return {style:`background:${f.bg}`, cls:f.fx}; }
 
 /* ================= Import Excel ================= */
@@ -427,7 +481,7 @@ function loadBank(){
       S.bankStatus=BANK.length?'ok':'error';
     })
     .catch(()=>{S.bankStatus='error'})
-    .finally(()=>{if(S.screen==='setup')render()});
+    .finally(()=>{if(['home','decks'].includes(S.screen))render()});
 }
 function importFile(file){
   if(!window.XLSX){S.report={file:file.name,added:0,warnings:['La lecture Excel n’a pas pu se charger. Vérifiez la connexion puis réessayez.']};render();return}
@@ -445,7 +499,7 @@ function importFile(file){
     });
     Object.assign(IMPORT_DECKS,out.decks);
     const decks=[...new Set(out.themes.map(t=>t.deck))];
-    decks.forEach(d=>delete S.off[d]);
+    decks.forEach(d=>S.on[d]=true);
     if(!out.themes.length&&!out.warnings.length) out.warnings.push('Aucune carte trouvée. La première ligne doit contenir les colonnes Deck, Thème, Niveau, Question, Réponse.');
     saveImports();
     S.report={file:file.name,added,replaced,decks,warnings:out.warnings};
@@ -500,7 +554,7 @@ function startGame(){
   S.error='';
   S.teams.forEach((t,i)=>{if(!t.name.trim())t.name=W().def+' '+(i+1)});
   if(S.teams.length<2){S.error=S.play==='solo'?'Il faut au moins deux joueurs.':'Il faut au moins deux équipes.';render();return}
-  if(!activeDecks().length){S.error='Ajoutez au moins un deck à la partie.';render();return}
+  if(!activeDecks().length){S.error='Ajoute au moins un deck à la partie.';S.screen='decks';render();return}
   S.teams.forEach(t=>t.score=0);
   S.cur=0;S.turn=0;S.deckTurn=Math.floor(Math.random()*activeDecks().length);S.used=[];S.history=[];S.flash='';
   S.screen='game'; beginTurn(); render();
@@ -520,54 +574,55 @@ function updTimer(){
 
 /* ================= Rendu ================= */
 function render(){
-  if(S.screen==='setup') $app.innerHTML=viewSetup();
-  else if(S.screen==='game') $app.innerHTML=viewGame();
-  else $app.innerHTML=viewWin();
+  const v={home:viewHome,setup:viewPlayers,decks:viewDeckPicker,game:viewGame,win:viewWin}[S.screen]||viewHome;
+  $app.innerHTML=v();
   if(S.screen==='game'&&S.phase==='question') updTimer();
+  if(S.screen==='decks') applySearch();
 }
 const plural=(n,w)=>`${n} ${w}${n>1?'s':''}`;
-function viewDecks(){
-  const D=deckList();
-  const on=D.filter(d=>!S.off[d.name]);
-  const cards=on.reduce((s,d)=>s+d.themes.length,0);
-  const tiles=D.map(d=>{
-    const f=finishOf(d.finish), isOn=!S.off[d.name];
-    const tag=d.src==='sample'?'Intégré':d.src==='banque'?'Banque':'Importé';
-    return `<button class="deck ${f.fx} ${isOn?'':'off'}" style="background:${f.bg}" data-a="deck" data-d="${esc(d.name)}" aria-pressed="${isOn}" title="${esc(d.themes.map(t=>t.name).join(' · '))}">
-      <span class="tick" aria-hidden="true">${isOn?'✓':'+'}</span>
-      <span class="meta">${tag} · ${f.label}</span>
-      <h3>${esc(d.name)}</h3>
-      ${d.desc?`<p>${esc(d.desc)}</p>`:''}
-      <span class="meta">${plural(d.themes.length,'carte')} · ${d.themes.length*10} questions</span>
-    </button>`;
-  }).join('');
-  const bank=S.bankStatus==='loading'?'<p class="hint">Chargement des decks de themes.xlsx…</p>':S.bankStatus==='error'?'<p class="hint">Fichier themes.xlsx introuvable à côté du jeu : seuls le deck intégré et vos imports sont disponibles.</p>':'';
-  const rep=S.report?`<div class="report"><b>${esc(S.report.file||'Import')}</b> : ${plural(S.report.added||0,'carte')} ajoutée${(S.report.added||0)>1?'s':''}${S.report.replaced?`, ${S.report.replaced} mise(s) à jour`:''}${S.report.decks?.length?` dans ${S.report.decks.map(esc).join(', ')}`:''}.${S.report.warnings.length?`<ul>${S.report.warnings.slice(0,8).map(w=>`<li>${esc(w)}</li>`).join('')}${S.report.warnings.length>8?`<li>… et ${S.report.warnings.length-8} autre(s)</li>`:''}</ul>`:''}</div>`:'';
-  return `<div class="panel decks-panel">
-    <div class="decks-head">
-      <div><h2>Decks</h2><p class="hint">Cliquez sur un deck pour l’ajouter ou le retirer de la partie. Une carte = un thème de 10 questions.</p></div>
-      <span class="label">${plural(on.length,'deck')} · ${plural(cards,'carte')} en jeu</span>
-    </div>
-    ${bank}
-    <div class="decks">${tiles}</div>
-    <div class="actions">
-      <button class="btn primary small" data-a="import">Importer un deck Excel</button>
-      ${location.hostname.endsWith('github.io')?`<a class="btn ghost small" href="Connoisseur_modele_themes.xlsx" download>Télécharger le modèle</a>`:''}
-        ${IMPORTS.length?`<button class="btn ghost small" data-a="clear-imports">Retirer les ${plural(IMPORTS.length,'carte')} importée${IMPORTS.length>1?'s':''}</button>`:''}
-    </div>
-    ${rep}
-    <details class="fmt">
-      <summary>Format du fichier Excel</summary>
-      <div class="format"><table>
-        <tr><th>Deck</th><th>Thème</th><th>Niveau</th><th>Question</th><th>Réponse</th></tr>
-        <tr><td>Années 90</td><td>Spice Girls</td><td>1</td><td>Combien étaient-elles ?</td><td>5</td></tr>
-        <tr><td></td><td></td><td>2</td><td>Quel est leur premier tube ?</td><td>Wannabe</td></tr>
-      </table></div>
-      <p class="hint">Une ligne par question, 10 niveaux par thème. Les cellules Deck et Thème vides reprennent la valeur du dessus. Pour choisir l’apparence d’un deck, ajoutez une feuille « Decks » avec les colonnes Deck, Finition et Description. Finitions : ${Object.values(FINISHES).map(f=>f.label.toLowerCase()).join(', ')}, ou un code couleur comme #ff6600. Les decks importés restent dans ce navigateur.</p>
-    </details>
+
+function packHTML(d, opts={}){
+  const f=finishOf(d.finish), on=!!S.on[d.name];
+  const search=norm(d.name+' '+d.themes.map(t=>t.name).join(' '));
+  return `<div class="pack-wrap ${on?'on':''}" data-search="${esc(search)}">
+    <button class="pack ${f.fx}" style="background:${f.bg}" data-a="open" data-d="${esc(d.name)}" aria-label="Ouvrir le booster ${esc(d.name)}">
+      <span class="crimp"></span>
+      <span class="pk-brand"><em>CON</em>NOISSEUR</span>
+      <span class="pk-name">${esc(d.name)}</span>
+      <span class="pk-foot">${plural(d.themes.length,'carte')}</span>
+      <span class="crimp bottom"></span>
+    </button>
+    ${opts.noToggle?'':`<button class="pk-toggle" data-a="deck" data-d="${esc(d.name)}" aria-pressed="${on}" aria-label="${on?'Retirer de la partie':'Ajouter à la partie'}">${on?'✓':'+'}</button>`}
   </div>`;
 }
-function viewSetup(){
+
+function viewHome(){
+  const D=deckList();
+  const picks=(D.length>3?D.slice(1,4):D).slice(0,3);
+  const fan=picks.map((d,i)=>{const f=finishOf(d.finish);return `<div class="fan-pack ${f.fx}" style="background:${f.bg};--r:${(i-1)*9}deg;--x:${(i-1)*46}px"><span class="crimp"></span><span class="pk-brand"><em>CON</em>NOISSEUR</span><span class="pk-name">${esc(d?d.name:'Booster')}</span><span class="crimp bottom"></span></div>`}).join('');
+  return `<section class="home">
+    <div class="home-text">
+      <h1><em>Con</em> ou<br>connoisseur ?</h1>
+      <p>Note-toi de 1 à 10 sur une carte, réponds à la question de ce niveau, marque autant de points.</p>
+      <div class="home-choice">
+        <button class="choice" data-a="mode-play" data-v="teams"><b>En équipes</b><span>2 à 6 équipes</span></button>
+        <button class="choice" data-a="mode-play" data-v="solo"><b>En solo</b><span>2 à 10 joueurs</span></button>
+      </div>
+    </div>
+    <div class="fan" aria-hidden="true">${fan}</div>
+  </section>`;
+}
+
+function stepHead(back, step, title, sub){
+  return `<header class="step-head">
+    <button class="btn ghost small" data-a="go" data-v="${back}">← Retour</button>
+    <span class="label">Étape ${step} sur 2</span>
+    <h2 class="step-title">${title}</h2>
+    ${sub?`<p class="hint">${sub}</p>`:''}
+  </header>`;
+}
+
+function viewPlayers(){
   const teams=S.teams.map((t,i)=>`
     <div class="team-row">
       <input type="text" id="team-${i}" data-team="${i}" value="${esc(t.name)}" maxlength="24" aria-label="Nom ${i+1}">
@@ -575,18 +630,10 @@ function viewSetup(){
       <button class="icon-btn" data-a="rm-team" data-i="${i}" aria-label="Retirer" ${S.teams.length<=2?'disabled':''}>✕</button>
     </div>`).join('');
   const seg=(key,opts)=>`<div class="seg">${opts.map(([v,l])=>`<button class="${S[key]===v?'on':''}" data-a="set" data-k="${key}" data-v="${v}">${l}</button>`).join('')}</div>`;
-  return `
-  <header class="hero">
-    <div>
-      <h1><em>Con</em> ou<br>connoisseur ?</h1>
-      <p>Notez-vous de 1 à 10 sur le thème tiré : 1, vous êtes con, 10, vous êtes connoisseur. Chaque bonne réponse rapporte autant de points que la note annoncée.</p>
-    </div>
-    <div class="stripe">${['irise','metal','or','neon','retro'].map(k=>`<span class="${FINISHES[k].fx}" style="background:${FINISHES[k].bg}" title="${FINISHES[k].label}"></span>`).join('')}</div>
-  </header>
+  return `${stepHead('home',1,S.play==='solo'?'Les joueurs':'Les équipes')}
   <section class="setup">
     <div class="panel">
       <h2>${W().Many}</h2>
-      <div class="seg">${[['teams','En équipes'],['solo','En solo']].map(([v,l])=>`<button class="${S.play===v?'on':''}" data-a="play" data-v="${v}">${l}</button>`).join('')}</div>
       ${teams}
       <button class="btn ghost small" data-a="add-team" ${S.teams.length>=MAX[S.play]?'disabled':''} style="align-self:flex-start">+ Ajouter ${W().a}</button>
     </div>
@@ -597,15 +644,102 @@ function viewSetup(){
         ?`<div class="field"><span class="label">Premier à</span>${seg('goal',[[20,'20 pts'],[30,'30 pts'],[50,'50 pts'],[80,'80 pts']])}</div>`
         :`<div class="field"><span class="label">Tours par ${W().one}</span>${seg('rounds',[[5,'5'],[8,'8'],[10,'10'],[15,'15']])}</div>`}
       <div class="field"><span class="label">Chrono par question</span>${seg('timer',[[0,'Sans'],[30,'30 s'],[45,'45 s'],[60,'60 s']])}</div>
-      <p class="hint">Bonne réponse : la note choisie devient le nombre de points. Les decks choisis tournent à chaque question.</p>
     </div>
-    ${viewDecks()}
   </section>
-  <div class="start-bar">
+  <div class="bottom-bar"><span></span><button class="btn primary big" data-a="go" data-v="decks">Choisir les decks →</button></div>`;
+}
+
+function viewDeckPicker(){
+  const D=deckList();
+  const on=D.filter(d=>S.on[d.name]);
+  const cards=on.reduce((s,d)=>s+d.themes.length,0);
+  const bank=S.bankStatus==='loading'?'<p class="hint">Chargement des boosters…</p>':S.bankStatus==='error'?'<p class="hint">themes.xlsx introuvable à côté du jeu : seuls le booster intégré et tes imports sont là.</p>':'';
+  const rep=S.report?`<div class="report"><b>${esc(S.report.file||'Import')}</b> : ${plural(S.report.added||0,'carte')} ajoutée${(S.report.added||0)>1?'s':''}${S.report.replaced?`, ${S.report.replaced} mise(s) à jour`:''}${S.report.decks?.length?` dans ${S.report.decks.map(esc).join(', ')}`:''}.${S.report.warnings.length?`<ul>${S.report.warnings.slice(0,8).map(w=>`<li>${esc(w)}</li>`).join('')}${S.report.warnings.length>8?`<li>… et ${S.report.warnings.length-8} autre(s)</li>`:''}</ul>`:''}</div>`:'';
+  return `${stepHead('setup',2,'Choisis tes boosters','Ouvre un booster pour découvrir ses cartes. Le + l’ajoute directement à la partie.')}
+  <div class="tools">
+    ${D.length>8?`<input type="search" id="deck-q" class="search" placeholder="Chercher un deck ou un thème" value="${esc(S.q)}" aria-label="Chercher">`:''}
+    <button class="btn small" data-a="all-on">Tout prendre</button>
+    <button class="btn small ghost" data-a="all-off" ${on.length?'':'disabled'}>Vider</button>
+    <button class="btn small ghost" data-a="import">Importer un deck Excel</button>
+    ${location.hostname.endsWith('github.io')?`<a class="btn small ghost" href="Connoisseur_modele_themes.xlsx" download>Modèle Excel</a>`:''}
+  </div>
+  ${bank}${rep}
+  <div class="packs">${D.map(d=>packHTML(d)).join('')}</div>
+  <p class="hint none" id="none-found" hidden>Aucun deck ne correspond.</p>
+  <details class="fmt">
+    <summary>Format d’un deck Excel</summary>
+    <div class="format"><table>
+      <tr><th>Deck</th><th>Thème</th><th>Niveau</th><th>Question</th><th>Réponse</th></tr>
+      <tr><td>Années 90</td><td>Spice Girls</td><td>1</td><td>Combien étaient-elles ?</td><td>5</td></tr>
+      <tr><td></td><td></td><td>2</td><td>Quel est leur premier tube ?</td><td>Wannabe</td></tr>
+    </table></div>
+    <p class="hint">Une ligne par question, 10 niveaux par thème. Une feuille « Decks » (Deck, Finition, Description) règle l’apparence : ${Object.values(FINISHES).map(f=>f.label.toLowerCase()).join(', ')}, ou un code couleur. ${IMPORTS.length?`<button class="link-btn" data-a="clear-imports">Retirer mes ${plural(IMPORTS.length,'carte')} importée${IMPORTS.length>1?'s':''}</button>`:''}</p>
+  </details>
+  <div class="bottom-bar">
+    <span class="sel">${on.length?`<b>${plural(on.length,'deck')}</b> · ${plural(cards,'carte')}`:'Aucun deck choisi'}</span>
     ${S.error?`<span class="err">${esc(S.error)}</span>`:''}
-    <button class="btn primary" data-a="start">Lancer la partie →</button>
+    <button class="btn primary big" data-a="start" ${on.length?'':'disabled'}>Lancer la partie →</button>
   </div>`;
 }
+function applySearch(){
+  const q=norm(S.q||''); let n=0;
+  document.querySelectorAll('.pack-wrap').forEach(el=>{const hit=!q||el.dataset.search.includes(q);el.hidden=!hit;if(hit)n++});
+  const none=document.getElementById('none-found'); if(none) none.hidden=n>0;
+}
+
+/* ================= Unboxing ================= */
+let SEEN=(()=>{try{return JSON.parse(localStorage.getItem('connoisseur.seen')||'{}')}catch(e){return {}}})();
+function openPack(name){
+  const d=deckMeta(name); const f=finishOf(d.finish);
+  const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const box=document.getElementById('unbox');
+  const cards=d.themes.map((t,i)=>`<div class="ub-card" style="--i:${i}">
+      <div class="ub-inner">
+        <div class="ub-back"><span><em>CON</em><br>NOIS<br>SEUR</span></div>
+        <div class="ub-front ${f.fx}" style="background:${f.bg}"><span class="meta">Carte ${i+1}/${d.themes.length}</span><b>${esc(t.name)}</b><span class="meta">${t.qs.filter(Boolean).length} questions</span></div>
+      </div></div>`).join('');
+  box.innerHTML=`<div class="ub-dialog" role="dialog" aria-modal="true" aria-label="Booster ${esc(d.name)}">
+    <button class="icon-btn ub-close" data-u="close" aria-label="Fermer">✕</button>
+    <div class="ub-stage">
+      <button class="ub-pack pack ${f.fx}" style="background:${f.bg}" data-u="tear" aria-label="Ouvrir le booster">
+        <span class="ub-top"><span class="crimp"></span></span>
+        <span class="pk-brand"><em>CON</em>NOISSEUR</span>
+        <span class="pk-name">${esc(d.name)}</span>
+        <span class="pk-foot">${plural(d.themes.length,'carte')}</span>
+        <span class="crimp bottom"></span>
+      </button>
+      <p class="ub-hint">Clique pour ouvrir</p>
+      <div class="ub-cards">${cards}</div>
+    </div>
+    <div class="ub-info">
+      <h3>${esc(d.name)}</h3>
+      ${d.desc?`<p>${esc(d.desc)}</p>`:''}
+      <div class="actions"><button class="btn ${S.on[name]?'':'primary'}" data-u="toggle">${S.on[name]?'Retirer de la partie':'Ajouter à la partie'}</button><button class="btn ghost" data-u="close">Fermer</button></div>
+    </div>
+  </div>`;
+  box.hidden=false; box.dataset.deck=name;
+  box.className='unbox'+(reduce||SEEN[name]?' opened':'');
+  requestAnimationFrame(()=>box.classList.add('in'));
+  box.querySelector('[data-u="tear"]').focus();
+}
+function tearPack(){
+  const box=document.getElementById('unbox');
+  if(box.classList.contains('torn')||box.classList.contains('opened')) return;
+  box.classList.add('torn');
+  setTimeout(()=>box.classList.add('opened'),520);
+  SEEN[box.dataset.deck]=1; try{localStorage.setItem('connoisseur.seen',JSON.stringify(SEEN))}catch(e){}
+}
+function closePack(){ const box=document.getElementById('unbox'); box.hidden=true; box.innerHTML=''; box.className='unbox'; }
+document.getElementById('unbox').addEventListener('click',e=>{
+  const box=e.currentTarget;
+  if(e.target===box) return closePack();
+  const b=e.target.closest('[data-u]'); if(!b) return;
+  const u=b.dataset.u, name=box.dataset.deck;
+  if(u==='close') closePack();
+  else if(u==='tear') tearPack();
+  else if(u==='toggle'){ if(S.on[name])delete S.on[name]; else S.on[name]=true; S.error=''; closePack(); render(); }
+});
+
 function viewScores(){
   const max=S.mode==='points'?S.goal:Math.max(1,...S.teams.map(t=>t.score));
   const rows=S.teams.map((t,i)=>`<div class="srow ${i===S.cur?'cur':''}">
@@ -650,6 +784,7 @@ function viewGame(){
     <span class="brand"><em>CON</em>NOISSEUR</span>
     <div class="actions">
       <button class="btn small ghost" data-a="undo" ${S.history.length?'':'disabled'}>Annuler le coup</button>
+      <button class="btn small ghost" data-a="go" data-v="decks">Decks</button>
       <button class="btn small ghost" data-a="menu">Menu</button>
     </div>
   </div>
@@ -674,7 +809,7 @@ function viewWin(){
     <h1>${title}</h1>
     <p class="hint">${sub}</p>
     <div class="ranking">${ranked.map((t,i)=>`<div><span>${i+1}. ${esc(t.name)}</span><b>${t.score} pts</b></div>`).join('')}</div>
-    <div class="actions"><button class="btn primary" data-a="replay">Rejouer avec ${S.play==='solo'?'les mêmes joueurs':'les mêmes équipes'}</button><button class="btn" data-a="undo" ${S.history.length?'':'disabled'}>Annuler le dernier coup</button><button class="btn" data-a="menu">Retour au menu</button></div>
+    <div class="actions"><button class="btn primary" data-a="replay">Rejouer avec ${S.play==='solo'?'les mêmes joueurs':'les mêmes équipes'}</button><button class="btn" data-a="undo" ${S.history.length?'':'disabled'}>Annuler le dernier coup</button><button class="btn" data-a="go" data-v="decks">Changer de decks</button><button class="btn ghost" data-a="menu">Retour au menu</button></div>
   </section>`;
 }
 
@@ -683,15 +818,19 @@ $app.addEventListener('click',e=>{
   const b=e.target.closest('[data-a]'); if(!b||b.disabled) return;
   const a=b.dataset.a;
   if(a==='set'){const v=b.dataset.v;S[b.dataset.k]=isNaN(+v)?v:+v;render()}
-  else if(a==='deck'){const d=b.dataset.d;if(S.off[d])delete S.off[d];else S.off[d]=true;S.error='';render()}
+  else if(a==='mode-play'){const to=b.dataset.v;if(to!==S.play){S.teams.forEach((t,i)=>{if(t.name===DEFAULTS[S.play][i]||t.name===W().def+' '+(i+1))t.name=DEFAULTS[to][i]||((to==='solo'?'Joueur ':'Équipe ')+(i+1))});S.play=to;S.teams=S.teams.slice(0,MAX[to])}S.screen='setup';render();scrollTo(0,0)}
+  else if(a==='go'){stopTimer();S.screen=b.dataset.v;S.error='';render();scrollTo(0,0)}
+  else if(a==='open'){openPack(b.dataset.d)}
+  else if(a==='deck'){const d=b.dataset.d;if(S.on[d])delete S.on[d];else S.on[d]=true;S.error='';render()}
+  else if(a==='all-on'){deckList().forEach(d=>S.on[d.name]=true);render()}
+  else if(a==='all-off'){S.on={};render()}
   else if(a==='color'){const t=S.teams[+b.dataset.i];const used=S.teams.map(x=>x.color);let k=PAWNS.indexOf(t.color);for(let n=0;n<PAWNS.length;n++){k=(k+1)%PAWNS.length;if(!used.includes(PAWNS[k]))break}t.color=PAWNS[k];render()}
-  else if(a==='play'){const to=b.dataset.v;if(to===S.play)return;S.teams.forEach((t,i)=>{if(t.name===DEFAULTS[S.play][i]||t.name===W().def+' '+(i+1))t.name=DEFAULTS[to][i]||((to==='solo'?'Joueur ':'Équipe ')+(i+1))});S.play=to;S.teams=S.teams.slice(0,MAX[to]);render()}
   else if(a==='add-team'){const used=S.teams.map(t=>t.color);S.teams.push({name:W().def+' '+(S.teams.length+1),color:PAWNS.find(c=>!used.includes(c))||PAWNS[0],score:0});render()}
   else if(a==='rm-team'){S.teams.splice(+b.dataset.i,1);render()}
   else if(a==='import'){document.getElementById('file').click()}
-  else if(a==='clear-imports'){IMPORTS=[];IMPORT_DECKS={};saveImports();S.report=null;render()}
+  else if(a==='clear-imports'){IMPORTS.forEach(t=>delete S.on[t.deck]);IMPORTS=[];IMPORT_DECKS={};saveImports();S.report=null;render()}
   else if(a==='start'||a==='replay'){startGame()}
-  else if(a==='menu'){stopTimer();S.screen='setup';render()}
+  else if(a==='menu'){stopTimer();S.screen='home';render();scrollTo(0,0)}
   else if(a==='lv'){choose(+b.dataset.l)}
   else if(a==='skip'){S.theme=draw(S.theme.deck,S.theme.id);render()}
   else if(a==='reveal'){reveal()}
@@ -699,9 +838,14 @@ $app.addEventListener('click',e=>{
   else if(a==='ko'){resolve(false)}
   else if(a==='undo'){undo()}
 });
-$app.addEventListener('input',e=>{const i=e.target.dataset.team;if(i!==undefined)S.teams[+i].name=e.target.value});
+$app.addEventListener('input',e=>{
+  const i=e.target.dataset.team; if(i!==undefined) S.teams[+i].name=e.target.value;
+  if(e.target.id==='deck-q'){S.q=e.target.value;applySearch()}
+});
 document.getElementById('file').addEventListener('change',e=>{const f=e.target.files[0];if(f)importFile(f);e.target.value=''});
 document.addEventListener('keydown',e=>{
+  const box=document.getElementById('unbox');
+  if(!box.hidden){ if(e.key==='Escape') closePack(); return; }
   if(S.screen!=='game'||e.target.closest('input')) return;
   if(S.phase==='pick'&&/^[0-9]$/.test(e.key)){choose(e.key==='0'?10:+e.key)}
   else if(S.phase==='question'&&(e.key===' '||e.key==='Enter')){e.preventDefault();reveal()}
@@ -714,7 +858,9 @@ function start(data){
   const p=data&&data.S;
   if(p&&p.teams&&p.teams[0]&&'score' in p.teams[0]){
     S={...S,...p};
-    if(!S.off) S.off={};
+    if(!S.on||typeof S.on!=='object') S.on={};
+    delete S.off;
+    if(S.q===undefined) S.q='';
     if(S.deckTurn===undefined) S.deckTurn=0;
     if(S.screen==='game'&&!(S.theme&&S.theme.deck)) S.screen='setup';
     if(S.screen==='game'&&S.phase==='question') S.phase='answer';
