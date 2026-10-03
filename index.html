@@ -324,16 +324,34 @@ html.no-glow .ub-glow{display:none}
 .ub-back .logo{--lf:var(--muted);--lb:var(--panel);font-size:11px}
 .home-logo{font-size:13px;margin-bottom:18px}
 /* ---------- Boutons de jeu toujours visibles ---------- */
-.tcg-actions{position:sticky;bottom:env(safe-area-inset-bottom,0px);z-index:6;padding:16px 0 12px;background:linear-gradient(180deg,transparent,var(--ink) 35%)}
-html.dev-on .tcg-actions{padding-left:56px;padding-right:56px}
-@media (max-width:900px){
-  .tcg{aspect-ratio:auto}
-  .tcg-art{flex:none;min-height:0;padding:12px 14px}
-  .tcg.deal .tcg-art{min-height:150px}
-  .art-num{font-size:64px}
-  .art-theme{font-size:clamp(30px,9vw,44px)}
-  .topbar{gap:8px}
-}
+
+/* ---------- Carte : question dans l'illustration ---------- */
+.art-q{margin:0;font-family:var(--f-display);font-weight:800;font-size:clamp(24px,3.2vw,34px);line-height:1.12;letter-spacing:-.01em;text-wrap:balance}
+.art-q.long{font-size:clamp(21px,2.7vw,29px)}
+.art-q.xl{font-size:clamp(18px,2.3vw,24px)}
+.tcg-art.is-q{justify-content:center;gap:10px}
+.tcg-art.is-q .art-kicker{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+.tcg .btn.dark{background:var(--on-card);color:var(--text);border-color:var(--on-card)}
+.tcg .btn.wide{width:100%;justify-content:center;font-size:17px;padding:13px}
+.tcg-verdict{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tcg-verdict .btn{justify-content:center;font-size:17px;padding:13px 10px}
+.tcg .kbd{display:none}
+@media (hover:hover) and (pointer:fine){.tcg .kbd{display:inline}}
+/* ---------- Burger ---------- */
+.turn{position:relative}
+.turn .who{flex:1;min-width:0}
+.burger-wrap{position:relative;margin-left:auto}
+.burger{width:42px;height:42px;border-radius:10px;border:1px solid var(--line);background:var(--panel);display:grid;place-content:center;gap:4px;padding:0}
+.burger i{display:block;width:18px;height:2px;border-radius:2px;background:var(--text)}
+.burger[aria-expanded="true"]{background:var(--text)}
+.burger[aria-expanded="true"] i{background:var(--ink)}
+.menu-pop{position:absolute;right:0;top:calc(100% + 8px);z-index:20;width:min(260px,80vw);background:var(--raise);border:1px solid var(--line);border-radius:14px;padding:6px;display:flex;flex-direction:column;box-shadow:0 20px 40px -16px rgba(0,0,0,.9)}
+.menu-item{background:none;border:0;text-align:left;padding:12px 12px;border-radius:9px;font-weight:600;font-size:15px}
+.menu-item:hover:not([disabled]){background:var(--line)}
+.menu-item[disabled]{opacity:.35;cursor:not-allowed}
+.menu-note{margin:4px 12px 8px;font-size:12px;color:var(--dim)}
+.topbar{margin-bottom:-6px}
+.game .flash:empty{display:none}
 </style>
 </head>
 <body>
@@ -911,50 +929,54 @@ function viewCard(){
   const th=S.theme, d=deckMeta(th.deck), f=finishOf(d.finish);
   const idx=Math.max(1,d.themes.findIndex(t=>t.id===th.id)+1);
   const pick=S.phase==='pick', qa=pick?null:th.qs[S.level-1];
-  let text, actions;
+  let art, text;
   if(pick){
+    art=`<span class="art-kicker">T’es con ou connoisseur en…</span><b class="art-theme">${esc(th.name)}</b>`;
     text=`<div class="tcg-levels">${Array.from({length:10},(_,i)=>`<button class="gem" data-a="lv" data-l="${i+1}" ${th.qs[i]?'':'disabled'}>${i+1}</button>`).join('')}</div>`;
-    actions=`<button class="btn ghost" data-a="skip">Changer de carte</button>`;
-  } else if(S.phase==='question'){
-    const timer=S.timer?`<div class="timer-row" id="trow"><div class="timer"><i id="tbar" style="width:100%"></i></div><span id="tnum">${S.timer} s</span></div>`:'';
-    text=`<p class="tcg-q">${esc(qa.q)}</p>${timer}`;
-    actions=`<button class="btn primary" data-a="reveal">Voir la réponse <span class="kbd">Espace</span></button>`;
   } else {
-    text=`<p class="tcg-q">${esc(qa.q)}</p><div class="tcg-a"><small>Réponse</small>${esc(qa.a)}</div>`;
-    actions=`<button class="btn ok" data-a="ok">Juste · +${S.level} <span class="kbd">J</span></button><button class="btn ko" data-a="ko">Faux <span class="kbd">F</span></button>`;
+    const len=qa.q.length;
+    art=`<span class="art-kicker">Question niveau ${S.level}</span><p class="art-q ${len>110?'xl':len>70?'long':''}">${esc(qa.q)}</p>`;
+    if(S.phase==='question'){
+      const timer=S.timer?`<div class="timer-row" id="trow"><div class="timer"><i id="tbar" style="width:100%"></i></div><span id="tnum">${S.timer} s</span></div>`:'';
+      text=`${timer}<button class="btn dark wide" data-a="reveal">Voir la réponse <span class="kbd">Espace</span></button>`;
+    } else {
+      text=`<div class="tcg-a"><small>Réponse</small>${esc(qa.a)}</div>
+        <div class="tcg-verdict"><button class="btn ok" data-a="ok">Juste · +${S.level} <span class="kbd">J</span></button><button class="btn ko" data-a="ko">Faux <span class="kbd">F</span></button></div>`;
+    }
   }
-  const art=pick
-    ? `<span class="art-kicker">T’es con ou connoisseur en…</span><b class="art-theme">${esc(th.name)}</b>`
-    : `<span class="art-kicker">Niveau</span><b class="art-num">${S.level}</b>`;
   return `<article class="tcg ${f.fx} ${pick?'deal':''}" style="background:${f.bg}">
     <div class="tcg-in">
       <header class="tcg-title"><h2>${esc(th.name)}</h2><span class="cost" style="background:${f.bg}">${pick?'?':S.level}</span></header>
-      <div class="tcg-art ${f.fx}" style="background:${f.bg}">${art}</div>
+      <div class="tcg-art ${f.fx} ${pick?'':'is-q'}" style="background:${f.bg}">${art}</div>
       <div class="tcg-type"><span>Carte · ${esc(th.deck)}</span><span>◆ ${idx}/${d.themes.length}</span></div>
       <div class="tcg-text">${text}</div>
-      <footer class="tcg-foot"><span class="logo"><em>CON</em>NOISSEUR</span><span>${pick?'Choisis ta note':'Niv. '+S.level+' · '+(S.level*1)+' pt'+(S.level>1?'s':'')}</span></footer>
+      <footer class="tcg-foot"><span class="logo"><em>CON</em>NOISSEUR</span><span>${pick?'Choisis ta note':'Niv. '+S.level+' · '+S.level+' pt'+(S.level>1?'s':'')}</span></footer>
     </div>
-  </article>
-  <div class="actions tcg-actions">${actions}</div>`;
+  </article>`;
 }
 function viewGame(){
   const t=team();
+  const item=(a,label,dis,extra='')=>`<button class="menu-item" data-a="${a}" ${extra} ${dis?'disabled':''}>${label}</button>`;
   return `
-  <div class="topbar">
-    <span class="brand logo"><em>CON</em>NOISSEUR</span>
-    <div class="actions">
-      <button class="btn small ghost" data-a="undo" ${S.history.length?'':'disabled'}>Annuler le coup</button>
-      <button class="btn small ghost" data-a="go" data-v="decks">Decks</button>
-      <button class="btn small ghost" data-a="menu">Menu</button>
-    </div>
-  </div>
+  <div class="topbar"><span class="brand logo"><em>CON</em>NOISSEUR</span></div>
   <div class="game">
     <div class="side">${viewScores()}</div>
     <div class="side play">
-      <div class="turn"><span class="pawn-s" style="background:${t.color}"></span><span>Au tour de <b>${esc(t.name)}</b></span></div>
+      <div class="turn">
+        <span class="pawn-s" style="background:${t.color}"></span><span class="who">Au tour de <b>${esc(t.name)}</b></span>
+        <div class="burger-wrap">
+          <button class="burger" data-a="burger" aria-expanded="${!!S.menuOpen}" aria-label="Options de la partie"><i></i><i></i><i></i></button>
+          ${S.menuOpen?`<div class="menu-pop" role="menu">
+            ${S.phase==='pick'?item('skip','Changer de carte'):''}
+            ${item('undo','Annuler le dernier coup',!S.history.length)}
+            ${item('go','Changer de decks',false,'data-v="decks"')}
+            ${item('menu','Retour à l’accueil')}
+            <p class="menu-note">Clavier : 1 à 9, 0 pour 10 · Espace révèle · J juste · F faux</p>
+          </div>`:''}
+        </div>
+      </div>
       <div class="flash">${S.flash}</div>
       ${viewCard()}
-      <span class="shortcuts">Clavier : 1 à 9 et 0 pour 10 · Espace révèle · J juste · F faux</span>
     </div>
   </div>`;
 }
@@ -975,8 +997,12 @@ function viewWin(){
 
 /* ================= Événements ================= */
 $app.addEventListener('click',e=>{
-  const b=e.target.closest('[data-a]'); if(!b||b.disabled) return;
+  const b=e.target.closest('[data-a]');
+  if(!b&&S.menuOpen&&!e.target.closest('.menu-pop')){S.menuOpen=false;render();return}
+  if(!b||b.disabled) return;
   const a=b.dataset.a;
+  if(a==='burger'){S.menuOpen=!S.menuOpen;render();return}
+  if(S.menuOpen){S.menuOpen=false}
   if(a==='set'){const v=b.dataset.v;S[b.dataset.k]=isNaN(+v)?v:+v;render()}
   else if(a==='mode-play'){const to=b.dataset.v;if(to!==S.play){S.teams.forEach((t,i)=>{if(t.name===DEFAULTS[S.play][i]||t.name===W().def+' '+(i+1))t.name=DEFAULTS[to][i]||((to==='solo'?'Joueur ':'Équipe ')+(i+1))});S.play=to;S.teams=S.teams.slice(0,MAX[to])}S.screen='setup';render();scrollTo(0,0)}
   else if(a==='go'){stopTimer();S.screen=b.dataset.v;S.error='';render();scrollTo(0,0)}
