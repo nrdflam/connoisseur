@@ -436,18 +436,6 @@ html.dev-on .bottom-bar{padding-left:calc(clamp(16px,3vw,40px) + 56px)}
 /* ---------- Téléphone : tout tient sans scroller ---------- */
 @media (max-width:800px){
   body{padding-block:14px 16px}
-  .home{gap:10px;padding-top:0}
-  .fan{height:138px}
-  .fan-pack{width:84px;padding:10px 6px;gap:6px}
-  .fan-pack .pk-name{font-size:12px}
-  .fan-pack .pk-brand{font-size:8px}
-  .home-logo{margin-bottom:10px;font-size:12px}
-  .home h1{font-size:clamp(40px,12vw,54px)}
-  .home p{font-size:15px;margin:10px 0 16px}
-  .home-choice{flex-direction:column;flex-wrap:nowrap;gap:8px;margin-bottom:40px}
-  .choice{flex:none;flex-direction:row;align-items:baseline;justify-content:space-between;gap:10px;padding:13px 16px}
-  .choice b{font-size:22px}
-  .choice span{font-size:13px}
   .step-head{flex-direction:row;flex-wrap:wrap;align-items:center;column-gap:12px;row-gap:6px}
   .step-head .btn{margin-bottom:0}
   .step-title{flex-basis:100%;font-size:30px}
@@ -469,6 +457,29 @@ html.dev-on .bottom-bar{padding-left:calc(clamp(16px,3vw,40px) + 56px)}
   .panel-players .add-team{margin-top:auto}
   .panel-game{justify-content:space-evenly}
   .screen-fill .bottom-bar{margin-top:0}
+}
+.plus-wrap{position:relative;margin-left:auto}
+.plus-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--raise);font-size:24px;font-weight:600;line-height:1;display:grid;place-items:center;padding:0 0 2px}
+.plus-btn[aria-expanded="true"]{background:var(--text);color:var(--ink);border-color:var(--text)}
+.import-pop{width:min(340px,calc(100vw - 32px))}
+.import-pop a.menu-item{color:var(--text);text-decoration:none}
+.import-pop .fmt{padding:6px 12px 10px}
+.import-pop .format table{min-width:380px}
+/* ---------- Accueil plein écran, hiérarchisé ---------- */
+@media (max-width:800px){
+  .home{display:flex;flex-direction:column;min-height:calc(100dvh - 30px);gap:22px;padding:0}
+  .fan{order:0;flex:1 1 auto;height:auto;min-height:clamp(190px,32vh,300px)}
+  .fan-pack{width:clamp(104px,30vw,138px);padding:14px 10px;gap:9px}
+  .fan-pack .pk-name{font-size:clamp(15px,4.4vw,19px)}
+  .fan-pack .pk-brand{font-size:9px}
+  .home-text{display:flex;flex-direction:column}
+  .home-logo{margin-bottom:14px;font-size:12px}
+  .home h1{font-size:clamp(50px,15vw,72px);line-height:.92}
+  .home p{font-size:16px;margin:16px 0 26px;max-width:32ch}
+  .home-choice{flex-direction:column;flex-wrap:nowrap;gap:10px;max-width:none;margin-bottom:62px}
+  .choice{flex:none;flex-direction:row;align-items:baseline;justify-content:space-between;gap:10px;padding:18px 18px}
+  .choice b{font-size:24px}
+  .choice span{font-size:14px}
 }
 </style>
 </head>
@@ -939,21 +950,27 @@ function viewDeckPicker(){
     ${D.length>8?`<input type="search" id="deck-q" class="search" placeholder="Chercher un deck ou un thème" value="${esc(S.q)}" aria-label="Chercher">`:''}
     <button class="btn small" data-a="all-on">Tout prendre</button>
     <button class="btn small ghost" data-a="all-off" ${on.length?'':'disabled'}>Vider</button>
-    <button class="btn small ghost" data-a="import">Importer un deck Excel</button>
-    ${location.hostname.endsWith('github.io')?`<a class="btn small ghost" href="Connoisseur_modele_themes.xlsx" download>Modèle Excel</a>`:''}
+    <div class="plus-wrap">
+      <button class="plus-btn" data-a="import-menu" aria-expanded="${!!S.importOpen}" aria-label="Ajouter des decks">+</button>
+      ${S.importOpen?`<div class="menu-pop import-pop" role="menu">
+        <button class="menu-item" data-a="import">Importer un deck Excel</button>
+        ${location.hostname.endsWith('github.io')?`<a class="menu-item" href="Connoisseur_modele_themes.xlsx" download>Télécharger le modèle Excel</a>`:''}
+        ${IMPORTS.length?`<button class="menu-item" data-a="clear-imports">Retirer mes ${plural(IMPORTS.length,'carte')} importée${IMPORTS.length>1?'s':''}</button>`:''}
+        <details class="fmt">
+          <summary>Format du fichier</summary>
+          <div class="format"><table>
+            <tr><th>Deck</th><th>Thème</th><th>Niveau</th><th>Question</th><th>Réponse</th></tr>
+            <tr><td>Années 90</td><td>Spice Girls</td><td>1</td><td>Combien étaient-elles ?</td><td>5</td></tr>
+            <tr><td></td><td></td><td>2</td><td>Quel est leur premier tube ?</td><td>Wannabe</td></tr>
+          </table></div>
+          <p class="hint">Une ligne par question, 10 niveaux par thème. Une feuille « Decks » (Deck, Finition, Description) règle l’apparence : ${Object.values(FINISHES).map(f=>f.label.toLowerCase()).join(', ')}, ou un code couleur.</p>
+        </details>
+      </div>`:''}
+    </div>
   </div>
   ${bank}${rep}
   <div class="packs">${D.map(d=>packHTML(d)).join('')}</div>
   <p class="hint none" id="none-found" hidden>Aucun deck ne correspond.</p>
-  <details class="fmt">
-    <summary>Format d’un deck Excel</summary>
-    <div class="format"><table>
-      <tr><th>Deck</th><th>Thème</th><th>Niveau</th><th>Question</th><th>Réponse</th></tr>
-      <tr><td>Années 90</td><td>Spice Girls</td><td>1</td><td>Combien étaient-elles ?</td><td>5</td></tr>
-      <tr><td></td><td></td><td>2</td><td>Quel est leur premier tube ?</td><td>Wannabe</td></tr>
-    </table></div>
-    <p class="hint">Une ligne par question, 10 niveaux par thème. Une feuille « Decks » (Deck, Finition, Description) règle l’apparence : ${Object.values(FINISHES).map(f=>f.label.toLowerCase()).join(', ')}, ou un code couleur. ${IMPORTS.length?`<button class="link-btn" data-a="clear-imports">Retirer mes ${plural(IMPORTS.length,'carte')} importée${IMPORTS.length>1?'s':''}</button>`:''}</p>
-  </details>
   <div class="bottom-bar">
     <span class="sel">${on.length?`<b>${plural(on.length,'deck')}</b> · ${plural(cards,'carte')}`:'Aucun deck choisi'}</span>
     ${S.error?`<span class="err">${esc(S.error)}</span>`:''}
@@ -1199,10 +1216,12 @@ function viewWin(){
 /* ================= Événements ================= */
 $app.addEventListener('click',e=>{
   const b=e.target.closest('[data-a]');
-  if(!b&&S.menuOpen&&!e.target.closest('.menu-pop')){S.menuOpen=false;render();return}
+  if(!b&&(S.menuOpen||S.importOpen)&&!e.target.closest('.menu-pop')){S.menuOpen=false;S.importOpen=false;render();return}
   if(!b||b.disabled) return;
   const a=b.dataset.a;
   if(a==='burger'){S.menuOpen=!S.menuOpen;render();return}
+  if(a==='import-menu'){S.importOpen=!S.importOpen;render();return}
+  if(S.importOpen&&a!=='clear-imports'){S.importOpen=false}
   if(S.menuOpen){S.menuOpen=false}
   if(a==='set'){const v=b.dataset.v;S[b.dataset.k]=isNaN(+v)?v:+v;render()}
   else if(a==='mode-play'){const to=b.dataset.v;if(to!==S.play){S.teams.forEach((t,i)=>{if(t.name===DEFAULTS[S.play][i]||t.name===W().def+' '+(i+1))t.name=DEFAULTS[to][i]||((to==='solo'?'Joueur ':'Équipe ')+(i+1))});S.play=to;S.teams=S.teams.slice(0,MAX[to])}S.screen='setup';render();scrollTo(0,0)}
@@ -1235,7 +1254,7 @@ document.getElementById('file').addEventListener('change',e=>{const f=e.target.f
 document.addEventListener('keydown',e=>{
   const box=document.getElementById('unbox');
   if(!box.hidden){ if(e.key==='Escape') closePack(); return; }
-  if(S.menuOpen&&e.key==='Escape'){S.menuOpen=false;render();return}
+  if((S.menuOpen||S.importOpen)&&e.key==='Escape'){S.menuOpen=false;S.importOpen=false;render();return}
   if(S.screen!=='game'||e.target.closest('input')) return;
   if(S.phase==='pick'&&/^[0-9]$/.test(e.key)){choose(e.key==='0'?10:+e.key)}
   else if(S.phase==='question'&&(e.key===' '||e.key==='Enter')){e.preventDefault();reveal()}
@@ -1308,7 +1327,7 @@ function start(data){
     if(S.screen==='game'&&S.phase==='question') S.phase='answer';
     if(S.screen==='game'&&S.phase==='recap'&&!S.recap) S.phase='answer';
     if(S.recap) S.recap.anim=true;
-    S.menuOpen=false;
+    S.menuOpen=false; S.importOpen=false;
   }
   if(S.live===undefined) S.live=S.screen==='game';
   S.bankStatus='loading';
