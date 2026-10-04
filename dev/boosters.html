@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Labo boosters · Connoisseur</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Lexend:wght@400;500;600;700&display=swap">
+<style>
+/* Page de dev : planche de 40 traitements de booster néo-brutalistes, sélectionnables. */
+:root{
+  color-scheme:light;
+  --ink:#FFF4DF; --text:#111; --muted:#4B4740; --pla:#FFC83A; --ok:#1CC7A8;
+  --f-display:"Archivo","Arial Black",system-ui,sans-serif;
+  --f-body:"Lexend",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background-color:var(--ink);background-image:radial-gradient(rgba(17,17,17,.13) 1.2px,transparent 1.3px);background-size:22px 22px;color:var(--text);font-family:var(--f-body);padding:20px clamp(16px,3vw,40px) 120px}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid #2E5BFF;outline-offset:3px}
+header{max-width:1300px;margin:0 auto 22px;display:flex;flex-wrap:wrap;gap:12px 20px;align-items:flex-end;justify-content:space-between}
+h1{font-family:var(--f-display);font-weight:900;font-size:clamp(30px,6vw,52px);letter-spacing:-.03em;margin:0;line-height:1}
+h1 em{font-style:normal;background:var(--pla);border:3px solid #111;border-radius:10px;box-shadow:4px 4px 0 #111;padding:0 .14em;display:inline-block;transform:rotate(-3deg)}
+.intro{margin:10px 0 0;color:var(--muted);max-width:60ch}
+.tag{display:inline-block;background:#111;color:#fff;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;margin-bottom:10px}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:2.5px solid #111;background:#fff;border-radius:10px;box-shadow:3px 3px 0 #111;padding:9px 14px;font-weight:700;transition:transform .08s,box-shadow .08s}
+.btn:active{transform:translate(3px,3px);box-shadow:none}
+.btn.on{background:#111;color:#fff}
+.btn.primary{background:var(--pla)}
+.grid{max-width:1300px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:30px 20px}
+.tile{position:relative;display:flex;flex-direction:column;gap:12px;align-items:stretch;background:none;border:0;padding:0;text-align:left}
+.tile .num{position:absolute;left:-8px;top:-10px;z-index:5;background:#fff;border:2.5px solid #111;border-radius:999px;min-width:34px;height:34px;display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:14px;box-shadow:2px 2px 0 #111}
+.tile .pick{position:absolute;right:-8px;top:-10px;z-index:5;width:34px;height:34px;border-radius:50%;border:2.5px solid #111;background:#fff;display:grid;place-items:center;font-weight:900;box-shadow:2px 2px 0 #111}
+.tile.sel .pick{background:var(--ok)}
+.tile.sel .pack{outline:4px solid #111;outline-offset:5px}
+.cap{display:flex;flex-direction:column;gap:2px;padding:0 2px}
+.cap b{font-family:var(--f-display);font-weight:800;font-size:15px}
+.cap span{font-size:12px;color:var(--muted)}
+
+/* ---------- Booster (même structure que la v2) ---------- */
+.pack{position:relative;overflow:hidden;width:100%;aspect-ratio:5/7.4;border:3px solid #111;border-radius:10px;box-shadow:5px 5px 0 #111;padding:20px 10px 18px;color:#111;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;transition:transform .2s}
+.tile:hover .pack{transform:translate(-2px,-3px) rotate(-1deg)}
+.pack > *:not(.crimp):not(.fxl){position:relative;z-index:2}
+.crimp{position:absolute;left:0;right:0;top:0;height:11px;z-index:3;background:repeating-linear-gradient(90deg,var(--cr,#111) 0 2.5px,transparent 2.5px 6px);border-bottom:2.5px solid var(--cr,#111);opacity:.9}
+.crimp.bottom{top:auto;bottom:0;border-bottom:0;border-top:2.5px solid var(--cr,#111)}
+.logo{display:inline-flex;align-items:center;gap:.18em;font-family:var(--f-display);font-weight:900;font-size:10px;letter-spacing:0;color:var(--lc,#111);margin-top:8px}
+.logo em{font-style:normal;background:var(--le,#111);color:var(--lt,#fff);border:1.5px solid var(--le,#111);border-radius:.3em;padding:.12em .3em .08em;transform:rotate(-4deg)}
+.label{background:var(--lb,#fff);color:var(--lx,#111);border:2.5px solid #111;border-radius:8px;box-shadow:3px 3px 0 #111;padding:10px 8px;width:calc(100% - 6px);display:flex;flex-direction:column;gap:5px;transform:rotate(-1.5deg)}
+.label b{font-family:var(--f-display);font-weight:900;font-size:clamp(14px,3.9vw,19px);line-height:1;letter-spacing:-.02em}
+.label b.long{font-size:clamp(12.5px,3.2vw,15px)}
+.label i{font-style:normal;font-size:11px;font-weight:500;opacity:.75;line-height:1.25}
+.foot{background:var(--fb,#111);color:var(--ft,#fff);border-radius:999px;padding:4px 9px;font-size:9.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.fxl{position:absolute;inset:0;z-index:1;pointer-events:none}
+/* reflet franc */
+.shine .fxl{background:linear-gradient(105deg,transparent 0 42%,rgba(255,255,255,.9) 42% 47%,transparent 47% 51%,rgba(255,255,255,.6) 51% 53%,transparent 53%);background-size:300% 100%;background-position:150% 0;animation:sheen 4.5s cubic-bezier(.6,0,.3,1) infinite}
+.still .shine .fxl{animation:none;background-position:50% 0}
+@keyframes sheen{0%{background-position:150% 0}55%,100%{background-position:-150% 0}}
+.halftone .fxl{background-image:radial-gradient(rgba(17,17,17,.2) 1.4px,transparent 1.6px);background-size:8px 8px}
+@media (prefers-reduced-motion:reduce){.shine .fxl{animation:none;background-position:50% 0}}
+
+/* ---------- Barre de sélection ---------- */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--ink);border-top:3px solid #111;padding:12px clamp(16px,3vw,40px) calc(12px + env(safe-area-inset-bottom,0px));display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.bar .count{font-family:var(--f-display);font-weight:900;font-size:20px;margin-right:auto}
+.bar .list{flex-basis:100%;font-size:13px;color:var(--muted);max-height:3.2em;overflow:auto;order:3}
+.toast{font-size:13px;font-weight:700;color:#0E8F78}
+textarea#copybox{position:absolute;left:-9999px}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <span class="tag">Page de dev · non publique</span>
+    <h1>Labo <em>boosters</em></h1>
+    <p class="intro">40 traitements de booster. Clique sur ceux que tu aimes, puis « Copier ma sélection » et colle-la-moi. Ta sélection reste en mémoire sur cet appareil.</p>
+  </div>
+  <div class="opts">
+    <button class="btn" id="names" aria-pressed="false">Même nom partout</button>
+    <button class="btn" id="anim" aria-pressed="true">Reflets animés</button>
+    <button class="btn" id="onlysel" aria-pressed="false">Voir ma sélection</button>
+  </div>
+</header>
+<main class="grid" id="grid"></main>
+<div class="bar">
+  <span class="count" id="count">0 sélectionné</span>
+  <span class="toast" id="toast" aria-live="polite"></span>
+  <button class="btn" id="clear">Tout effacer</button>
+  <button class="btn primary" id="copy">Copier ma sélection</button>
+  <div class="list" id="list"></div>
+</div>
+<textarea id="copybox" aria-hidden="true" tabindex="-1"></textarea>
+<script>
+/* Chaque traitement : id, nom, famille, fond, classes d'effet, variables (couleurs de l'étiquette, du logo, des sertis), ombre. */
+const SH='5px 5px 0 #111';
+const T=[
+ // ---- Métaux (bandes franches)
+ {n:'Argent',f:'Métal',bg:'linear-gradient(118deg,#C3C9D2 0 36%,#F5F7FA 36% 44%,#C3C9D2 44% 52%,#E6E9EE 52% 56%,#A7AFBB 56% 100%)',fx:'shine'},
+ {n:'Or',f:'Métal',bg:'linear-gradient(118deg,#F5BE2A 0 36%,#FFF3B0 36% 44%,#F5BE2A 44% 52%,#FFDF73 52% 56%,#DB9F12 56% 100%)',fx:'shine'},
+ {n:'Cuivre',f:'Métal',bg:'linear-gradient(118deg,#E8854E 0 36%,#FFD3B3 36% 44%,#E8854E 44% 52%,#F8B08A 52% 56%,#C2602D 56% 100%)',fx:'shine'},
+ {n:'Bronze',f:'Métal',bg:'linear-gradient(118deg,#B37B3B 0 36%,#F1CF9C 36% 44%,#B37B3B 44% 52%,#D9A86A 52% 56%,#8C5A25 56% 100%)',fx:'shine'},
+ {n:'Or rose',f:'Métal',bg:'linear-gradient(118deg,#F2A69D 0 36%,#FFE3DE 36% 44%,#F2A69D 44% 52%,#F9C7C0 52% 56%,#D9817A 56% 100%)',fx:'shine'},
+ {n:'Chrome bleu',f:'Métal',bg:'linear-gradient(118deg,#9DB7DB 0 36%,#EEF4FF 36% 44%,#9DB7DB 44% 52%,#CADAF0 52% 56%,#7393C2 56% 100%)',fx:'shine'},
+ {n:'Titane',f:'Métal',bg:'linear-gradient(118deg,#7E8693 0 36%,#C9CED6 36% 44%,#7E8693 44% 52%,#A3AAB5 52% 56%,#5E6571 56% 100%)',fx:'shine'},
+ {n:'Platine noir',f:'Métal',bg:'linear-gradient(118deg,#2A2D33 0 36%,#6B717C 36% 44%,#2A2D33 44% 52%,#4A4F58 52% 56%,#16181C 56% 100%)',fx:'shine',v:{'--cr':'#fff','--lc':'#fff','--le':'#FFC83A','--lt':'#111'}},
+ // ---- Holos
+ {n:'Irisé pastel',f:'Holo',bg:'linear-gradient(118deg,#FFB0DC 0 19%,#9FE3FF 19% 38%,#C9FFA8 38% 57%,#FFEE8F 57% 76%,#CDB4FF 76% 100%)',fx:'shine'},
+ {n:'Irisé vif',f:'Holo',bg:'linear-gradient(118deg,#FF4FA3 0 19%,#2EC5FF 19% 38%,#7DFF4F 38% 57%,#FFE14F 57% 76%,#9B6BFF 76% 100%)',fx:'shine'},
+ {n:'Holo vertical',f:'Holo',bg:'linear-gradient(90deg,#FFB0DC 0 14%,#FFEE8F 14% 28%,#C9FFA8 28% 42%,#9FE3FF 42% 57%,#CDB4FF 57% 71%,#FFB0DC 71% 85%,#FFEE8F 85% 100%)',fx:'shine'},
+ {n:'Holo prisme',f:'Holo',bg:'conic-gradient(from 20deg at 30% 35%,#FFB0DC 0 60deg,#FFEE8F 60deg 120deg,#C9FFA8 120deg 180deg,#9FE3FF 180deg 240deg,#CDB4FF 240deg 300deg,#FFB0DC 300deg)',fx:'shine'},
+ {n:'Nacre',f:'Holo',bg:'linear-gradient(118deg,#FFF9EF 0 28%,#F1DEFF 28% 50%,#D8F6F0 50% 72%,#FFEBD6 72% 100%)',fx:'shine'},
+ {n:'Opale',f:'Holo',bg:'linear-gradient(160deg,#E6F4FF 0 25%,#FFE6F4 25% 45%,#E8FFE6 45% 65%,#FFF6DB 65% 82%,#EDE4FF 82% 100%)',fx:'shine halftone'},
+ // ---- Néons
+ {n:'Néon rose',f:'Néon',bg:'#FF4FB0',sh:'4px 4px 0 #FFE45C,7px 7px 0 #111'},
+ {n:'Néon vert',f:'Néon',bg:'#3DFF7E',sh:'4px 4px 0 #FF4FB0,7px 7px 0 #111'},
+ {n:'Néon orange',f:'Néon',bg:'#FF7A1A',sh:'4px 4px 0 #3DF2FF,7px 7px 0 #111'},
+ {n:'Néon cyan',f:'Néon',bg:'#3DF2FF',sh:'4px 4px 0 #FF4FB0,7px 7px 0 #111'},
+ // ---- Motifs
+ {n:'Pois',f:'Motif',bg:'radial-gradient(#111 3px,transparent 3.5px) 0 0/16px 16px,#FFC83A'},
+ {n:'Damier',f:'Motif',bg:'conic-gradient(#111 0 25%,#fff 0 50%,#111 0 75%,#fff 0) 0 0/24px 24px'},
+ {n:'Sucre d’orge',f:'Motif',bg:'repeating-linear-gradient(135deg,#FF4F4F 0 12px,#fff 12px 24px)'},
+ {n:'Chevrons',f:'Motif',bg:'linear-gradient(135deg,#1CC7A8 25%,transparent 25%) -12px 0/24px 24px,linear-gradient(225deg,#1CC7A8 25%,transparent 25%) -12px 0/24px 24px,linear-gradient(315deg,#1CC7A8 25%,transparent 25%) 0 0/24px 24px,linear-gradient(45deg,#1CC7A8 25%,#FFF4DF 25%) 0 0/24px 24px'},
+ {n:'Trame dégradée',f:'Motif',bg:'radial-gradient(#111 1.1px,transparent 1.3px) 0 0/7px 7px,linear-gradient(180deg,#FF5B2E,#FF5B2E)',fx:''},
+ {n:'Papier millimétré',f:'Motif',bg:'linear-gradient(#2E5BFF55 1px,transparent 1px) 0 0/10px 10px,linear-gradient(90deg,#2E5BFF55 1px,transparent 1px) 0 0/10px 10px,#F4F8FF'},
+ {n:'Soleil',f:'Motif',bg:'repeating-conic-gradient(from 0deg at 50% 45%,#FFC83A 0 12deg,#FF8A1A 12deg 24deg)'},
+ {n:'Vagues',f:'Motif',bg:'radial-gradient(circle at 50% 100%,transparent 9px,#2E5BFF 10px 13px,transparent 14px) 0 0/28px 14px,#BFD3FF'},
+ {n:'Tartan',f:'Motif',bg:'repeating-linear-gradient(0deg,transparent 0 14px,rgba(17,17,17,.35) 14px 20px,transparent 20px 34px),repeating-linear-gradient(90deg,transparent 0 14px,rgba(17,17,17,.35) 14px 20px,transparent 20px 34px),#E8423A'},
+ {n:'Confettis',f:'Motif',bg:'radial-gradient(#FF4FB0 3px,transparent 3.5px) 0 0/30px 30px,radial-gradient(#2E5BFF 3px,transparent 3.5px) 15px 10px/30px 30px,radial-gradient(#1CC7A8 3px,transparent 3.5px) 7px 20px/30px 30px,#FFF4DF'},
+ // ---- Rétro
+ {n:'Coucher de soleil',f:'Rétro',bg:'linear-gradient(180deg,#FF6FB5 0 34%,#FFA14A 34% 67%,#55C6FF 67% 100%)'},
+ {n:'Synthwave',f:'Rétro',bg:'linear-gradient(transparent 60%,#FF4FB0 60% 61%,transparent 61%) ,repeating-linear-gradient(180deg,transparent 0 9px,#FF4FB0aa 9px 10px) 0 60%/100% 40% no-repeat,linear-gradient(180deg,#2B1460 0 60%,#4A1A7A 60% 100%)',v:{'--cr':'#FF4FB0','--lc':'#fff','--le':'#FF4FB0','--lt':'#111'}},
+ {n:'Années 70',f:'Rétro',bg:'linear-gradient(180deg,#F9E3B4 0 22%,#F5B82E 22% 40%,#EE7B26 40% 58%,#C0451F 58% 76%,#6B3519 76% 100%)'},
+ {n:'Vaporwave',f:'Rétro',bg:'linear-gradient(180deg,#B6F0FF 0 50%,#FFC4EC 50% 100%)',fx:'halftone'},
+ // ---- Aplats & compositions
+ {n:'Bleu électrique',f:'Aplat',bg:'#2E5BFF',v:{'--lb':'#FFC83A','--lc':'#fff','--le':'#FFC83A','--lt':'#111','--cr':'#fff'}},
+ {n:'Menthe',f:'Aplat',bg:'#7BE7C4'},
+ {n:'Violet',f:'Aplat',bg:'#8B6CFF',v:{'--lc':'#fff','--le':'#fff','--lt':'#111'}},
+ {n:'Diagonale',f:'Composition',bg:'linear-gradient(135deg,#FF4FB0 0 50%,#FFC83A 50% 100%)'},
+ {n:'Blocs',f:'Composition',bg:'linear-gradient(90deg,#2E5BFF 0 50%,#FF5B2E 50%) top/100% 50% no-repeat,linear-gradient(90deg,#FFC83A 0 50%,#1CC7A8 50%) bottom/100% 50% no-repeat'},
+ {n:'Risographie',f:'Composition',bg:'radial-gradient(circle at 36% 38%,#FF4FB0cc 0 34%,transparent 34.5%),radial-gradient(circle at 62% 60%,#2E5BFFcc 0 34%,transparent 34.5%),#FFF4DF',fx:'halftone'},
+ {n:'Kraft',f:'Composition',bg:'repeating-linear-gradient(90deg,rgba(90,60,30,.12) 0 1px,transparent 1px 7px),repeating-linear-gradient(0deg,rgba(90,60,30,.08) 0 1px,transparent 1px 11px),#C9A27A'},
+ {n:'Noir mat',f:'Composition',bg:'#141414',v:{'--cr':'#fff','--lc':'#fff','--le':'#FFC83A','--lt':'#111','--fb':'#FFC83A','--ft':'#111'}},
+];
+T.forEach((t,i)=>{t.id=i+1});
+const NAMES=['Années 90','Culture G de comptoir','Majeur et vacciné','You talkin’ to me?!','Culture inutile','Échauffement'];
+const DESCS=['Pop culture des années 90','Monuments, histoire et grands événements','Vie d’adulte : maison, bouffe, bagnole','Films, séries, musique et pop culture','Anecdotes et savoirs improbables','Un peu de tout pour démarrer'];
+const LS='connoisseur.labo.boosters';
+let SEL=new Set((()=>{try{return JSON.parse(localStorage.getItem(LS)||'[]')}catch(e){return []}})());
+let SAME=false, ONLY=false;
+const grid=document.getElementById('grid');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function save(){try{localStorage.setItem(LS,JSON.stringify([...SEL]))}catch(e){}}
+function render(){
+  grid.innerHTML=T.filter(t=>!ONLY||SEL.has(t.id)).map((t,i)=>{
+    const k=SAME?0:(t.id-1)%NAMES.length;
+    const vars=Object.entries(t.v||{}).map(([a,b])=>`${a}:${b}`).join(';');
+    return `<button class="tile ${SEL.has(t.id)?'sel':''}" data-id="${t.id}" aria-pressed="${SEL.has(t.id)}" aria-label="${t.id}. ${esc(t.n)}">
+      <span class="num">${t.id}</span><span class="pick" aria-hidden="true">${SEL.has(t.id)?'✓':'+'}</span>
+      <div class="pack ${t.fx||''}" style="background:${t.bg};box-shadow:${t.sh||SH};${vars}">
+        <span class="crimp"></span><span class="fxl"></span>
+        <span class="logo"><em>CON</em>NOISSEUR</span>
+        <span class="label"><b class="${NAMES[k].split(' ').some(w=>w.length>10)?'long':''}">${esc(NAMES[k])}</b><i>${esc(DESCS[k])}</i></span>
+        <span class="foot">${5+(t.id%4)} cartes</span>
+        <span class="crimp bottom"></span>
+      </div>
+      <span class="cap"><b>${esc(t.n)}</b><span>${esc(t.f)}</span></span>
+    </button>`;
+  }).join('')||'<p class="intro">Aucun booster sélectionné pour l’instant.</p>';
+  const n=SEL.size;
+  document.getElementById('count').textContent=`${n} sélectionné${n>1?'s':''}`;
+  document.getElementById('list').textContent=[...SEL].sort((a,b)=>a-b).map(id=>`${id}. ${T[id-1].n}`).join(' · ');
+}
+grid.addEventListener('click',e=>{
+  const t=e.target.closest('.tile'); if(!t) return;
+  const id=+t.dataset.id; SEL.has(id)?SEL.delete(id):SEL.add(id); save(); render();
+});
+function toggleBtn(id,fn){const b=document.getElementById(id);b.addEventListener('click',()=>{const v=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',v);b.classList.toggle('on',v);fn(v)});}
+toggleBtn('names',v=>{SAME=v;render()});
+toggleBtn('anim',v=>{document.body.classList.toggle('still',!v)});
+document.getElementById('anim').classList.add('on');
+toggleBtn('onlysel',v=>{ONLY=v;render()});
+document.getElementById('clear').addEventListener('click',()=>{SEL.clear();save();render();toast('Sélection effacée.')});
+function toast(t){const el=document.getElementById('toast');el.textContent=t;setTimeout(()=>{if(el.textContent===t)el.textContent=''},2200)}
+document.getElementById('copy').addEventListener('click',()=>{
+  const ids=[...SEL].sort((a,b)=>a-b);
+  if(!ids.length){toast('Sélectionne au moins un booster.');return}
+  const txt='Boosters retenus : '+ids.map(id=>`${id}. ${T[id-1].n}`).join(', ');
+  const fallback=()=>{const ta=document.getElementById('copybox');ta.value=txt;ta.select();try{document.execCommand('copy');toast('Copié.')}catch(e){toast('Copie impossible : '+txt)}};
+  if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(()=>toast('Copié, colle-le-moi.')).catch(fallback); else fallback();
+});
+render();
+</script>
+</body>
+</html>
