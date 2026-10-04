@@ -759,6 +759,16 @@ h1,h2,h3{font-family:var(--f-display);letter-spacing:-.015em}
 .tcg-art.dark .art-theme{color:#fff;text-shadow:3px 3px 0 #111}
 .pack.halftone::before,.fan-pack.halftone::before,.tcg-art.halftone::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(rgba(17,17,17,.18) 1.4px,transparent 1.6px);background-size:8px 8px}
 .cost.dark{color:#fff;text-shadow:1.5px 1.5px 0 #111}
+/* boosters : ouvrir au tap, ajouter avec un vrai bouton */
+.pack-wrap{display:flex;flex-direction:column;gap:12px}
+.pk-open{position:absolute!important;z-index:4!important;left:50%;bottom:22px;transform:translateX(-50%) rotate(-3deg);background:var(--pla);color:#111;border:2px solid #111;border-radius:999px;box-shadow:2px 2px 0 #111;font-family:var(--f-display);font-weight:900;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;opacity:0;transition:opacity .15s}
+.pack:hover .pk-open,.pack:focus-visible .pk-open{opacity:1}
+@media (hover:none){.pk-open{opacity:1}.pack .pk-foot{visibility:hidden}}
+.pk-add{width:100%;border:2.5px solid #111;background:#fff;color:#111;border-radius:10px;box-shadow:3px 3px 0 #111;padding:9px 8px;font-family:var(--f-display);font-weight:800;font-size:14px;transition:transform .08s,box-shadow .08s,background .1s}
+.pk-add:active{transform:translate(3px,3px);box-shadow:none}
+.pk-add.on{background:var(--imp)}
+.pack-wrap.on .pack{box-shadow:0 0 0 3px var(--ink),0 0 0 6px #111,9px 9px 0 3px #111}
+.pk-toggle{display:none}
 </style>
 </head>
 <body>
@@ -1163,8 +1173,9 @@ function packHTML(d, opts={}){
       <span class="pk-mid"><span class="pk-name">${esc(d.name)}</span><span class="pk-desc">${esc(d.desc||d.themes.slice(0,3).map(t=>t.name).join(', ')+(d.themes.length>3?'…':''))}</span></span>
       <span class="pk-foot">${plural(d.themes.length,'carte')}</span>
       <span class="crimp bottom"></span>
+      <span class="pk-open" aria-hidden="true">Ouvrir</span>
     </button>
-    ${opts.noToggle?'':`<button class="pk-toggle" data-a="deck" data-d="${esc(d.name)}" aria-pressed="${on}" aria-label="${on?'Retirer de la partie':'Ajouter à la partie'}">${on?'✓':'+'}</button>`}
+    ${opts.noToggle?'':`<button class="pk-add ${on?'on':''}" data-a="deck" data-d="${esc(d.name)}" aria-pressed="${on}">${on?'✓ Dans la partie':'+ Ajouter'}</button>`}
   </div>`;
 }
 
@@ -1229,7 +1240,7 @@ function viewDeckPicker(){
   const cards=on.reduce((s,d)=>s+d.themes.length,0);
   const bank=S.bankStatus==='loading'?'<p class="hint">Chargement des boosters…</p>':S.bankStatus==='error'?'<p class="hint">themes.xlsx introuvable à côté du jeu : seuls le booster intégré et tes imports sont là.</p>':'';
   const rep=S.report?`<div class="report"><b>${esc(S.report.file||'Import')}</b> : ${plural(S.report.added||0,'carte')} ajoutée${(S.report.added||0)>1?'s':''}${S.report.replaced?`, ${S.report.replaced} mise(s) à jour`:''}${S.report.decks?.length?` dans ${S.report.decks.map(esc).join(', ')}`:''}.${S.report.warnings.length?`<ul>${S.report.warnings.slice(0,8).map(w=>`<li>${esc(w)}</li>`).join('')}${S.report.warnings.length>8?`<li>… et ${S.report.warnings.length-8} autre(s)</li>`:''}</ul>`:''}</div>`:'';
-  return `${stepHead('setup',2,'Choisis tes boosters','Ouvre un booster pour découvrir ses cartes. Le + l’ajoute directement à la partie.')}
+  return `${stepHead('setup',2,'Choisis tes boosters','Touche un booster pour voir ses cartes. « Ajouter » le met dans la partie.')}
   <div class="tools">
     ${D.length>8?`<input type="search" id="deck-q" class="search" placeholder="Chercher un deck ou un thème" value="${esc(S.q)}" aria-label="Chercher">`:''}
     <button class="btn small" data-a="all-on">Tout prendre</button>
