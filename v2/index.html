@@ -751,6 +751,14 @@ h1,h2,h3{font-family:var(--f-display);letter-spacing:-.015em}
 @keyframes holo2{from{transform:translateX(-130%)}to{transform:translateX(130%)}}
 .pk-name{overflow-wrap:normal;word-break:normal;hyphens:manual}
 .pack .pk-name{font-size:clamp(14px,3.9vw,19px)}
+/* finitions sombres et tramées */
+.dark .crimp{--crc:#fff;background:repeating-linear-gradient(90deg,#fff 0 2.5px,transparent 2.5px 6px);border-color:#fff}
+.pack.dark .pk-brand.logo,.fan-pack.dark .pk-brand.logo,.ub-body.dark .pk-brand.logo{--lf:#fff}
+.dark .pk-brand.logo em{background:#FF4FB0;color:#111;border-color:#111}
+.tcg-art.dark .art-theme,.tcg-art.dark .art-kicker{color:#111}
+.tcg-art.dark .art-theme{color:#fff;text-shadow:3px 3px 0 #111}
+.pack.halftone::before,.fan-pack.halftone::before,.tcg-art.halftone::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(rgba(17,17,17,.18) 1.4px,transparent 1.6px);background-size:8px 8px}
+.cost.dark{color:#fff;text-shadow:1.5px 1.5px 0 #111}
 </style>
 </head>
 <body>
@@ -775,10 +783,16 @@ const FINISHES = {
   jaune:{label:'Jaune', bg:'#FFC83A', fx:''},
   vert:{label:'Vert', bg:'#1CC7A8', fx:''},
   violet:{label:'Violet', bg:'#8B6CFF', fx:''},
-  craie:{label:'Craie', bg:'#FFF4DF', fx:''}
+  craie:{label:'Craie', bg:'#FFF4DF', fx:''},
+  chrome:{label:'Chrome bleu', bg:'linear-gradient(118deg,#9DB7DB 0 36%,#EEF4FF 36% 44%,#9DB7DB 44% 52%,#CADAF0 52% 56%,#7393C2 56% 100%)', fx:'shine'},
+  millimetre:{label:'Papier millimétré', bg:'linear-gradient(#2E5BFF55 1px,transparent 1px) 0 0/10px 10px,linear-gradient(90deg,#2E5BFF55 1px,transparent 1px) 0 0/10px 10px,#F4F8FF', fx:''},
+  confettis:{label:'Confettis', bg:'radial-gradient(#FF4FB0 3px,transparent 3.5px) 0 0/30px 30px,radial-gradient(#2E5BFF 3px,transparent 3.5px) 15px 10px/30px 30px,radial-gradient(#1CC7A8 3px,transparent 3.5px) 7px 20px/30px 30px,#FFF4DF', fx:''},
+  synthwave:{label:'Synthwave', bg:'linear-gradient(transparent 60%,#FF4FB0 60% 61%,transparent 61%),repeating-linear-gradient(180deg,transparent 0 9px,#FF4FB0aa 9px 10px) 0 100%/100% 40% no-repeat,linear-gradient(180deg,#2B1460 0 60%,#4A1A7A 60% 100%)', fx:'dark'},
+  seventies:{label:'Années 70', bg:'linear-gradient(180deg,#F9E3B4 0 22%,#F5B82E 22% 40%,#EE7B26 40% 58%,#C0451F 58% 76%,#6B3519 76% 100%)', fx:''},
+  vaporwave:{label:'Vaporwave', bg:'linear-gradient(180deg,#B6F0FF 0 50%,#FFC4EC 50% 100%)', fx:'halftone'}
 };
 const FINISH_CYCLE = ['irise','metal','or','neon','cuivre','retro','nacre','bleu','vert','violet','rouge','jaune'];
-const FINISH_ALIASES = {irise:'irise',holo:'irise',holographique:'irise',arcenciel:'irise',metal:'metal',metallique:'metal',argent:'metal',chrome:'metal',acier:'metal',or:'or',dore:'or',gold:'or',cuivre:'cuivre',bronze:'cuivre',nacre:'nacre',perle:'nacre',neon:'neon',fluo:'neon',retro:'retro',vaporwave:'retro',bleu:'bleu',rouge:'rouge',jaune:'jaune',vert:'vert',violet:'violet',craie:'craie',blanc:'craie'};
+const FINISH_ALIASES = {irise:'irise',holo:'irise',holographique:'irise',arcenciel:'irise',metal:'metal',metallique:'metal',argent:'metal',chrome:'chrome',chromebleu:'chrome',millimetre:'millimetre',papiermillimetre:'millimetre',confettis:'confettis',synthwave:'synthwave',annees:'seventies',seventies:'seventies',vaporwave:'vaporwave',acier:'metal',or:'or',dore:'or',gold:'or',cuivre:'cuivre',bronze:'cuivre',nacre:'nacre',perle:'nacre',neon:'neon',fluo:'neon',retro:'retro',vaporwave:'retro',bleu:'bleu',rouge:'rouge',jaune:'jaune',vert:'vert',violet:'violet',craie:'craie',blanc:'craie'};
 function finishFrom(v){
   const raw=String(v??'').trim();
   if(/^#[0-9a-f]{3,8}$/i.test(raw)) return raw;
@@ -1441,7 +1455,7 @@ function viewCard(){
   const fresh=pick&&S.lastDealt!==th.id;
   return `<article class="tcg ${f.fx} ${fresh?'deal':''}" style="background:${f.bg}">
     <div class="tcg-in">
-      <header class="tcg-title">${pick?`<h2 class="set">${esc(th.deck)}</h2>`:`<h2>${esc(th.name)}</h2>`}<span class="cost" style="background:${f.bg}">${pick?'?':S.level}</span></header>
+      <header class="tcg-title">${pick?`<h2 class="set">${esc(th.deck)}</h2>`:`<h2>${esc(th.name)}</h2>`}<span class="cost ${f.fx.includes('dark')?'dark':''}" style="background:${f.bg}">${pick?'?':S.level}</span></header>
       <div class="tcg-art ${f.fx} ${pick?'':'is-q'}" style="background:${f.bg}">${art}</div>
       <div class="tcg-type"><span>${pick?'Carte · 10 questions':'Carte · '+esc(th.deck)}</span><span>◆ ${idx}/${d.themes.length}</span></div>
       <div class="tcg-text">${text}</div>
