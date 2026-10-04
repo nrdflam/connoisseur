@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Connoisseur</title>
+<title>Connoisseur 2.0</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Lexend:wght@400;500;600;700&display=swap">
 <style>
 /* Layout : écran de salon. Scores à gauche, grande carte de jeu à droite, decks à finitions (irisé, métal, or…) ; une seule ambiance sombre assumée. */
 :root{
@@ -490,7 +490,195 @@ html.dev-on .bottom-bar{padding-left:calc(clamp(16px,3vw,40px) + 56px)}
 .rc-list.ft.fb{-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 64px,#000 calc(100% - 64px),transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 64px,#000 calc(100% - 64px),transparent 100%)}
 .rc-next{position:sticky;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:5;box-shadow:0 -10px 24px 6px var(--ink)}
 @media (min-width:901px){.rc-list{max-height:min(420px,calc(100vh - 380px))}}
+
+/* =====================================================================
+   CONNOISSEUR 2.0 · Design system néo-brutaliste
+   Fond crème, contours noirs épais, ombres décalées dures, aplats vifs.
+   Thème unique clair assumé.
+   ===================================================================== */
+:root{
+  color-scheme:light;
+  --ink:#FFF4DF; --panel:#FFFFFF; --raise:#FFE9B8; --line:#111111;
+  --text:#111111; --muted:#4B4740; --dim:#857E70;
+  --sco:#2E5BFF; --mat:#FF5B2E; --pla:#FFC83A; --imp:#1CC7A8; --int:#8B6CFF; --fin:#FFFFFF;
+  --pink:#FF6FB5;
+  --on-card:#111111; --ok:#1CC7A8; --ko:#FF4F4F;
+  --bd:2.5px solid #111111; --bd-thin:2px solid #111111;
+  --sh:4px 4px 0 #111111; --sh-lg:6px 6px 0 #111111; --sh-sm:3px 3px 0 #111111;
+  --r:14px; --r-sm:10px;
+  --f-display:"Archivo", "Arial Black", system-ui, sans-serif;
+  --f-body:"Lexend", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+body{background-color:var(--ink);background-image:radial-gradient(rgba(17,17,17,.13) 1.2px,transparent 1.3px);background-size:22px 22px;color:var(--text)}
+::selection{background:var(--pla);color:#111}
+:focus-visible{outline:3px solid var(--sco);outline-offset:3px}
+h1,h2,h3{font-family:var(--f-display);letter-spacing:-.015em}
+
+/* ---------- Boutons ---------- */
+.btn{border:var(--bd);background:var(--panel);color:var(--text);border-radius:var(--r-sm);box-shadow:var(--sh-sm);font-weight:700;transition:transform .08s,box-shadow .08s}
+.btn:hover{background:var(--raise)}
+.btn:active:not([disabled]){transform:translate(3px,3px);box-shadow:0 0 0 #111}
+.btn.primary,.btn.primary:hover{background:var(--pla);color:#111;border-color:#111}
+.btn.primary:hover{filter:brightness(1.04)}
+.btn.ghost{background:var(--panel)}
+.btn.ok,.btn.ok:hover{background:var(--imp);color:#111;border-color:#111}
+.btn.ko,.btn.ko:hover{background:var(--ko);color:#111;border-color:#111}
+.tcg .btn.dark,.btn.dark{background:#111;color:#fff;border-color:#111}
+.btn.big{font-family:var(--f-display);font-weight:800;box-shadow:var(--sh)}
+.btn[disabled]{opacity:.45;box-shadow:none}
+.kbd{border-width:1.5px;opacity:.6}
+.icon-btn{border:var(--bd-thin);background:var(--panel);color:var(--text);border-radius:var(--r-sm);box-shadow:2px 2px 0 #111}
+.icon-btn:hover{background:var(--raise);color:var(--text)}
+.icon-btn[disabled]{opacity:.35;box-shadow:none}
+
+/* ---------- Logo ---------- */
+.logo{--lf:#111;--lb:var(--pla)}
+.logo em{border:2px solid #111;box-shadow:2px 2px 0 #111;border-radius:6px}
+.pk-brand.logo,.tcg-foot .logo{--lf:#111;--lb:#fff}
+.pk-brand.logo em,.tcg-foot .logo em{box-shadow:none;border-width:1.5px}
+.ub-back .logo{--lf:#111;--lb:var(--pla)}
+
+/* ---------- Accueil ---------- */
+.home h1{font-weight:900;letter-spacing:-.04em}
+.home h1 em{background:var(--pla);color:#111;border:3px solid #111;box-shadow:5px 5px 0 #111;border-radius:.12em;padding:0 .1em;display:inline-block;transform:rotate(-2deg);margin:0 .06em .06em 0}
+.home p{color:var(--muted)}
+.choice{background:var(--panel);border:var(--bd);border-radius:var(--r);box-shadow:var(--sh);color:var(--text)}
+.choice:nth-child(1){background:var(--mat)}
+.choice:nth-child(2){background:var(--imp)}
+.choice b{color:#111}
+.choice span{color:#111;opacity:.8;font-weight:600}
+.choice:hover{transform:translate(-2px,-2px);box-shadow:var(--sh-lg);border-color:#111;background:inherit}
+.choice:nth-child(1):hover{background:var(--mat)}
+.choice:nth-child(2):hover{background:var(--imp)}
+.choice:active{transform:translate(4px,4px);box-shadow:0 0 0 #111}
+.fan-pack{border:var(--bd);box-shadow:var(--sh)}
+.v2-sticker{position:absolute;z-index:4;right:6%;top:4%;background:var(--pink);color:#111;border:var(--bd);box-shadow:var(--sh-sm);border-radius:999px;font-family:var(--f-display);font-weight:900;font-size:15px;padding:6px 12px;transform:rotate(10deg)}
+
+/* ---------- Étapes & panneaux ---------- */
+.step-head .label{color:#111;background:var(--panel);border:var(--bd-thin);border-radius:999px;padding:4px 10px;box-shadow:2px 2px 0 #111}
+.step-title{font-weight:900}
+.step-head .hint{color:var(--muted)}
+.panel{background:var(--panel);border:var(--bd);border-radius:var(--r);box-shadow:var(--sh)}
+.panel-players{background:var(--panel)}
+.panel-game{background:#FFF9EC}
+.panel h2{font-weight:900}
+.label{color:var(--muted)}
+.team-row input[type=text]{background:#fff;border:var(--bd-thin);border-radius:var(--r-sm);color:#111;font-weight:600}
+.team-row input[type=text]:focus{box-shadow:var(--sh-sm);outline:none}
+.sw,.sw.on{border:var(--bd-thin)!important;box-shadow:2px 2px 0 #111!important}
+.seg button{border:var(--bd-thin);background:#fff;color:#111;font-weight:700;box-shadow:2px 2px 0 #111;transition:transform .08s,box-shadow .08s}
+.seg button.on{background:#111;color:#fff;border-color:#111}
+.seg button:active{transform:translate(2px,2px);box-shadow:none}
+.hint{color:var(--muted)}
+.err{color:#D12B2B}
+.bottom-bar{background:var(--ink);border-top:var(--bd);box-shadow:0 40px 0 0 var(--ink)}
+.sel{color:var(--muted)} .sel b{color:#111}
+
+/* ---------- Boosters ---------- */
+.search{background:#fff;border:var(--bd);border-radius:var(--r-sm);box-shadow:var(--sh-sm);color:#111}
+.pack{border:var(--bd);box-shadow:var(--sh);border-radius:8px 8px 10px 10px}
+.pack:hover{transform:translate(-2px,-4px)}
+.pack-wrap.on .pack{box-shadow:0 0 0 3px var(--ink),0 0 0 6px #111,8px 8px 0 3px #111}
+.pk-toggle{background:#fff;color:#111;border:var(--bd);box-shadow:2px 2px 0 #111}
+.pack-wrap.on .pk-toggle{background:var(--imp);color:#111}
+.plus-btn{background:var(--pla);color:#111;border:var(--bd);box-shadow:var(--sh-sm)}
+.plus-btn[aria-expanded="true"]{background:#111;color:#fff;border-color:#111}
+.report{background:#fff;border:var(--bd-thin);box-shadow:var(--sh-sm)}
+.report ul{color:var(--muted)}
+.format{border:var(--bd-thin)}
+.format th{background:var(--raise)}
+.format th,.format td{border-bottom:1.5px solid #111}
+
+/* ---------- Menus ---------- */
+.menu-pop{background:#fff;border:var(--bd);border-radius:var(--r);box-shadow:var(--sh)}
+.menu-item{color:#111}
+.menu-item:hover:not([disabled]){background:var(--raise)}
+.menu-note{color:var(--dim)}
+.burger{background:#fff;border:var(--bd);box-shadow:var(--sh-sm)}
+.burger i{background:#111}
+.burger[aria-expanded="true"]{background:#111}
+.burger[aria-expanded="true"] i{background:#fff}
+
+/* ---------- Partie : bandeau, tour ---------- */
+.play-head{background:transparent}
+@media (max-width:900px){.play-head{background:var(--ink)}}
+.chip{background:#fff;border:var(--bd-thin);box-shadow:2px 2px 0 #111;color:#111}
+.chip .nm{color:var(--muted)}
+.chip .dot{border:1.5px solid #111}
+.chip .prog{height:4px}
+.chip.cur{background:var(--pla);border-color:#111}
+.chip.cur .nm{color:#111}
+.strip-info{color:var(--dim)}
+.turn{color:var(--muted)}
+.turn b{color:#111}
+.pawn-s{border:2px solid #111!important}
+.flash{color:var(--muted)} .flash b{color:#111}
+.scoreboard{background:#fff;border:var(--bd);box-shadow:var(--sh);border-radius:var(--r)}
+.srow.cur{border:var(--bd-thin);background:var(--raise)}
+.srow .bar{background:#EDE3CF;border:1.5px solid #111;height:8px}
+.round{color:var(--muted)}
+
+/* ---------- Carte TCG ---------- */
+.tcg{border:3px solid #111;box-shadow:var(--sh-lg);border-radius:18px}
+.tcg-in{background:#FFFDF6;box-shadow:inset 0 0 0 2.5px #111}
+.tcg-title,.tcg-type,.tcg-text{background:#fff;border:var(--bd-thin)}
+.tcg-title{box-shadow:2px 2px 0 #111}
+.cost{border:var(--bd-thin);box-shadow:2px 2px 0 #111}
+.tcg-art{border:var(--bd-thin);box-shadow:none}
+.gem{background:#fff;border:var(--bd-thin);box-shadow:2px 2px 0 #111;transition:transform .08s,box-shadow .08s,background .08s}
+.gem:hover:not([disabled]){background:var(--pla);color:#111;transform:translate(-1px,-1px);box-shadow:3px 3px 0 #111}
+.gem:active:not([disabled]){transform:translate(2px,2px);box-shadow:none}
+.tcg-a{background:#111;color:#fff;border-radius:var(--r-sm)}
+.tcg-a small{color:var(--pla)}
+.timer{background:#EDE3CF;border:1.5px solid #111;height:12px}
+.timer i{background:#111}
+.timer-row.out{color:#D12B2B}
+.timer-row.out .timer i{background:var(--ko)}
+.tcg-foot{opacity:.8}
+
+/* ---------- Écran de score ---------- */
+.rc-delta{-webkit-text-stroke:3px #111;paint-order:stroke fill;text-shadow:5px 5px 0 #111}
+.rc-delta.miss{color:#fff}
+.rc-line{color:var(--muted)} .rc-line b{color:#111}
+.rc-board{background:#fff;border:var(--bd);box-shadow:var(--sh);border-radius:var(--r)}
+.rc-row{background:#FFF9EC;border:var(--bd-thin)}
+.rc-row.me{box-shadow:3px 3px 0 #111;background:var(--raise)}
+.rc-row .dot{border:1.5px solid #111}
+.rc-pos{color:#111}
+.rc-bar{background:#EDE3CF;border:1.5px solid #111;height:7px}
+.rc-mv.up{color:#0E8F78} .rc-mv.down{color:#D12B2B}
+.rc-next{box-shadow:var(--sh),0 -10px 24px 6px var(--ink)}
+
+/* ---------- Unboxing ---------- */
+.unbox{background:rgba(255,244,223,.94);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.ub-rays{background:repeating-conic-gradient(from 0deg,rgba(17,17,17,.09) 0 5deg,transparent 5deg 16deg)}
+.ub-hint{color:var(--muted)}
+.ub-piece{border:var(--bd)}
+.ub-pack{filter:drop-shadow(6px 6px 0 #111)}
+.ub-back{background:repeating-linear-gradient(45deg,#fff 0 10px,#FFE9B8 10px 20px);border:var(--bd)}
+.ub-front{border:var(--bd);box-shadow:var(--sh)}
+.ub-info p{color:var(--muted)}
+.spark{box-shadow:none;border:1.5px solid #111}
+
+/* ---------- Victoire ---------- */
+.win .label{color:#111;background:var(--pla);border:var(--bd-thin);padding:4px 10px;border-radius:999px;box-shadow:2px 2px 0 #111}
+.win h1{font-weight:900}
+.confetti span{border:var(--bd);box-shadow:var(--sh-sm)}
+.ranking div{border-bottom:2px solid #111}
+
+/* ---------- Dev ---------- */
+.dev-btn{background:#fff;color:#111;border:var(--bd-thin);box-shadow:2px 2px 0 #111}
+.dev-btn:hover,.dev-btn[aria-expanded="true"]{background:var(--pink);color:#111;border-color:#111}
+.dev{background:#fff;border:var(--bd);box-shadow:var(--sh);color:#111}
+.dev .row span{color:var(--muted)}
+.dev select{background:#fff;border:var(--bd-thin);color:#111}
+.dev .sep{background:#111}
+.dev .toast{color:#0E8F78}
+
+.glow{box-shadow:var(--sh)}
+.pack.glow,.fan-pack.glow{box-shadow:var(--sh)}
 @media (min-width:700px){.ub-cards{grid-template-columns:repeat(auto-fit,minmax(150px,180px))}}
+@media (max-width:800px){.home h1{font-size:clamp(38px,11vw,62px)}}
 .opened .ub-cards{display:flex;flex-wrap:wrap;justify-content:center}
 .ub-card{width:150px;flex:none}
 @media (min-width:700px){.ub-card{width:175px}}
@@ -750,8 +938,8 @@ function parseWorkbook(buf, defDeck){
 }
 function loadBank(){
   if(!window.XLSX){S.bankStatus='error';render();return}
-  fetch('themes.xlsx',{cache:'no-cache'})
-    .then(r=>{if(!r.ok)throw new Error(r.status);return r.arrayBuffer()})
+  const get=u=>fetch(u,{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error(r.status);return r.arrayBuffer()});
+  get('themes.xlsx').catch(()=>get('../themes.xlsx'))
     .then(buf=>{
       const out=parseWorkbook(buf,'Banque');
       BANK=out.themes.map((t,i)=>({id:'b'+i,src:'banque',...t}));
@@ -906,14 +1094,14 @@ function viewHome(){
   return `<section class="home">
     <div class="home-text">
       <span class="logo home-logo"><em>CON</em>NOISSEUR</span>
-      <h1><em>Con</em> ou<br>connoisseur ?</h1>
+      <h1><em>Con</em> ou<br>connoisseur&nbsp;?</h1>
       <p>Note-toi de 1 à 10 sur une carte, réponds à la question de ce niveau, marque autant de points.</p>
       <div class="home-choice">
         <button class="choice" data-a="mode-play" data-v="teams"><b>En équipes</b><span>2 à 6 équipes</span></button>
         <button class="choice" data-a="mode-play" data-v="solo"><b>En solo</b><span>2 à 10 joueurs</span></button>
       </div>
     </div>
-    <div class="fan" aria-hidden="true">${fan}</div>
+    <div class="fan" aria-hidden="true">${fan}<span class="v2-sticker">2.0</span></div>
   </section>`;
 }
 
@@ -968,7 +1156,7 @@ function viewDeckPicker(){
       <button class="plus-btn" data-a="import-menu" aria-expanded="${!!S.importOpen}" aria-label="Ajouter des decks">+</button>
       ${S.importOpen?`<div class="menu-pop import-pop" role="menu">
         <button class="menu-item" data-a="import">Importer un deck Excel</button>
-        ${location.hostname.endsWith('github.io')?`<a class="menu-item" href="Connoisseur_modele_themes.xlsx" download>Télécharger le modèle Excel</a>`:''}
+        ${location.hostname.endsWith('github.io')?`<a class="menu-item" href="../Connoisseur_modele_themes.xlsx" download>Télécharger le modèle Excel</a>`:''}
         ${IMPORTS.length?`<button class="menu-item" data-a="clear-imports">Retirer mes ${plural(IMPORTS.length,'carte')} importée${IMPORTS.length>1?'s':''}</button>`:''}
         <details class="fmt">
           <summary>Format du fichier</summary>

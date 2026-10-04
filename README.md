@@ -8,4 +8,10 @@
 - Decks chargés automatiquement depuis `themes.xlsx` : feuille « Cartes » (Deck, Thème, Niveau, Question, Réponse) et feuille « Decks » (Deck, Finition, Description)
 - Import ponctuel d'un deck Excel depuis le jeu (modèle : `Connoisseur_modele_themes.xlsx`)
 
-Jouer : https://nrdflam.github.io/connoisseur/
+## Versions
+
+- **v2.0 · néo-brutalisme** : https://nrdflam.github.io/connoisseur/v2/
+- **v1.0 · figée** : https://nrdflam.github.io/connoisseur/v1/
+- La racine (https://nrdflam.github.io/connoisseur/) sert la v1 tant que la v2 n'est pas validée.
+
+Les deux versions lisent le même `themes.xlsx` à la racine du dépôt.

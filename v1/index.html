@@ -750,8 +750,8 @@ function parseWorkbook(buf, defDeck){
 }
 function loadBank(){
   if(!window.XLSX){S.bankStatus='error';render();return}
-  fetch('themes.xlsx',{cache:'no-cache'})
-    .then(r=>{if(!r.ok)throw new Error(r.status);return r.arrayBuffer()})
+  const get=u=>fetch(u,{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error(r.status);return r.arrayBuffer()});
+  get('themes.xlsx').catch(()=>get('../themes.xlsx'))
     .then(buf=>{
       const out=parseWorkbook(buf,'Banque');
       BANK=out.themes.map((t,i)=>({id:'b'+i,src:'banque',...t}));
@@ -968,7 +968,7 @@ function viewDeckPicker(){
       <button class="plus-btn" data-a="import-menu" aria-expanded="${!!S.importOpen}" aria-label="Ajouter des decks">+</button>
       ${S.importOpen?`<div class="menu-pop import-pop" role="menu">
         <button class="menu-item" data-a="import">Importer un deck Excel</button>
-        ${location.hostname.endsWith('github.io')?`<a class="menu-item" href="Connoisseur_modele_themes.xlsx" download>Télécharger le modèle Excel</a>`:''}
+        ${location.hostname.endsWith('github.io')?`<a class="menu-item" href="../Connoisseur_modele_themes.xlsx" download>Télécharger le modèle Excel</a>`:''}
         ${IMPORTS.length?`<button class="menu-item" data-a="clear-imports">Retirer mes ${plural(IMPORTS.length,'carte')} importée${IMPORTS.length>1?'s':''}</button>`:''}
         <details class="fmt">
           <summary>Format du fichier</summary>
