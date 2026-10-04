@@ -797,6 +797,9 @@ h1,h2,h3{font-family:var(--f-display);letter-spacing:-.015em}
 .chip .dot{background:#fff}
 .chip.cur{background:#fff;box-shadow:3px 3px 0 #111;border-width:2.5px;transform:translateY(-1px)}
 .chip .nm,.chip.cur .nm{color:#111}
+/* pas d'indicateur de joueur courant dans le bandeau */
+.chip.cur{background:#fff;box-shadow:2px 2px 0 #111;border-width:2px;transform:none}
+.strip{padding-top:2px}
 </style>
 </head>
 <body>
@@ -808,7 +811,7 @@ h1,h2,h3{font-family:var(--f-display);letter-spacing:-.015em}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 /* ================= Finitions des decks ================= */
-const VERSION='2.00.04';
+const VERSION='2.00.05';
 const FINISHES = {
   irise:{label:'Irisé', bg:'linear-gradient(118deg,#FFB0DC 0 19%,#9FE3FF 19% 38%,#C9FFA8 38% 57%,#FFEE8F 57% 76%,#CDB4FF 76% 100%)', fx:'shine'},
   metal:{label:'Métal', bg:'linear-gradient(118deg,#C3C9D2 0 36%,#F5F7FA 36% 44%,#C3C9D2 44% 52%,#E6E9EE 52% 56%,#A7AFBB 56% 100%)', fx:'shine'},
