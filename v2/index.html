@@ -769,6 +769,11 @@ h1,h2,h3{font-family:var(--f-display);letter-spacing:-.015em}
 .pk-add.on{background:var(--imp)}
 .pack-wrap.on .pack{box-shadow:0 0 0 3px var(--ink),0 0 0 6px #111,9px 9px 0 3px #111}
 .pk-toggle{display:none}
+.pk-open{display:none}
+@media (hover:none){.pack .pk-foot{visibility:visible}}
+.pk-check{position:absolute!important;z-index:5!important;bottom:18px;right:10px;width:30px;height:30px;border-radius:50%;background:var(--imp);border:2.5px solid #111;box-shadow:2px 2px 0 #111;display:grid;place-items:center;font-weight:900;font-size:15px;color:#111;transform:scale(0);transition:transform .18s cubic-bezier(.3,1.6,.5,1)}
+.pack-wrap.on .pk-check{transform:scale(1)}
+.pk-add{font-family:var(--f-body);font-weight:700;font-size:13px;background:#fff}
 </style>
 </head>
 <body>
@@ -1167,15 +1172,15 @@ function packHTML(d, opts={}){
   const f=finishOf(d.finish), on=!!S.on[d.name];
   const search=norm(d.name+' '+d.themes.map(t=>t.name).join(' '));
   return `<div class="pack-wrap ${on?'on':''}" data-search="${esc(search)}">
-    <button class="pack ${f.fx}" style="background:${f.bg}" data-a="open" data-d="${esc(d.name)}" aria-label="Ouvrir le booster ${esc(d.name)}">
+    <button class="pack ${f.fx}" style="background:${f.bg}" data-a="deck" data-d="${esc(d.name)}" aria-pressed="${on}" aria-label="${on?'Retirer':'Ajouter'} ${esc(d.name)} ${on?'de':'à'} la partie">
       <span class="crimp"></span>
       <span class="pk-brand logo"><em>CON</em>NOISSEUR</span>
       <span class="pk-mid"><span class="pk-name">${esc(d.name)}</span><span class="pk-desc">${esc(d.desc||d.themes.slice(0,3).map(t=>t.name).join(', ')+(d.themes.length>3?'…':''))}</span></span>
       <span class="pk-foot">${plural(d.themes.length,'carte')}</span>
       <span class="crimp bottom"></span>
-      <span class="pk-open" aria-hidden="true">Ouvrir</span>
+      <span class="pk-check" aria-hidden="true">✓</span>
     </button>
-    ${opts.noToggle?'':`<button class="pk-add ${on?'on':''}" data-a="deck" data-d="${esc(d.name)}" aria-pressed="${on}">${on?'✓ Dans la partie':'+ Ajouter'}</button>`}
+    ${opts.noToggle?'':`<button class="pk-add" data-a="open" data-d="${esc(d.name)}">Voir les cartes</button>`}
   </div>`;
 }
 
@@ -1240,7 +1245,7 @@ function viewDeckPicker(){
   const cards=on.reduce((s,d)=>s+d.themes.length,0);
   const bank=S.bankStatus==='loading'?'<p class="hint">Chargement des boosters…</p>':S.bankStatus==='error'?'<p class="hint">themes.xlsx introuvable à côté du jeu : seuls le booster intégré et tes imports sont là.</p>':'';
   const rep=S.report?`<div class="report"><b>${esc(S.report.file||'Import')}</b> : ${plural(S.report.added||0,'carte')} ajoutée${(S.report.added||0)>1?'s':''}${S.report.replaced?`, ${S.report.replaced} mise(s) à jour`:''}${S.report.decks?.length?` dans ${S.report.decks.map(esc).join(', ')}`:''}.${S.report.warnings.length?`<ul>${S.report.warnings.slice(0,8).map(w=>`<li>${esc(w)}</li>`).join('')}${S.report.warnings.length>8?`<li>… et ${S.report.warnings.length-8} autre(s)</li>`:''}</ul>`:''}</div>`:'';
-  return `${stepHead('setup',2,'Choisis tes boosters','Touche un booster pour voir ses cartes. « Ajouter » le met dans la partie.')}
+  return `${stepHead('setup',2,'Choisis tes boosters','Touche un booster pour l’ajouter à la partie. « Voir les cartes » l’ouvre.')}
   <div class="tools">
     ${D.length>8?`<input type="search" id="deck-q" class="search" placeholder="Chercher un deck ou un thème" value="${esc(S.q)}" aria-label="Chercher">`:''}
     <button class="btn small" data-a="all-on">Tout prendre</button>
