@@ -10,8 +10,9 @@
 
 ## Versions
 
-- **v2.0 · néo-brutalisme** : https://nrdflam.github.io/connoisseur/v2/
-- **v1.0 · figée** : https://nrdflam.github.io/connoisseur/v1/
-- La racine (https://nrdflam.github.io/connoisseur/) sert la v1 tant que la v2 n'est pas validée.
+- **Version principale (2.x, néo-brutalisme)** : https://nrdflam.github.io/connoisseur/ · numéro affiché en bas de l'accueil et dans le menu de partie
+- **v1.0 figée** : https://nrdflam.github.io/connoisseur/v1/
+- `/v2/` redirige vers la racine.
+- Réglages de test : ajouter `#dev` à l'adresse. Labo des boosters : `/dev/boosters.html`.
 
-Les deux versions lisent le même `themes.xlsx` à la racine du dépôt.
+Les versions lisent le même `themes.xlsx` à la racine du dépôt.

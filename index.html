@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Connoisseur</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Lexend:wght@400;500;600;700&display=swap">
 <style>
 /* Layout : écran de salon. Scores à gauche, grande carte de jeu à droite, decks à finitions (irisé, métal, or…) ; une seule ambiance sombre assumée. */
 :root{
@@ -490,11 +490,295 @@ html.dev-on .bottom-bar{padding-left:calc(clamp(16px,3vw,40px) + 56px)}
 .rc-list.ft.fb{-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 64px,#000 calc(100% - 64px),transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 64px,#000 calc(100% - 64px),transparent 100%)}
 .rc-next{position:sticky;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:5;box-shadow:0 -10px 24px 6px var(--ink)}
 @media (min-width:901px){.rc-list{max-height:min(420px,calc(100vh - 380px))}}
+
+/* =====================================================================
+   CONNOISSEUR 2.0 · Design system néo-brutaliste
+   Fond crème, contours noirs épais, ombres décalées dures, aplats vifs.
+   Thème unique clair assumé.
+   ===================================================================== */
+:root{
+  color-scheme:light;
+  --ink:#FFF4DF; --panel:#FFFFFF; --raise:#FFE9B8; --line:#111111;
+  --text:#111111; --muted:#4B4740; --dim:#857E70;
+  --sco:#2E5BFF; --mat:#FF5B2E; --pla:#FFC83A; --imp:#1CC7A8; --int:#8B6CFF; --fin:#FFFFFF;
+  --pink:#FF6FB5;
+  --on-card:#111111; --ok:#1CC7A8; --ko:#FF4F4F;
+  --bd:2.5px solid #111111; --bd-thin:2px solid #111111;
+  --sh:4px 4px 0 #111111; --sh-lg:6px 6px 0 #111111; --sh-sm:3px 3px 0 #111111;
+  --r:14px; --r-sm:10px;
+  --f-display:"Archivo", "Arial Black", system-ui, sans-serif;
+  --f-body:"Lexend", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+body{background-color:var(--ink);background-image:radial-gradient(rgba(17,17,17,.13) 1.2px,transparent 1.3px);background-size:22px 22px;color:var(--text)}
+::selection{background:var(--pla);color:#111}
+:focus-visible{outline:3px solid var(--sco);outline-offset:3px}
+h1,h2,h3{font-family:var(--f-display);letter-spacing:-.015em}
+
+/* ---------- Boutons ---------- */
+.btn{border:var(--bd);background:var(--panel);color:var(--text);border-radius:var(--r-sm);box-shadow:var(--sh-sm);font-weight:700;transition:transform .08s,box-shadow .08s}
+.btn:hover{background:var(--raise)}
+.btn:active:not([disabled]){transform:translate(3px,3px);box-shadow:0 0 0 #111}
+.btn.primary,.btn.primary:hover{background:var(--pla);color:#111;border-color:#111}
+.btn.primary:hover{filter:brightness(1.04)}
+.btn.ghost{background:var(--panel)}
+.btn.ok,.btn.ok:hover{background:var(--imp);color:#111;border-color:#111}
+.btn.ko,.btn.ko:hover{background:var(--ko);color:#111;border-color:#111}
+.tcg .btn.dark,.btn.dark{background:#111;color:#fff;border-color:#111}
+.btn.big{font-family:var(--f-display);font-weight:800;box-shadow:var(--sh)}
+.btn[disabled]{opacity:.45;box-shadow:none}
+.kbd{border-width:1.5px;opacity:.6}
+.icon-btn{border:var(--bd-thin);background:var(--panel);color:var(--text);border-radius:var(--r-sm);box-shadow:2px 2px 0 #111}
+.icon-btn:hover{background:var(--raise);color:var(--text)}
+.icon-btn[disabled]{opacity:.35;box-shadow:none}
+
+/* ---------- Logo ---------- */
+.logo{--lf:#111;--lb:var(--pla)}
+.logo em{border:2px solid #111;box-shadow:2px 2px 0 #111;border-radius:6px}
+.pk-brand.logo,.tcg-foot .logo{--lf:#111;--lb:#fff}
+.pk-brand.logo em,.tcg-foot .logo em{box-shadow:none;border-width:1.5px}
+.ub-back .logo{--lf:#111;--lb:var(--pla)}
+
+/* ---------- Accueil ---------- */
+.home h1{font-weight:900;letter-spacing:-.04em}
+.home h1 em{background:var(--pla);color:#111;border:3px solid #111;box-shadow:5px 5px 0 #111;border-radius:.12em;padding:0 .1em;display:inline-block;transform:rotate(-2deg);margin:0 .06em .06em 0}
+.home p{color:var(--muted)}
+.choice{background:var(--panel);border:var(--bd);border-radius:var(--r);box-shadow:var(--sh);color:var(--text)}
+.choice:nth-child(1){background:var(--mat)}
+.choice:nth-child(2){background:var(--imp)}
+.choice b{color:#111}
+.choice span{color:#111;opacity:.8;font-weight:600}
+.choice:hover{transform:translate(-2px,-2px);box-shadow:var(--sh-lg);border-color:#111;background:inherit}
+.choice:nth-child(1):hover{background:var(--mat)}
+.choice:nth-child(2):hover{background:var(--imp)}
+.choice:active{transform:translate(4px,4px);box-shadow:0 0 0 #111}
+.fan-pack{border:var(--bd);box-shadow:var(--sh)}
+.v2-sticker{position:absolute;z-index:4;right:6%;top:4%;background:var(--pink);color:#111;border:var(--bd);box-shadow:var(--sh-sm);border-radius:999px;font-family:var(--f-display);font-weight:900;font-size:15px;padding:6px 12px;transform:rotate(10deg)}
+
+/* ---------- Étapes & panneaux ---------- */
+.step-head .label{color:#111;background:var(--panel);border:var(--bd-thin);border-radius:999px;padding:4px 10px;box-shadow:2px 2px 0 #111}
+.step-title{font-weight:900}
+.step-head .hint{color:var(--muted)}
+.panel{background:var(--panel);border:var(--bd);border-radius:var(--r);box-shadow:var(--sh)}
+.panel-players{background:var(--panel)}
+.panel-game{background:#FFF9EC}
+.panel h2{font-weight:900}
+.label{color:var(--muted)}
+.team-row input[type=text]{background:#fff;border:var(--bd-thin);border-radius:var(--r-sm);color:#111;font-weight:600}
+.team-row input[type=text]:focus{box-shadow:var(--sh-sm);outline:none}
+.sw,.sw.on{border:var(--bd-thin)!important;box-shadow:2px 2px 0 #111!important}
+.seg button{border:var(--bd-thin);background:#fff;color:#111;font-weight:700;box-shadow:2px 2px 0 #111;transition:transform .08s,box-shadow .08s}
+.seg button.on{background:#111;color:#fff;border-color:#111}
+.seg button:active{transform:translate(2px,2px);box-shadow:none}
+.hint{color:var(--muted)}
+.err{color:#D12B2B}
+.bottom-bar{background:var(--ink);border-top:var(--bd);box-shadow:0 40px 0 0 var(--ink)}
+.sel{color:var(--muted)} .sel b{color:#111}
+
+/* ---------- Boosters ---------- */
+.search{background:#fff;border:var(--bd);border-radius:var(--r-sm);box-shadow:var(--sh-sm);color:#111}
+.pack{border:var(--bd);box-shadow:var(--sh);border-radius:8px 8px 10px 10px}
+.pack:hover{transform:translate(-2px,-4px)}
+.pack-wrap.on .pack{box-shadow:0 0 0 3px var(--ink),0 0 0 6px #111,8px 8px 0 3px #111}
+.pk-toggle{background:#fff;color:#111;border:var(--bd);box-shadow:2px 2px 0 #111}
+.pack-wrap.on .pk-toggle{background:var(--imp);color:#111}
+.plus-btn{background:var(--pla);color:#111;border:var(--bd);box-shadow:var(--sh-sm)}
+.plus-btn[aria-expanded="true"]{background:#111;color:#fff;border-color:#111}
+.report{background:#fff;border:var(--bd-thin);box-shadow:var(--sh-sm)}
+.report ul{color:var(--muted)}
+.format{border:var(--bd-thin)}
+.format th{background:var(--raise)}
+.format th,.format td{border-bottom:1.5px solid #111}
+
+/* ---------- Menus ---------- */
+.menu-pop{background:#fff;border:var(--bd);border-radius:var(--r);box-shadow:var(--sh)}
+.menu-item{color:#111}
+.menu-item:hover:not([disabled]){background:var(--raise)}
+.menu-note{color:var(--dim)}
+.burger{background:#fff;border:var(--bd);box-shadow:var(--sh-sm)}
+.burger i{background:#111}
+.burger[aria-expanded="true"]{background:#111}
+.burger[aria-expanded="true"] i{background:#fff}
+
+/* ---------- Partie : bandeau, tour ---------- */
+.play-head{background:transparent}
+@media (max-width:900px){.play-head{background:var(--ink)}}
+.chip{background:#fff;border:var(--bd-thin);box-shadow:2px 2px 0 #111;color:#111}
+.chip .nm{color:var(--muted)}
+.chip .dot{border:1.5px solid #111}
+.chip .prog{height:4px}
+.chip.cur{background:var(--pla);border-color:#111}
+.chip.cur .nm{color:#111}
+.strip-info{color:var(--dim)}
+.turn{color:var(--muted)}
+.turn b{color:#111}
+.pawn-s{border:2px solid #111!important}
+.flash{color:var(--muted)} .flash b{color:#111}
+.scoreboard{background:#fff;border:var(--bd);box-shadow:var(--sh);border-radius:var(--r)}
+.srow.cur{border:var(--bd-thin);background:var(--raise)}
+.srow .bar{background:#EDE3CF;border:1.5px solid #111;height:8px}
+.round{color:var(--muted)}
+
+/* ---------- Carte TCG ---------- */
+.tcg{border:3px solid #111;box-shadow:var(--sh-lg);border-radius:18px}
+.tcg-in{background:#FFFDF6;box-shadow:inset 0 0 0 2.5px #111}
+.tcg-title,.tcg-type,.tcg-text{background:#fff;border:var(--bd-thin)}
+.tcg-title{box-shadow:2px 2px 0 #111}
+.cost{border:var(--bd-thin);box-shadow:2px 2px 0 #111}
+.tcg-art{border:var(--bd-thin);box-shadow:none}
+.gem{background:#fff;border:var(--bd-thin);box-shadow:2px 2px 0 #111;transition:transform .08s,box-shadow .08s,background .08s}
+.gem:hover:not([disabled]){background:var(--pla);color:#111;transform:translate(-1px,-1px);box-shadow:3px 3px 0 #111}
+.gem:active:not([disabled]){transform:translate(2px,2px);box-shadow:none}
+.tcg-a{background:#111;color:#fff;border-radius:var(--r-sm)}
+.tcg-a small{color:var(--pla)}
+.timer{background:#EDE3CF;border:1.5px solid #111;height:12px}
+.timer i{background:#111}
+.timer-row.out{color:#D12B2B}
+.timer-row.out .timer i{background:var(--ko)}
+.tcg-foot{opacity:.8}
+
+/* ---------- Écran de score ---------- */
+.rc-delta{-webkit-text-stroke:3px #111;paint-order:stroke fill;text-shadow:5px 5px 0 #111}
+.rc-delta.miss{color:#fff}
+.rc-line{color:var(--muted)} .rc-line b{color:#111}
+.rc-board{background:#fff;border:var(--bd);box-shadow:var(--sh);border-radius:var(--r)}
+.rc-row{background:#FFF9EC;border:var(--bd-thin)}
+.rc-row.me{box-shadow:3px 3px 0 #111;background:var(--raise)}
+.rc-row .dot{border:1.5px solid #111}
+.rc-pos{color:#111}
+.rc-bar{background:#EDE3CF;border:1.5px solid #111;height:7px}
+.rc-mv.up{color:#0E8F78} .rc-mv.down{color:#D12B2B}
+.rc-next{box-shadow:var(--sh),0 -10px 24px 6px var(--ink)}
+
+/* ---------- Unboxing ---------- */
+.unbox{background:rgba(255,244,223,.94);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.ub-rays{background:repeating-conic-gradient(from 0deg,rgba(17,17,17,.09) 0 5deg,transparent 5deg 16deg)}
+.ub-hint{color:var(--muted)}
+.ub-piece{border:var(--bd)}
+.ub-pack{filter:drop-shadow(6px 6px 0 #111)}
+.ub-back{background:repeating-linear-gradient(45deg,#fff 0 10px,#FFE9B8 10px 20px);border:var(--bd)}
+.ub-front{border:var(--bd);box-shadow:var(--sh)}
+.ub-info p{color:var(--muted)}
+.spark{box-shadow:none;border:1.5px solid #111}
+
+/* ---------- Victoire ---------- */
+.win .label{color:#111;background:var(--pla);border:var(--bd-thin);padding:4px 10px;border-radius:999px;box-shadow:2px 2px 0 #111}
+.win h1{font-weight:900}
+.confetti span{border:var(--bd);box-shadow:var(--sh-sm)}
+.ranking div{border-bottom:2px solid #111}
+
+/* ---------- Dev ---------- */
+.dev-btn{background:#fff;color:#111;border:var(--bd-thin);box-shadow:2px 2px 0 #111}
+.dev-btn:hover,.dev-btn[aria-expanded="true"]{background:var(--pink);color:#111;border-color:#111}
+.dev{background:#fff;border:var(--bd);box-shadow:var(--sh);color:#111}
+.dev .row span{color:var(--muted)}
+.dev select{background:#fff;border:var(--bd-thin);color:#111}
+.dev .sep{background:#111}
+.dev .toast{color:#0E8F78}
+
+.glow{box-shadow:var(--sh)}
+.pack.glow,.fan-pack.glow{box-shadow:var(--sh)}
 @media (min-width:700px){.ub-cards{grid-template-columns:repeat(auto-fit,minmax(150px,180px))}}
+@media (max-width:800px){.home h1{font-size:clamp(38px,11vw,62px)}}
 .opened .ub-cards{display:flex;flex-wrap:wrap;justify-content:center}
 .ub-card{width:150px;flex:none}
 @media (min-width:700px){.ub-card{width:175px}}
 .opened .ub-stage{padding-top:46px}
+
+/* =====================================================================
+   2.0 · Cartes, boosters et logo néo-brutalistes
+   Les finitions deviennent des aplats découpés (bandes à bord net),
+   le reflet est une bande blanche franche, l'illustration a une trame.
+   ===================================================================== */
+/* --- Reflet : bande franche, pas de flou --- */
+.shine::after{background:linear-gradient(105deg,transparent 0 42%,rgba(255,255,255,.9) 42% 47%,transparent 47% 51%,rgba(255,255,255,.6) 51% 53%,transparent 53%);background-size:300% 100%;background-position:150% 0;mix-blend-mode:normal;animation:sheen2 4.5s steps(1,end) infinite,sheen 4.5s cubic-bezier(.6,0,.3,1) infinite}
+@keyframes sheen2{0%,100%{opacity:1}}
+/* --- Néon : ombre dure en couleur --- */
+.glow{box-shadow:4px 4px 0 #FFE45C,7px 7px 0 #111}
+.pack.glow{box-shadow:4px 4px 0 #FFE45C,7px 7px 0 #111}
+.tcg.glow{box-shadow:5px 5px 0 #FFE45C,9px 9px 0 #111}
+
+/* --- Logo --- */
+.logo{font-family:var(--f-display);font-weight:900;letter-spacing:-.01em;gap:.18em}
+.logo em{display:inline-block;background:var(--pla);color:#111;border:2.5px solid #111;border-radius:.3em;padding:.12em .3em .08em;margin-right:0;letter-spacing:0;transform:rotate(-5deg);box-shadow:2px 2px 0 #111}
+.brand.logo{font-size:22px}
+.home-logo{font-size:16px}
+.pk-brand.logo,.tcg-foot .logo{--lf:#111;font-size:10px;letter-spacing:0}
+.pk-brand.logo em,.tcg-foot .logo em{background:#111;color:#fff;border:1.5px solid #111;box-shadow:1.5px 1.5px 0 rgba(0,0,0,.35);transform:rotate(-4deg)}
+.ub-back .logo{font-size:15px;flex-direction:column;gap:6px}
+.ub-back .logo em{font-size:22px}
+
+/* --- Boosters --- */
+.pack,.fan-pack{border:3px solid #111;border-radius:10px;box-shadow:5px 5px 0 #111;padding:20px 10px 18px}
+.crimp{height:11px;background:repeating-linear-gradient(90deg,#111 0 2.5px,transparent 2.5px 6px);border-bottom:2.5px solid #111;opacity:.9}
+.crimp.bottom{border-top:2.5px solid #111;border-bottom:0}
+.pk-brand{margin-top:8px}
+.pk-mid{background:#fff;border:2.5px solid #111;border-radius:8px;box-shadow:3px 3px 0 #111;padding:10px 8px;width:calc(100% - 6px);gap:5px;transform:rotate(-1.5deg)}
+.pk-name{font-family:var(--f-display);font-weight:900;color:#111;letter-spacing:-.02em}
+.pk-desc{opacity:.7;font-weight:500;color:#111}
+.pk-foot{background:#111;color:#fff;border-radius:999px;padding:4px 9px;opacity:1;font-size:9.5px;letter-spacing:.1em}
+.fan-pack .pk-name{background:#fff;border:2px solid #111;border-radius:6px;box-shadow:2px 2px 0 #111;padding:6px 6px;transform:rotate(-2deg)}
+.pack-wrap.on .pack{box-shadow:0 0 0 3px var(--ink),0 0 0 6px #111,9px 9px 0 3px #111}
+.pack:hover{transform:translate(-2px,-3px) rotate(-1deg)}
+
+/* --- Carte de jeu --- */
+.tcg{border:3px solid #111;border-radius:20px;padding:11px;box-shadow:7px 7px 0 #111}
+.tcg-in{background:#FFF8EA;border:2.5px solid #111;box-shadow:none;border-radius:12px;gap:8px}
+.tcg-title{background:#fff;border:2.5px solid #111;border-radius:10px;box-shadow:3px 3px 0 #111}
+.tcg-title h2{font-family:var(--f-display);font-weight:900;letter-spacing:-.02em}
+.tcg-title h2.set{font-family:var(--f-display);font-weight:800;letter-spacing:.06em;font-size:12px}
+.cost{border:2.5px solid #111;box-shadow:2px 2px 0 #111;font-family:var(--f-display);font-weight:900}
+.tcg-art{border:2.5px solid #111;border-radius:10px}
+.tcg-art::before{content:"";position:absolute;inset:0;z-index:0;background-image:radial-gradient(rgba(17,17,17,.16) 1.3px,transparent 1.5px);background-size:9px 9px;pointer-events:none}
+.art-kicker{display:inline-block;align-self:center;background:#fff;border:2px solid #111;border-radius:999px;padding:3px 10px;box-shadow:2px 2px 0 #111;font-size:12px;font-weight:700}
+.tcg-art.is-q .art-kicker{align-self:flex-start;font-size:10px;opacity:1}
+.art-theme{font-family:var(--f-display);font-weight:900;letter-spacing:-.035em;color:#111;-webkit-text-stroke:0}
+.art-sub{background:#111;color:#fff;border-radius:999px;padding:4px 10px;opacity:1;font-size:10px}
+.art-q{font-family:var(--f-display);font-weight:900;letter-spacing:-.02em;background:#fff;border:2.5px solid #111;border-radius:10px;box-shadow:3px 3px 0 #111;padding:12px 14px}
+.tcg-type{background:#111;color:#fff;border:2.5px solid #111;border-radius:8px}
+.tcg-text{background:#fff;border:2.5px solid #111;border-radius:10px}
+.gem{border-radius:10px;aspect-ratio:1.25;font-family:var(--f-display);font-weight:900;border:2.5px solid #111;box-shadow:2px 2px 0 #111}
+.tcg-foot{opacity:1;font-weight:800}
+
+/* --- Unboxing --- */
+.ub-piece{border:3px solid #111}
+.ub-body{padding:30% 12px 22px}
+.ub-pack .pk-name{background:#fff;border:2.5px solid #111;border-radius:8px;box-shadow:3px 3px 0 #111;padding:10px 12px;transform:rotate(-2deg)}
+.ub-front{border:3px solid #111;box-shadow:5px 5px 0 #111;justify-content:space-between}
+.ub-front .meta{background:#111;color:#fff;border-radius:999px;padding:3px 8px;opacity:1}
+.ub-front b{font-family:var(--f-display);font-weight:900;background:#fff;border:2.5px solid #111;border-radius:8px;box-shadow:3px 3px 0 #111;padding:10px 8px;width:100%;transform:rotate(-2deg)}
+.ub-back{border:3px solid #111;background:repeating-linear-gradient(45deg,var(--pla) 0 12px,#fff 12px 24px)}
+.ub-front .holo{background:linear-gradient(110deg,transparent 0 44%,rgba(255,255,255,.95) 44% 52%,transparent 52%);background-size:100% 100%;mix-blend-mode:normal;transform:translateX(-130%);animation-name:holo2}
+@keyframes holo2{from{transform:translateX(-130%)}to{transform:translateX(130%)}}
+.pk-name{overflow-wrap:normal;word-break:normal;hyphens:manual}
+.pack .pk-name{font-size:clamp(14px,3.9vw,19px)}
+/* finitions sombres et tramées */
+.dark .crimp{--crc:#fff;background:repeating-linear-gradient(90deg,#fff 0 2.5px,transparent 2.5px 6px);border-color:#fff}
+.pack.dark .pk-brand.logo,.fan-pack.dark .pk-brand.logo,.ub-body.dark .pk-brand.logo{--lf:#fff}
+.dark .pk-brand.logo em{background:#FF4FB0;color:#111;border-color:#111}
+.tcg-art.dark .art-theme,.tcg-art.dark .art-kicker{color:#111}
+.tcg-art.dark .art-theme{color:#fff;text-shadow:3px 3px 0 #111}
+.pack.halftone::before,.fan-pack.halftone::before,.tcg-art.halftone::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(rgba(17,17,17,.18) 1.4px,transparent 1.6px);background-size:8px 8px}
+.cost.dark{color:#fff;text-shadow:1.5px 1.5px 0 #111}
+/* boosters : ouvrir au tap, ajouter avec un vrai bouton */
+.pack-wrap{display:flex;flex-direction:column;gap:12px}
+.pk-open{position:absolute!important;z-index:4!important;left:50%;bottom:22px;transform:translateX(-50%) rotate(-3deg);background:var(--pla);color:#111;border:2px solid #111;border-radius:999px;box-shadow:2px 2px 0 #111;font-family:var(--f-display);font-weight:900;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;opacity:0;transition:opacity .15s}
+.pack:hover .pk-open,.pack:focus-visible .pk-open{opacity:1}
+@media (hover:none){.pk-open{opacity:1}.pack .pk-foot{visibility:hidden}}
+.pk-add{width:100%;border:2.5px solid #111;background:#fff;color:#111;border-radius:10px;box-shadow:3px 3px 0 #111;padding:9px 8px;font-family:var(--f-display);font-weight:800;font-size:14px;transition:transform .08s,box-shadow .08s,background .1s}
+.pk-add:active{transform:translate(3px,3px);box-shadow:none}
+.pk-add.on{background:var(--imp)}
+.pack-wrap.on .pack{box-shadow:0 0 0 3px var(--ink),0 0 0 6px #111,9px 9px 0 3px #111}
+.pk-toggle{display:none}
+.pk-open{display:none}
+@media (hover:none){.pack .pk-foot{visibility:visible}}
+.pk-check{position:absolute!important;z-index:5!important;bottom:18px;right:10px;width:30px;height:30px;border-radius:50%;background:var(--imp);border:2.5px solid #111;box-shadow:2px 2px 0 #111;display:grid;place-items:center;font-weight:900;font-size:15px;color:#111;transform:scale(0);transition:transform .18s cubic-bezier(.3,1.6,.5,1)}
+.pack-wrap.on .pk-check{transform:scale(1)}
+.pk-add{font-family:var(--f-body);font-weight:700;font-size:13px;background:#fff}
+.v2-sticker{display:none}
+.home{position:relative}
+.ver-stamp{position:absolute;right:0;bottom:6px;font-size:10px;letter-spacing:.06em;color:var(--dim);font-variant-numeric:tabular-nums}
+.menu-note.ver{margin-top:0;font-size:10px;letter-spacing:.06em}
+@media (max-width:800px){.home-choice{margin-bottom:28px}}
 </style>
 </head>
 <body>
@@ -506,23 +790,30 @@ html.dev-on .bottom-bar{padding-left:calc(clamp(16px,3vw,40px) + 56px)}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 /* ================= Finitions des decks ================= */
+const VERSION='2.00.00';
 const FINISHES = {
-  irise:{label:'Irisé', bg:'linear-gradient(115deg,#ffc8ee 0%,#c4ecff 22%,#dcffc9 44%,#fff0bd 66%,#e3ccff 88%,#ffc8ee 100%)', fx:'shine'},
-  metal:{label:'Métal', bg:'linear-gradient(160deg,#f1f3f6 0%,#b4bac4 38%,#e9ecf0 52%,#9aa2ae 78%,#d7dbe1 100%)', fx:'shine'},
-  or:{label:'Or', bg:'linear-gradient(135deg,#fff0b3 0%,#e2b54a 35%,#fff4c4 52%,#c9962f 78%,#f3d77a 100%)', fx:'shine'},
-  cuivre:{label:'Cuivre', bg:'linear-gradient(135deg,#ffd5b8 0%,#d0855a 38%,#ffc9a3 55%,#b5683f 80%,#e9a37b 100%)', fx:'shine'},
-  nacre:{label:'Nacre', bg:'linear-gradient(135deg,#fffaf2 0%,#efe2f7 30%,#ddf3f1 60%,#fbefe1 100%)', fx:'shine'},
-  neon:{label:'Néon', bg:'#ff4fb0', fx:'glow'},
-  retro:{label:'Rétro', bg:'linear-gradient(180deg,#ffb1e1 0%,#ffd3a8 50%,#a8e3ff 100%)', fx:''},
-  bleu:{label:'Bleu', bg:'#4d8dff', fx:''},
-  rouge:{label:'Rouge', bg:'#ff5d62', fx:''},
-  jaune:{label:'Jaune', bg:'#ffc83d', fx:''},
-  vert:{label:'Vert', bg:'#35d99a', fx:''},
-  violet:{label:'Violet', bg:'#b678ff', fx:''},
-  craie:{label:'Craie', bg:'#f4f1e8', fx:''}
+  irise:{label:'Irisé', bg:'linear-gradient(118deg,#FFB0DC 0 19%,#9FE3FF 19% 38%,#C9FFA8 38% 57%,#FFEE8F 57% 76%,#CDB4FF 76% 100%)', fx:'shine'},
+  metal:{label:'Métal', bg:'linear-gradient(118deg,#C3C9D2 0 36%,#F5F7FA 36% 44%,#C3C9D2 44% 52%,#E6E9EE 52% 56%,#A7AFBB 56% 100%)', fx:'shine'},
+  or:{label:'Or', bg:'linear-gradient(118deg,#F5BE2A 0 36%,#FFF3B0 36% 44%,#F5BE2A 44% 52%,#FFDF73 52% 56%,#DB9F12 56% 100%)', fx:'shine'},
+  cuivre:{label:'Cuivre', bg:'linear-gradient(118deg,#E8854E 0 36%,#FFD3B3 36% 44%,#E8854E 44% 52%,#F8B08A 52% 56%,#C2602D 56% 100%)', fx:'shine'},
+  nacre:{label:'Nacre', bg:'linear-gradient(118deg,#FFF9EF 0 28%,#F1DEFF 28% 50%,#D8F6F0 50% 72%,#FFEBD6 72% 100%)', fx:'shine'},
+  neon:{label:'Néon', bg:'#FF4FB0', fx:'glow'},
+  retro:{label:'Rétro', bg:'linear-gradient(180deg,#FF6FB5 0 34%,#FFA14A 34% 67%,#55C6FF 67% 100%)', fx:''},
+  bleu:{label:'Bleu', bg:'#2E5BFF', fx:''},
+  rouge:{label:'Rouge', bg:'#FF5B2E', fx:''},
+  jaune:{label:'Jaune', bg:'#FFC83A', fx:''},
+  vert:{label:'Vert', bg:'#1CC7A8', fx:''},
+  violet:{label:'Violet', bg:'#8B6CFF', fx:''},
+  craie:{label:'Craie', bg:'#FFF4DF', fx:''},
+  chrome:{label:'Chrome bleu', bg:'linear-gradient(118deg,#9DB7DB 0 36%,#EEF4FF 36% 44%,#9DB7DB 44% 52%,#CADAF0 52% 56%,#7393C2 56% 100%)', fx:'shine'},
+  millimetre:{label:'Papier millimétré', bg:'linear-gradient(#2E5BFF55 1px,transparent 1px) 0 0/10px 10px,linear-gradient(90deg,#2E5BFF55 1px,transparent 1px) 0 0/10px 10px,#F4F8FF', fx:''},
+  confettis:{label:'Confettis', bg:'radial-gradient(#FF4FB0 3px,transparent 3.5px) 0 0/30px 30px,radial-gradient(#2E5BFF 3px,transparent 3.5px) 15px 10px/30px 30px,radial-gradient(#1CC7A8 3px,transparent 3.5px) 7px 20px/30px 30px,#FFF4DF', fx:''},
+  synthwave:{label:'Synthwave', bg:'linear-gradient(transparent 60%,#FF4FB0 60% 61%,transparent 61%),repeating-linear-gradient(180deg,transparent 0 9px,#FF4FB0aa 9px 10px) 0 100%/100% 40% no-repeat,linear-gradient(180deg,#2B1460 0 60%,#4A1A7A 60% 100%)', fx:'dark'},
+  seventies:{label:'Années 70', bg:'linear-gradient(180deg,#F9E3B4 0 22%,#F5B82E 22% 40%,#EE7B26 40% 58%,#C0451F 58% 76%,#6B3519 76% 100%)', fx:''},
+  vaporwave:{label:'Vaporwave', bg:'linear-gradient(180deg,#B6F0FF 0 50%,#FFC4EC 50% 100%)', fx:'halftone'}
 };
 const FINISH_CYCLE = ['irise','metal','or','neon','cuivre','retro','nacre','bleu','vert','violet','rouge','jaune'];
-const FINISH_ALIASES = {irise:'irise',holo:'irise',holographique:'irise',arcenciel:'irise',metal:'metal',metallique:'metal',argent:'metal',chrome:'metal',acier:'metal',or:'or',dore:'or',gold:'or',cuivre:'cuivre',bronze:'cuivre',nacre:'nacre',perle:'nacre',neon:'neon',fluo:'neon',retro:'retro',vaporwave:'retro',bleu:'bleu',rouge:'rouge',jaune:'jaune',vert:'vert',violet:'violet',craie:'craie',blanc:'craie'};
+const FINISH_ALIASES = {irise:'irise',holo:'irise',holographique:'irise',arcenciel:'irise',metal:'metal',metallique:'metal',argent:'metal',chrome:'chrome',chromebleu:'chrome',millimetre:'millimetre',papiermillimetre:'millimetre',confettis:'confettis',synthwave:'synthwave',annees:'seventies',seventies:'seventies',vaporwave:'vaporwave',acier:'metal',or:'or',dore:'or',gold:'or',cuivre:'cuivre',bronze:'cuivre',nacre:'nacre',perle:'nacre',neon:'neon',fluo:'neon',retro:'retro',vaporwave:'retro',bleu:'bleu',rouge:'rouge',jaune:'jaune',vert:'vert',violet:'violet',craie:'craie',blanc:'craie'};
 function finishFrom(v){
   const raw=String(v??'').trim();
   if(/^#[0-9a-f]{3,8}$/i.test(raw)) return raw;
@@ -750,8 +1041,8 @@ function parseWorkbook(buf, defDeck){
 }
 function loadBank(){
   if(!window.XLSX){S.bankStatus='error';render();return}
-  fetch('themes.xlsx',{cache:'no-cache'})
-    .then(r=>{if(!r.ok)throw new Error(r.status);return r.arrayBuffer()})
+  const get=u=>fetch(u,{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error(r.status);return r.arrayBuffer()});
+  get('themes.xlsx').catch(()=>get('../themes.xlsx'))
     .then(buf=>{
       const out=parseWorkbook(buf,'Banque');
       BANK=out.themes.map((t,i)=>({id:'b'+i,src:'banque',...t}));
@@ -887,14 +1178,15 @@ function packHTML(d, opts={}){
   const f=finishOf(d.finish), on=!!S.on[d.name];
   const search=norm(d.name+' '+d.themes.map(t=>t.name).join(' '));
   return `<div class="pack-wrap ${on?'on':''}" data-search="${esc(search)}">
-    <button class="pack ${f.fx}" style="background:${f.bg}" data-a="open" data-d="${esc(d.name)}" aria-label="Ouvrir le booster ${esc(d.name)}">
+    <button class="pack ${f.fx}" style="background:${f.bg}" data-a="deck" data-d="${esc(d.name)}" aria-pressed="${on}" aria-label="${on?'Retirer':'Ajouter'} ${esc(d.name)} ${on?'de':'à'} la partie">
       <span class="crimp"></span>
       <span class="pk-brand logo"><em>CON</em>NOISSEUR</span>
       <span class="pk-mid"><span class="pk-name">${esc(d.name)}</span><span class="pk-desc">${esc(d.desc||d.themes.slice(0,3).map(t=>t.name).join(', ')+(d.themes.length>3?'…':''))}</span></span>
       <span class="pk-foot">${plural(d.themes.length,'carte')}</span>
       <span class="crimp bottom"></span>
+      <span class="pk-check" aria-hidden="true">✓</span>
     </button>
-    ${opts.noToggle?'':`<button class="pk-toggle" data-a="deck" data-d="${esc(d.name)}" aria-pressed="${on}" aria-label="${on?'Retirer de la partie':'Ajouter à la partie'}">${on?'✓':'+'}</button>`}
+    ${opts.noToggle?'':`<button class="pk-add" data-a="open" data-d="${esc(d.name)}">Voir les cartes</button>`}
   </div>`;
 }
 
@@ -906,7 +1198,7 @@ function viewHome(){
   return `<section class="home">
     <div class="home-text">
       <span class="logo home-logo"><em>CON</em>NOISSEUR</span>
-      <h1><em>Con</em> ou<br>connoisseur ?</h1>
+      <h1><em>Con</em> ou<br>connoisseur&nbsp;?</h1>
       <p>Note-toi de 1 à 10 sur une carte, réponds à la question de ce niveau, marque autant de points.</p>
       <div class="home-choice">
         <button class="choice" data-a="mode-play" data-v="teams"><b>En équipes</b><span>2 à 6 équipes</span></button>
@@ -914,6 +1206,7 @@ function viewHome(){
       </div>
     </div>
     <div class="fan" aria-hidden="true">${fan}</div>
+    <span class="ver-stamp">v${VERSION}</span>
   </section>`;
 }
 
@@ -959,7 +1252,7 @@ function viewDeckPicker(){
   const cards=on.reduce((s,d)=>s+d.themes.length,0);
   const bank=S.bankStatus==='loading'?'<p class="hint">Chargement des boosters…</p>':S.bankStatus==='error'?'<p class="hint">themes.xlsx introuvable à côté du jeu : seuls le booster intégré et tes imports sont là.</p>':'';
   const rep=S.report?`<div class="report"><b>${esc(S.report.file||'Import')}</b> : ${plural(S.report.added||0,'carte')} ajoutée${(S.report.added||0)>1?'s':''}${S.report.replaced?`, ${S.report.replaced} mise(s) à jour`:''}${S.report.decks?.length?` dans ${S.report.decks.map(esc).join(', ')}`:''}.${S.report.warnings.length?`<ul>${S.report.warnings.slice(0,8).map(w=>`<li>${esc(w)}</li>`).join('')}${S.report.warnings.length>8?`<li>… et ${S.report.warnings.length-8} autre(s)</li>`:''}</ul>`:''}</div>`:'';
-  return `${stepHead('setup',2,'Choisis tes boosters','Ouvre un booster pour découvrir ses cartes. Le + l’ajoute directement à la partie.')}
+  return `${stepHead('setup',2,'Choisis tes boosters','Touche un booster pour l’ajouter à la partie. « Voir les cartes » l’ouvre.')}
   <div class="tools">
     ${D.length>8?`<input type="search" id="deck-q" class="search" placeholder="Chercher un deck ou un thème" value="${esc(S.q)}" aria-label="Chercher">`:''}
     <button class="btn small" data-a="all-on">Tout prendre</button>
@@ -1185,7 +1478,7 @@ function viewCard(){
   const fresh=pick&&S.lastDealt!==th.id;
   return `<article class="tcg ${f.fx} ${fresh?'deal':''}" style="background:${f.bg}">
     <div class="tcg-in">
-      <header class="tcg-title">${pick?`<h2 class="set">${esc(th.deck)}</h2>`:`<h2>${esc(th.name)}</h2>`}<span class="cost" style="background:${f.bg}">${pick?'?':S.level}</span></header>
+      <header class="tcg-title">${pick?`<h2 class="set">${esc(th.deck)}</h2>`:`<h2>${esc(th.name)}</h2>`}<span class="cost ${f.fx.includes('dark')?'dark':''}" style="background:${f.bg}">${pick?'?':S.level}</span></header>
       <div class="tcg-art ${f.fx} ${pick?'':'is-q'}" style="background:${f.bg}">${art}</div>
       <div class="tcg-type"><span>${pick?'Carte · 10 questions':'Carte · '+esc(th.deck)}</span><span>◆ ${idx}/${d.themes.length}</span></div>
       <div class="tcg-text">${text}</div>
@@ -1212,6 +1505,7 @@ function viewGame(){
             ${item('go','Changer de decks',false,'data-v="decks"')}
             ${item('menu','Retour à l’accueil')}
             <p class="menu-note">Clavier : 1 à 9, 0 pour 10 · Espace révèle · J juste · F faux</p>
+            <p class="menu-note ver">v${VERSION}</p>
           </div>`:''}
         </div>
       </div>
@@ -1296,15 +1590,16 @@ document.addEventListener('keydown',e=>{
 
 
 /* ================= Panneau dev ================= */
-const DEV_DEFAULT={speed:1,tear:520,stagger:160,rays:true,sparks:true,glow:true,holo:true,sheen:true,deal:true,shake:true,always:true,finish:''};
-let DEV=(()=>{try{return {...DEV_DEFAULT,...JSON.parse(localStorage.getItem('connoisseur.dev')||'{}')}}catch(e){return {...DEV_DEFAULT}}})();
+const DEV_DEFAULT={speed:1,tear:520,stagger:160,rays:true,sparks:true,glow:true,holo:true,sheen:true,deal:true,shake:true,always:false,finish:''};
+const DEV_ON=location.hash==='#dev';
+let DEV=DEV_ON?(()=>{try{return {...DEV_DEFAULT,...JSON.parse(localStorage.getItem('connoisseur.dev')||'{}')}}catch(e){return {...DEV_DEFAULT}}})():{...DEV_DEFAULT};
 function saveDev(){try{localStorage.setItem('connoisseur.dev',JSON.stringify(DEV))}catch(e){}}
 function applyDev(){
   const r=document.documentElement;
   r.style.setProperty('--k',(1/DEV.speed).toFixed(3));
   r.style.setProperty('--stag',DEV.stagger+'ms');
   ['rays','sparks','glow','holo','sheen','deal','shake'].forEach(k=>r.classList.toggle('no-'+k,!DEV[k]));
-  r.classList.add('dev-on');
+  r.classList.toggle('dev-on',DEV_ON);
 }
 function devToast(t){const el=document.getElementById('dev-toast');if(el){el.textContent=t;setTimeout(()=>{if(el.textContent===t)el.textContent=''},1800)}}
 function devPanel(){
@@ -1323,6 +1618,7 @@ function devPanel(){
     <div class="toast" id="dev-toast"></div>`;
 }
 (function initDev(){
+  if(!DEV_ON){ applyDev(); return; }
   const btn=document.createElement('button'); btn.className='dev-btn'; btn.textContent='DEV'; btn.setAttribute('aria-expanded','false');
   const pan=document.createElement('div'); pan.className='dev'; pan.hidden=true; pan.id='dev';
   document.body.append(btn,pan);
