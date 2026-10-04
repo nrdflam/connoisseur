@@ -683,6 +683,74 @@ h1,h2,h3{font-family:var(--f-display);letter-spacing:-.015em}
 .ub-card{width:150px;flex:none}
 @media (min-width:700px){.ub-card{width:175px}}
 .opened .ub-stage{padding-top:46px}
+
+/* =====================================================================
+   2.0 · Cartes, boosters et logo néo-brutalistes
+   Les finitions deviennent des aplats découpés (bandes à bord net),
+   le reflet est une bande blanche franche, l'illustration a une trame.
+   ===================================================================== */
+/* --- Reflet : bande franche, pas de flou --- */
+.shine::after{background:linear-gradient(105deg,transparent 0 42%,rgba(255,255,255,.9) 42% 47%,transparent 47% 51%,rgba(255,255,255,.6) 51% 53%,transparent 53%);background-size:300% 100%;background-position:150% 0;mix-blend-mode:normal;animation:sheen2 4.5s steps(1,end) infinite,sheen 4.5s cubic-bezier(.6,0,.3,1) infinite}
+@keyframes sheen2{0%,100%{opacity:1}}
+/* --- Néon : ombre dure en couleur --- */
+.glow{box-shadow:4px 4px 0 #FFE45C,7px 7px 0 #111}
+.pack.glow{box-shadow:4px 4px 0 #FFE45C,7px 7px 0 #111}
+.tcg.glow{box-shadow:5px 5px 0 #FFE45C,9px 9px 0 #111}
+
+/* --- Logo --- */
+.logo{font-family:var(--f-display);font-weight:900;letter-spacing:-.01em;gap:.18em}
+.logo em{display:inline-block;background:var(--pla);color:#111;border:2.5px solid #111;border-radius:.3em;padding:.12em .3em .08em;margin-right:0;letter-spacing:0;transform:rotate(-5deg);box-shadow:2px 2px 0 #111}
+.brand.logo{font-size:22px}
+.home-logo{font-size:16px}
+.pk-brand.logo,.tcg-foot .logo{--lf:#111;font-size:10px;letter-spacing:0}
+.pk-brand.logo em,.tcg-foot .logo em{background:#111;color:#fff;border:1.5px solid #111;box-shadow:1.5px 1.5px 0 rgba(0,0,0,.35);transform:rotate(-4deg)}
+.ub-back .logo{font-size:15px;flex-direction:column;gap:6px}
+.ub-back .logo em{font-size:22px}
+
+/* --- Boosters --- */
+.pack,.fan-pack{border:3px solid #111;border-radius:10px;box-shadow:5px 5px 0 #111;padding:20px 10px 18px}
+.crimp{height:11px;background:repeating-linear-gradient(90deg,#111 0 2.5px,transparent 2.5px 6px);border-bottom:2.5px solid #111;opacity:.9}
+.crimp.bottom{border-top:2.5px solid #111;border-bottom:0}
+.pk-brand{margin-top:8px}
+.pk-mid{background:#fff;border:2.5px solid #111;border-radius:8px;box-shadow:3px 3px 0 #111;padding:10px 8px;width:calc(100% - 6px);gap:5px;transform:rotate(-1.5deg)}
+.pk-name{font-family:var(--f-display);font-weight:900;color:#111;letter-spacing:-.02em}
+.pk-desc{opacity:.7;font-weight:500;color:#111}
+.pk-foot{background:#111;color:#fff;border-radius:999px;padding:4px 9px;opacity:1;font-size:9.5px;letter-spacing:.1em}
+.fan-pack .pk-name{background:#fff;border:2px solid #111;border-radius:6px;box-shadow:2px 2px 0 #111;padding:6px 6px;transform:rotate(-2deg)}
+.pack-wrap.on .pack{box-shadow:0 0 0 3px var(--ink),0 0 0 6px #111,9px 9px 0 3px #111}
+.pack:hover{transform:translate(-2px,-3px) rotate(-1deg)}
+
+/* --- Carte de jeu --- */
+.tcg{border:3px solid #111;border-radius:20px;padding:11px;box-shadow:7px 7px 0 #111}
+.tcg-in{background:#FFF8EA;border:2.5px solid #111;box-shadow:none;border-radius:12px;gap:8px}
+.tcg-title{background:#fff;border:2.5px solid #111;border-radius:10px;box-shadow:3px 3px 0 #111}
+.tcg-title h2{font-family:var(--f-display);font-weight:900;letter-spacing:-.02em}
+.tcg-title h2.set{font-family:var(--f-display);font-weight:800;letter-spacing:.06em;font-size:12px}
+.cost{border:2.5px solid #111;box-shadow:2px 2px 0 #111;font-family:var(--f-display);font-weight:900}
+.tcg-art{border:2.5px solid #111;border-radius:10px}
+.tcg-art::before{content:"";position:absolute;inset:0;z-index:0;background-image:radial-gradient(rgba(17,17,17,.16) 1.3px,transparent 1.5px);background-size:9px 9px;pointer-events:none}
+.art-kicker{display:inline-block;align-self:center;background:#fff;border:2px solid #111;border-radius:999px;padding:3px 10px;box-shadow:2px 2px 0 #111;font-size:12px;font-weight:700}
+.tcg-art.is-q .art-kicker{align-self:flex-start;font-size:10px;opacity:1}
+.art-theme{font-family:var(--f-display);font-weight:900;letter-spacing:-.035em;color:#111;-webkit-text-stroke:0}
+.art-sub{background:#111;color:#fff;border-radius:999px;padding:4px 10px;opacity:1;font-size:10px}
+.art-q{font-family:var(--f-display);font-weight:900;letter-spacing:-.02em;background:#fff;border:2.5px solid #111;border-radius:10px;box-shadow:3px 3px 0 #111;padding:12px 14px}
+.tcg-type{background:#111;color:#fff;border:2.5px solid #111;border-radius:8px}
+.tcg-text{background:#fff;border:2.5px solid #111;border-radius:10px}
+.gem{border-radius:10px;aspect-ratio:1.25;font-family:var(--f-display);font-weight:900;border:2.5px solid #111;box-shadow:2px 2px 0 #111}
+.tcg-foot{opacity:1;font-weight:800}
+
+/* --- Unboxing --- */
+.ub-piece{border:3px solid #111}
+.ub-body{padding:30% 12px 22px}
+.ub-pack .pk-name{background:#fff;border:2.5px solid #111;border-radius:8px;box-shadow:3px 3px 0 #111;padding:10px 12px;transform:rotate(-2deg)}
+.ub-front{border:3px solid #111;box-shadow:5px 5px 0 #111;justify-content:space-between}
+.ub-front .meta{background:#111;color:#fff;border-radius:999px;padding:3px 8px;opacity:1}
+.ub-front b{font-family:var(--f-display);font-weight:900;background:#fff;border:2.5px solid #111;border-radius:8px;box-shadow:3px 3px 0 #111;padding:10px 8px;width:100%;transform:rotate(-2deg)}
+.ub-back{border:3px solid #111;background:repeating-linear-gradient(45deg,var(--pla) 0 12px,#fff 12px 24px)}
+.ub-front .holo{background:linear-gradient(110deg,transparent 0 44%,rgba(255,255,255,.95) 44% 52%,transparent 52%);background-size:100% 100%;mix-blend-mode:normal;transform:translateX(-130%);animation-name:holo2}
+@keyframes holo2{from{transform:translateX(-130%)}to{transform:translateX(130%)}}
+.pk-name{overflow-wrap:normal;word-break:normal;hyphens:manual}
+.pack .pk-name{font-size:clamp(14px,3.9vw,19px)}
 </style>
 </head>
 <body>
@@ -695,19 +763,19 @@ h1,h2,h3{font-family:var(--f-display);letter-spacing:-.015em}
 <script>
 /* ================= Finitions des decks ================= */
 const FINISHES = {
-  irise:{label:'Irisé', bg:'linear-gradient(115deg,#ffc8ee 0%,#c4ecff 22%,#dcffc9 44%,#fff0bd 66%,#e3ccff 88%,#ffc8ee 100%)', fx:'shine'},
-  metal:{label:'Métal', bg:'linear-gradient(160deg,#f1f3f6 0%,#b4bac4 38%,#e9ecf0 52%,#9aa2ae 78%,#d7dbe1 100%)', fx:'shine'},
-  or:{label:'Or', bg:'linear-gradient(135deg,#fff0b3 0%,#e2b54a 35%,#fff4c4 52%,#c9962f 78%,#f3d77a 100%)', fx:'shine'},
-  cuivre:{label:'Cuivre', bg:'linear-gradient(135deg,#ffd5b8 0%,#d0855a 38%,#ffc9a3 55%,#b5683f 80%,#e9a37b 100%)', fx:'shine'},
-  nacre:{label:'Nacre', bg:'linear-gradient(135deg,#fffaf2 0%,#efe2f7 30%,#ddf3f1 60%,#fbefe1 100%)', fx:'shine'},
-  neon:{label:'Néon', bg:'#ff4fb0', fx:'glow'},
-  retro:{label:'Rétro', bg:'linear-gradient(180deg,#ffb1e1 0%,#ffd3a8 50%,#a8e3ff 100%)', fx:''},
-  bleu:{label:'Bleu', bg:'#4d8dff', fx:''},
-  rouge:{label:'Rouge', bg:'#ff5d62', fx:''},
-  jaune:{label:'Jaune', bg:'#ffc83d', fx:''},
-  vert:{label:'Vert', bg:'#35d99a', fx:''},
-  violet:{label:'Violet', bg:'#b678ff', fx:''},
-  craie:{label:'Craie', bg:'#f4f1e8', fx:''}
+  irise:{label:'Irisé', bg:'linear-gradient(118deg,#FFB0DC 0 19%,#9FE3FF 19% 38%,#C9FFA8 38% 57%,#FFEE8F 57% 76%,#CDB4FF 76% 100%)', fx:'shine'},
+  metal:{label:'Métal', bg:'linear-gradient(118deg,#C3C9D2 0 36%,#F5F7FA 36% 44%,#C3C9D2 44% 52%,#E6E9EE 52% 56%,#A7AFBB 56% 100%)', fx:'shine'},
+  or:{label:'Or', bg:'linear-gradient(118deg,#F5BE2A 0 36%,#FFF3B0 36% 44%,#F5BE2A 44% 52%,#FFDF73 52% 56%,#DB9F12 56% 100%)', fx:'shine'},
+  cuivre:{label:'Cuivre', bg:'linear-gradient(118deg,#E8854E 0 36%,#FFD3B3 36% 44%,#E8854E 44% 52%,#F8B08A 52% 56%,#C2602D 56% 100%)', fx:'shine'},
+  nacre:{label:'Nacre', bg:'linear-gradient(118deg,#FFF9EF 0 28%,#F1DEFF 28% 50%,#D8F6F0 50% 72%,#FFEBD6 72% 100%)', fx:'shine'},
+  neon:{label:'Néon', bg:'#FF4FB0', fx:'glow'},
+  retro:{label:'Rétro', bg:'linear-gradient(180deg,#FF6FB5 0 34%,#FFA14A 34% 67%,#55C6FF 67% 100%)', fx:''},
+  bleu:{label:'Bleu', bg:'#2E5BFF', fx:''},
+  rouge:{label:'Rouge', bg:'#FF5B2E', fx:''},
+  jaune:{label:'Jaune', bg:'#FFC83A', fx:''},
+  vert:{label:'Vert', bg:'#1CC7A8', fx:''},
+  violet:{label:'Violet', bg:'#8B6CFF', fx:''},
+  craie:{label:'Craie', bg:'#FFF4DF', fx:''}
 };
 const FINISH_CYCLE = ['irise','metal','or','neon','cuivre','retro','nacre','bleu','vert','violet','rouge','jaune'];
 const FINISH_ALIASES = {irise:'irise',holo:'irise',holographique:'irise',arcenciel:'irise',metal:'metal',metallique:'metal',argent:'metal',chrome:'metal',acier:'metal',or:'or',dore:'or',gold:'or',cuivre:'cuivre',bronze:'cuivre',nacre:'nacre',perle:'nacre',neon:'neon',fluo:'neon',retro:'retro',vaporwave:'retro',bleu:'bleu',rouge:'rouge',jaune:'jaune',vert:'vert',violet:'violet',craie:'craie',blanc:'craie'};
