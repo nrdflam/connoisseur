@@ -790,7 +790,7 @@ h1,h2,h3{font-family:var(--f-display);letter-spacing:-.015em}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 /* ================= Finitions des decks ================= */
-const VERSION='2.00.00';
+const VERSION='2.00.01';
 const FINISHES = {
   irise:{label:'Irisé', bg:'linear-gradient(118deg,#FFB0DC 0 19%,#9FE3FF 19% 38%,#C9FFA8 38% 57%,#FFEE8F 57% 76%,#CDB4FF 76% 100%)', fx:'shine'},
   metal:{label:'Métal', bg:'linear-gradient(118deg,#C3C9D2 0 36%,#F5F7FA 36% 44%,#C3C9D2 44% 52%,#E6E9EE 52% 56%,#A7AFBB 56% 100%)', fx:'shine'},
@@ -1164,6 +1164,43 @@ function updTimer(){
 }
 
 /* ================= Rendu ================= */
+/* ================= Historique : le bouton précédent navigue entre les écrans ================= */
+const NAV={stack:[],i:-1,popping:false};
+function navSync(){
+  if(NAV.popping) return;
+  if(NAV.i<0){ NAV.stack=[S.screen]; NAV.i=0; try{history.replaceState({cnx:0},'')}catch(e){} return; }
+  if(NAV.stack[NAV.i]===S.screen) return;
+  NAV.stack=NAV.stack.slice(0,NAV.i+1); NAV.stack.push(S.screen); NAV.i++;
+  try{history.pushState({cnx:NAV.i},'')}catch(e){}
+}
+function navBackTo(target){
+  if(NAV.i>0&&NAV.stack[NAV.i-1]===target){ history.back(); return true; }
+  return false;
+}
+window.addEventListener('popstate',e=>{
+  const box=document.getElementById('unbox');
+  // un panneau ouvert se ferme au lieu de changer d'écran
+  if(!box.hidden||S.menuOpen||S.importOpen){
+    if(!box.hidden) closePack();
+    S.menuOpen=false; S.importOpen=false;
+    try{history.pushState({cnx:NAV.i},'')}catch(_){}
+    render(); return;
+  }
+  const i=(e.state&&typeof e.state.cnx==='number')?e.state.cnx:0;
+  NAV.i=Math.max(0,Math.min(i,NAV.stack.length-1));
+  let target=NAV.stack[NAV.i]||'home';
+  stopTimer();
+  NAV.popping=true;
+  if(target==='game'){
+    if(S.live&&activeDecks().length){ resumeGame(); }
+    else { target='decks'; NAV.stack[NAV.i]='decks'; S.screen='decks'; render(); }
+  } else if(target==='win'&&!S.teams.some(t=>t.score>0)){
+    S.screen='home'; NAV.stack[NAV.i]='home'; render();
+  } else { S.screen=target; S.menuOpen=false; render(); }
+  NAV.popping=false;
+  scrollTo(0,0);
+});
+
 function render(){
   const v={home:viewHome,setup:viewPlayers,decks:viewDeckPicker,game:viewGame,win:viewWin}[S.screen]||viewHome;
   $app.innerHTML=v();
@@ -1171,6 +1208,7 @@ function render(){
   if(S.screen==='game'&&S.phase==='question') updTimer();
   if(S.screen==='game'&&S.phase==='recap'){ focusRecap(); if(!S.recap.anim){ S.recap.anim=true; animateRecap(); } }
   if(S.screen==='decks') applySearch();
+  navSync();
 }
 const plural=(n,w)=>`${n} ${w}${n>1?'s':''}`;
 
@@ -1545,7 +1583,7 @@ $app.addEventListener('click',e=>{
   if(S.menuOpen){S.menuOpen=false}
   if(a==='set'){const v=b.dataset.v;S[b.dataset.k]=isNaN(+v)?v:+v;render()}
   else if(a==='mode-play'){const to=b.dataset.v;if(to!==S.play){S.teams.forEach((t,i)=>{if(t.name===DEFAULTS[S.play][i]||t.name===W().def+' '+(i+1))t.name=DEFAULTS[to][i]||((to==='solo'?'Joueur ':'Équipe ')+(i+1))});S.play=to;S.teams=S.teams.slice(0,MAX[to])}S.screen='setup';render();scrollTo(0,0)}
-  else if(a==='go'){stopTimer();S.screen=b.dataset.v;S.error='';render();scrollTo(0,0)}
+  else if(a==='go'){if(b.closest('.step-head')&&navBackTo(b.dataset.v))return;stopTimer();S.screen=b.dataset.v;S.error='';render();scrollTo(0,0)}
   else if(a==='open'){openPack(b.dataset.d)}
   else if(a==='deck'){const d=b.dataset.d;if(S.on[d])delete S.on[d];else S.on[d]=true;S.error='';render()}
   else if(a==='all-on'){deckList().forEach(d=>S.on[d.name]=true);render()}
